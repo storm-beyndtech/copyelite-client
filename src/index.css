@@ -1,0 +1,240 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&family=Palanquin:wght@100;200;300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Palanquin:wght@100;200;300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  scroll-behavior: smooth;
+}
+
+html,
+body {
+  width: 100%;
+  scroll-behavior: smooth;
+}
+
+section {
+  width: 100%;
+}
+
+h3,
+p {
+  font-family: 'Palanquin' !important;
+}
+
+/* Remove background and padding from the switcher */
+.gtranslate_wrapper,
+.gtranslate_wrapper * {
+  background: transparent !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  box-shadow: none !important;
+  border: none !important;
+  font-size: 12px !important;
+}
+
+/* Remove background and padding */
+.gtranslate_wrapper > div {
+  background: transparent !important;
+  position: relative !important;
+}
+
+/* Make flag in switcher smaller */
+.gtranslate_wrapper > div img {
+  width: 20px !important;
+  height: auto !important;
+  margin-right: 4px !important;
+}
+
+.gt_options a {
+  padding: 4px !important;
+}
+
+.gt_options {
+  background: white !important;
+}
+
+.gtranslate_wrapper > div::after {
+  content: '▾';
+  position: absolute;
+  right: 4px;
+  top: 50%;
+  transform: translateY(-60%);
+  font-size: 20px;
+  color: #555;
+}
+
+/* WebKit (Chrome, Safari, Edge) */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent; /* Hide the scrollbar track (background) */
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #888;
+  border-radius: 10px;
+}
+
+/* Firefox */
+* {
+  scrollbar-color: #888 transparent;
+  scrollbar-width: thin;
+}
+
+.custom-dots {
+  bottom: -25px;
+}
+.custom-dots li button:before {
+  font-size: 8px;
+  color: rgba(255, 255, 255, 0.3);
+}
+.custom-dots li.slick-active button:before {
+  color: rgba(0, 179, 255, 0.8);
+}
+
+.pending {
+  color: #e9a52b;
+}
+.success {
+  color: #4ecb71;
+}
+.failed {
+  color: #d34053;
+}
+
+.customBlur {
+  backdrop-filter: blur(10px);
+}
+
+.customBlur2 {
+  backdrop-filter: blur(20px);
+}
+
+.spin {
+  animation: spin 1s linear infinite;
+  font-size: 1rem;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@layer components {
+  .max-ctn {
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 16px;
+  }
+
+  .input {
+    @apply sm:flex-1 max-sm:w-full text-base leading-normal text-slate-900 pl-5 max-sm:p-4 outline-none sm:border-none border max-sm:border-slate-900 max-sm:rounded-full;
+  }
+
+  .inputLabel {
+    @apply block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1.5;
+  }
+
+  .editUserInput {
+    @apply shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500;
+  }
+
+  .editUserLabel {
+    @apply block mb-2 text-sm font-medium text-gray-900 dark:text-white;
+  }
+
+  .primaryBtn {
+    @apply text-white py-[18px] px-4 inline-block rounded-xl font-semibold text-sm bg-gray-900;
+  }
+}
+
+@layer base {
+  body {
+    @apply font-satoshi font-normal text-base text-body bg-whiten relative z-1;
+  }
+}
+
+@layer utilities {
+  /* Chrome, Safari and Opera */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .no-scrollbar {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
+
+  .pad {
+    @apply sm:px-16 px-5 sm:py-24 py-12;
+  }
+
+  .pad-x {
+    @apply sm:px-16 px-5;
+  }
+
+  .pad-y {
+    @apply sm:py-24 py-12;
+  }
+
+  .pad-l {
+    @apply sm:pl-16 pl-5;
+  }
+
+  .pad-r {
+    @apply sm:pr-16 pr-5;
+  }
+
+  .pad-t {
+    @apply sm:pt-24 pt-12;
+  }
+
+  .pad-b {
+    @apply sm:pb-24 pb-12;
+  }
+
+  .info-text {
+    @apply font-montserrat text-slate-900 text-lg leading-7;
+  }
+
+  .hd-text {
+    @apply text-3xl font-semibold md:text-5xl;
+  }
+
+  .desc {
+    @apply mb-6 max-w-[528px] text-xl md:mb-10 lg:mb-12;
+  }
+
+  .avatar {
+    @apply inline-block h-12 w-12 rounded-full object-cover z-10;
+  }
+}
+
+@media screen and (max-width: 1024px) {
+  #headlessui-portal-root .relative {
+    margin: 20px 0 !important;
+  }
+
+  #headlessui-portal-root .relative span {
+    font-size: 1.2rem !important;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  #slide {
+    overflow: -moz-hidden-unscrollable;
+  }
+}
