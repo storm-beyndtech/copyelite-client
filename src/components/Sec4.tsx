@@ -593,11 +593,11 @@ const TabbedSections: React.FC = () => {
       {/* Background Effects with Blur */}
       <div className="absolute inset-0 bg-bodydark backdrop-blur-lg z-0"></div>
 
-      {/* Spinning ProTrader logo in top-left */}
+      {/* Spinning Copyelite logo in top-left */}
       <div className="absolute top-150 -left-20 z-2 overflow-hidden w-180 h-180 -translate-x-1/2 -translate-y-1/2 opacity-70">
         <motion.img
           src="https://protradercopy.com/wp-content/themes/ProTrader-Copy/images/market-transaction-animation.webp"
-          alt="ProTrader Logo"
+          alt="Copyelite Logo"
           className="w-full h-full"
           animate={logoAnimation}
         />

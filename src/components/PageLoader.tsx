@@ -17,14 +17,14 @@ const PageLoader: React.FC = () => {
             width={120}
             height={120}
             style={{ transform: 'scale(1.15)' }}
-            alt="ProTrader icon"
+            alt="Copyelite icon"
           />
         </motion.div>
         <div className="load-text">
           <img
             loading="lazy"
             src={logo}
-            alt="ProTrader logo text"
+            alt="Copyelite logo text"
             width={308}
             height={107}
           />
@@ -34,7 +34,7 @@ const PageLoader: React.FC = () => {
         <img
           loading="lazy"
           src="https://protradercopy.com/wp-content/themes/ProTrader-Copy/images/moneta-loading-map.webp"
-          alt="ProTrader logo icon"
+          alt="Copyelite logo icon"
           width={1920}
           height={736}
         />

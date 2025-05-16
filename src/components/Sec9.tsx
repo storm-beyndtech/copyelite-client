@@ -78,7 +78,7 @@ const Sec9 = () => {
               Currencies, Indices, Commodities, Share CFDs, ETFs, and Bonds with
               the{' '}
               <span className="text-white font-medium">
-                ProTrader-Copy AppTrader
+                Copyelite AppTrader
               </span>
               .
             </p>

@@ -89,6 +89,11 @@ p {
   scrollbar-width: thin;
 }
 
+/* third-party libraries CSS */
+#tv-attr-logo {
+  display: none;
+}
+
 .custom-dots {
   bottom: -25px;
 }

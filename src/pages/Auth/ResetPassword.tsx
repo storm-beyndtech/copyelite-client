@@ -103,11 +103,11 @@ const ResetPassword: React.FC = () => {
       <div className="md:col-span-2 relative bg-bodydark hidden md:flex flex-col justify-center">
         <div className="absolute top-0 left-0 z-[4] w-full h-full bg-gradient-to-b from-brandblue/30 via-brandblue/10 to-bodydark"></div>
 
-        {/* Spinning ProTrader logo in top-left */}
+        {/* Spinning Copyelite logo in top-left */}
         <div className="absolute top-[650px] -left-20 overflow-hidden w-[560px] h-[560px] -translate-x-1/2 -translate-y-1/2 opacity-60">
           <motion.img
             src="https://protradercopy.com/wp-content/themes/ProTrader-Copy/images/market-transaction-animation.webp"
-            alt="ProTrader Logo"
+            alt="Copyelite Logo"
             className="w-full h-full"
             animate={logoAnimation}
           />

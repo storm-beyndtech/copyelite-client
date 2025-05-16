@@ -1,83 +1,85 @@
-// TradingViewWidget.jsx
-import { useEffect, useRef, memo } from 'react';
+import { useEffect, useRef, memo, useState } from 'react';
 
-function TradingViewWidget() {
-  const container = useRef<HTMLDivElement>(null);
+interface BigChartProps {
+  symbol: string;
+  interval?: string;
+  theme?: 'light' | 'dark';
+  backgroundColor?: string;
+  height?: string;
+  width?: string;
+  allowSymbolChange?: boolean;
+  style?: number;
+}
 
-  useEffect(
-    () => {
-      const script = document.createElement("script");
-      script.src = "https://s3.tradingview.com/external-embedding/embed-widget-symbol-overview.js";
-      script.type = "text/javascript";
-      script.async = true;
-      script.innerHTML = `
-        {
-          "symbols": [
-            [
-              "NASDAQ:TSLA|1D"
-            ],
-            [
-              "Apple",
-              "AAPL|1D"
-            ],
-            [
-              "Google",
-              "GOOGL|1D"
-            ],
-            [
-              "Microsoft",
-              "MSFT|1D"
-            ]
-          ],
-          "chartOnly": false,
-          "width": "100%",
-          "height": "100%",
-          "locale": "en",
-          "colorTheme": "dark",
-          "autosize": true,
-          "showVolume": false,
-          "showMA": false,
-          "hideDateRanges": false,
-          "hideMarketStatus": false,
-          "hideSymbolLogo": false,
-          "scalePosition": "right",
-          "scaleMode": "Normal",
-          "fontFamily": "-apple-system, BlinkMacSystemFont, Trebuchet MS, Roboto, Ubuntu, sans-serif",
-          "fontSize": "10",
-          "noTimeScale": false,
-          "valuesTracking": "1",
-          "changeMode": "price-and-percent",
-          "chartType": "area",
-          "maLineColor": "#2962FF",
-          "maLineWidth": 1,
-          "maLength": 9,
-          "backgroundColor": "rgba(255, 255, 255, 0)",
-          "widgetFontColor": "rgba(149, 152, 161, 1)",
-          "lineWidth": 2,
-          "lineType": 0,
-          "dateRanges": [
-            "1d|1",
-            "1m|30",
-            "3m|60",
-            "12m|1D",
-            "60m|1W",
-            "all|1M"
-          ]
-        }`;
-
-        if (container.current) {
-          container.current.innerHTML = "";
-          container.current.appendChild(script);
-        }
-    },
-    []
+function BigChart({
+  symbol = '',
+  interval = 'D',
+  theme = 'dark',
+  backgroundColor = 'transparent',
+  height = '100%',
+  width = '100%',
+  allowSymbolChange = true,
+  style = 1,
+}: BigChartProps) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [chartKey, setChartKey] = useState<string>(
+    `tv-${symbol}-${interval}-${theme}`,
   );
 
+  useEffect(() => {
+    // Clean up previous chart when inputs change
+    if (containerRef.current) {
+      containerRef.current.innerHTML = '';
+    }
+
+    // Generate new key to force re-render when props change
+    setChartKey(`tv-${symbol}-${interval}-${theme}-${Date.now()}`);
+
+    const script = document.createElement('script');
+    script.src =
+      'https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js';
+    script.type = 'text/javascript';
+    script.async = true;
+    script.innerHTML = JSON.stringify({
+      autosize: true,
+      symbol: symbol,
+      interval: interval,
+      timezone: 'Etc/UTC',
+      theme: theme,
+      style: style,
+      locale: 'en',
+    });
+
+    if (containerRef.current) {
+      containerRef.current.appendChild(script);
+    }
+
+    return () => {
+      // Cleanup function
+      if (containerRef.current) {
+        const scriptElements =
+          containerRef.current.getElementsByTagName('script');
+        while (scriptElements.length > 0) {
+          if (scriptElements[0].parentNode) {
+            scriptElements[0].parentNode.removeChild(scriptElements[0]);
+          }
+        }
+      }
+    };
+  }, [symbol, interval, theme, style, allowSymbolChange]);
+
   return (
-    <div className="tradingview-widget-container" ref={container}>
-      <div className="tradingview-widget-container__widget"></div>
-    </div>
+    <div
+      key={chartKey}
+      className="tradingview-widget-container"
+      ref={containerRef}
+      style={{
+        height: height,
+        width: width,
+        backgroundColor: backgroundColor,
+      }}
+    />
   );
 }
 
-export default memo(TradingViewWidget);
+export default memo(BigChart);

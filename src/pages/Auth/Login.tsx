@@ -29,6 +29,7 @@ const Login: React.FC = () => {
   });
 
   const [errors, setErrors] = useState<LoginErrors>({});
+  const [error, setError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<
     'idle' | 'success' | 'error'
@@ -36,6 +37,11 @@ const Login: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
   const url = import.meta.env.VITE_REACT_APP_SERVER_URL;
   const navigate = useNavigate();
+
+  function isEmail(input: string) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(input);
+  }
 
   // Validation function
   const validateForm = (): boolean => {
@@ -59,6 +65,13 @@ const Login: React.FC = () => {
     if (!validateForm()) return;
 
     setIsSubmitting(true);
+    const payload = {
+      password: formData.password,
+      email: isEmail(formData.emailOrUsername) ? formData.emailOrUsername : '',
+      username: isEmail(formData.emailOrUsername)
+        ? ''
+        : formData.emailOrUsername,
+    };
     try {
       // Placeholder for actual API call
       const response = await fetch(`${url}/users/login`, {
@@ -66,7 +79,7 @@ const Login: React.FC = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(payload),
       });
 
       if (!response.ok) {
@@ -79,11 +92,12 @@ const Login: React.FC = () => {
       // Redirect or handle successful login
       setTimeout(() => {
         navigate('/verify-otp', {
-          state: { ...formData, pageType: 'login-verification' },
+          state: { ...payload, pageType: 'login-verification' },
         });
       }, 2000);
-    } catch (error) {
+    } catch (error: any) {
       // Handle login error
+      setError(error.message);
       setSubmitStatus('error');
     } finally {
       setIsSubmitting(false);
@@ -121,11 +135,11 @@ const Login: React.FC = () => {
       <div className="md:col-span-2 relative bg-bodydark hidden md:flex flex-col justify-center">
         <div className="absolute top-0 left-0 z-[4] w-full h-full bg-gradient-to-b from-brandblue/30 via-brandblue/10 to-bodydark"></div>
 
-        {/* Spinning ProTrader logo in top-left */}
+        {/* Spinning Copyelite logo in top-left */}
         <div className="absolute top-[650px] -left-20 overflow-hidden w-[560px] h-[560px] -translate-x-1/2 -translate-y-1/2 opacity-60">
           <motion.img
             src="https://protradercopy.com/wp-content/themes/ProTrader-Copy/images/market-transaction-animation.webp"
-            alt="ProTrader Logo"
+            alt="Copyelite Logo"
             className="w-full h-full"
             animate={logoAnimation}
           />
@@ -279,17 +293,9 @@ const Login: React.FC = () => {
 
             {/* Alert Messages */}
             {submitStatus === 'success' && (
-              <Alert
-                type="success"
-                message="Login successful! Redirecting to dashboard..."
-              />
+              <Alert type="success" message="Login code was sent via mail." />
             )}
-            {submitStatus === 'error' && (
-              <Alert
-                type="error"
-                message="Invalid email/username or password. Please try again."
-              />
-            )}
+            {submitStatus === 'error' && <Alert type="error" message={error} />}
 
             {/* Submit Button */}
             <button

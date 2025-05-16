@@ -9,12 +9,12 @@ export default function Sec2() {
           Start copying <br /> & start earning
         </h1>
         <p className="text-gray-400 text-lg font-medium sm:pr-5">
-          ProTrader Copy Trading provides the ability to copy successful
+          Copyelite Trading provides the ability to copy successful
           strategies OR to share your own strategy and start earning when others
           copy it.
         </p>
         <p className="text-sm text-gray-500">
-          Experience the sheer brilliance of ProTrader Copy Trading - a
+          Experience the sheer brilliance of Copyelite Trading - a
           revolutionary platform that effortlessly mirrors the success of
           profitable traders and lets you copy successful strategies or provide
           your own strategy to others to be copied and profit from that.

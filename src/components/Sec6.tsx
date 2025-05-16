@@ -175,13 +175,13 @@ export default function Sec6() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 text-left">
             <FeatureCard
               title="Copy successful strategies!"
-              description="ProTrader Copy Trading will spare you the task of creating your own trading strategy and shielding you from unnecessary stress. With our seamless automated system, you can now embark on a journey of financial prosperity without breaking a sweat! Select from a handpicked array of the strategies in our portfolio and set yourself on the path to limitless earnings!"
-              cta="Seize this golden opportunity to start earning with ProTrader today!"
+              description="Copyelite Trading will spare you the task of creating your own trading strategy and shielding you from unnecessary stress. With our seamless automated system, you can now embark on a journey of financial prosperity without breaking a sweat! Select from a handpicked array of the strategies in our portfolio and set yourself on the path to limitless earnings!"
+              cta="Seize this golden opportunity to start earning with Copyelite today!"
             />
 
             <FeatureCard
               title="Share strategy and start earning"
-              description="ProTrader Copy Trading empowers traders to share their successful trading strategies with others, enabling them to profit from their expertise whenever someone decides to replicate their approach. This innovative platform fosters a community of knowledge-sharing and allows traders to capitalize on their skills!"
+              description="Copyelite Trading empowers traders to share their successful trading strategies with others, enabling them to profit from their expertise whenever someone decides to replicate their approach. This innovative platform fosters a community of knowledge-sharing and allows traders to capitalize on their skills!"
               cta="Sharing is caring. Share your successful strategy now!"
             />
           </div>

@@ -295,7 +295,8 @@ const OTPVerification: React.FC<OTPVerificationProps> = ({
 
       // Handle successful verification
       setSubmitStatus('success');
-      login(await response.json())
+      const userData = await response.json()
+      login(userData.user);
 
       // Redirect to appropriate page
       setTimeout(() => {
@@ -331,7 +332,7 @@ const OTPVerification: React.FC<OTPVerificationProps> = ({
       };
 
       // Placeholder for actual API call
-      const response = await fetch('/api/resend-otp', {
+      const response = await fetch(`${url}/users/resend-otp`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

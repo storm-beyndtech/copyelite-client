@@ -43,7 +43,7 @@ import OtpPage from './pages/Auth/OtpPage';
 
 function App() {
   const location = useLocation();
-  const isPublicRoute =
+  const isPrivateRoute =
     location.pathname.includes('/dashboard') ||
     location.pathname.includes('/admin') ||
     location.pathname.includes('/login') ||
@@ -76,7 +76,7 @@ function App() {
     return (
       <>
         <Helmet>
-          {isPublicRoute ? (
+          {isPrivateRoute ? (
             <meta
               name="viewport"
               content="width=device-width, initial-scale=1.0, maximum-scale=1.0"
@@ -131,17 +131,11 @@ function App() {
           <Route path="/trade-signals" element={<TradeSignals />} />
           <Route path="/trade-vps" element={<TradeVps />} />
 
-          {/* Auth Routes */}
-          <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/register/:ref" element={<Register />} />
           <Route path="/reset-password" element={<ResetPassword />} />
-
-          <Route path="/dashboard/" element={<DefaultLayout />}>
-            <Route index element={<Dashboard />} />
-          </Route>
-
           <Route path="/verify-otp" element={<OtpPage />} />
-          <Route path="/account-setup" element={<UserOnboarding />} />
 
           {user ? (
             <>
@@ -203,60 +197,29 @@ function App() {
                 />
               )}
 
-              {/* {!user.isAdmin ? (
+              {!user.isAdmin ? (
                 <>
+                  <Route path="/account-setup" element={<UserOnboarding />} />
+
                   <Route path="/dashboard/" element={<DefaultLayout />}>
-                    {user.fullName === '' ? (
-                      <Route
-                        path="/dashboard/updateProfile"
-                        element={<UpdateProfile />}
-                      />
-                    ) : (
-                      <Route path="/dashboard/home" element={<Dashboard />} />
-                    )}
-
                     <Route index element={<Dashboard />} />
-                    <Route path="/dashboard/home" element={<Dashboard />} />
-
-                    {routes.map((route, i) => (
-                      <Route
-                        key={i}
-                        path={route.path}
-                        element={<route.component />}
-                      />
-                    ))}
                   </Route>
-
-                  <Route
-                    path="/login"
-                    element={<Navigate to="/dashboard/" />}
-                  />
-                  <Route
-                    path="/register"
-                    element={<Navigate to="/dashboard/" />}
-                  />
-                  <Route
-                    path="/register/:ref"
-                    element={<Navigate to="/dashboard/" />}
-                  />
                 </>
               ) : (
                 <Route
                   path="/dashboard/*"
                   element={<Navigate to="/admin/" />}
                 />
-              )} */}
+              )}
             </>
           ) : (
             <>
-              {/* <Route path="/dashboard/*" element={<Navigate to="/login" />} />
-              <Route path="/admin/*" element={<Navigate to="/login" />} /> */}
-              {/* 
+              <Route path="/dashboard/*" element={<Navigate to="/login" />} />
+              <Route path="/admin/*" element={<Navigate to="/login" />} />
+
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
               <Route path="/register/:ref" element={<Register />} />
-              <Route path="/password-reset" element={<PasswordReset />} />
-              <Route path="/password-reset/:page" element={<PasswordReset />} /> */}
             </>
           )}
         </Routes>

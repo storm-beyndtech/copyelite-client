@@ -21,11 +21,11 @@ const Sec8 = () => {
       {/* Background Effects with Blur */}
       <div className="absolute inset-0 bg-bodydark backdrop-blur-lg z-0"></div>
 
-      {/* Spinning ProTrader logo in top-left */}
+      {/* Spinning Copyelite logo in top-left */}
       <div className="absolute top-10 left-[50%] z-2 overflow-hidden w-150 h-150 -translate-x-1/2 opacity-10">
         <motion.img
           src="https://protradercopy.com/wp-content/themes/ProTrader-Copy/images/market-transaction-animation.webp"
-          alt="ProTrader Logo"
+          alt="Copyelite Logo"
           className="w-full h-full"
           animate={logoAnimation}
         />
@@ -47,7 +47,7 @@ const Sec8 = () => {
                 We're Regulated
               </h2>
               <p className="text-sm md:text-base text-gray-300">
-                ProTrader-Copy operates in accordance with the financial
+                Copyelite operates in accordance with the financial
                 regulations and compliance standards outlined by the SLIBC (Reg.
                 No. 2023-00068) and FSCA (Reg. No. 47490).
               </p>
@@ -178,12 +178,12 @@ const Sec8 = () => {
             {/* Center description */}
             <div className="text-center px-2 py-6">
               <p className="text-gray-300 mb-8">
-                All ProTrader-Copy clients are able to profit from the bullish
+                All Copyelite clients are able to profit from the bullish
                 and bearish moves of 1000+ tradable instruments, such as Forex,
                 Share CFDs, Indices, Commodities and more.
               </p>
               <p className="text-base font-semibold text-brandblue">
-                Profit from both up and down market cycles with ProTrader-Copy!
+                Profit from both up and down market cycles with Copyelite!
               </p>
             </div>
 

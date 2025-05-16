@@ -1,7 +1,9 @@
 import { contextData } from '@/context/AuthContext';
-import { Bell, Search, User, LogOut, LayoutDashboard } from 'lucide-react';
+import { Bell, User, LogOut, LayoutDashboard } from 'lucide-react';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import DarkModeSwitcher from './DarkModeSwitcher';
+import { IoCopy } from 'react-icons/io5';
 
 const Header = (props: {
   sidebarOpen: string | boolean | undefined;
@@ -10,7 +12,7 @@ const Header = (props: {
   const [showNotificationDropdown, setShowNotificationDropdown] =
     useState(false);
   const [showProfileDropdown, setShowProfileDropdown] = useState(false);
-  const { logout, user } = contextData();
+  const { logout } = contextData();
 
   const toggleNotificationDropdown = () => {
     setShowNotificationDropdown(!showNotificationDropdown);
@@ -23,8 +25,8 @@ const Header = (props: {
   };
 
   return (
-    <header className="bg-white dark:bg-bodydark1/40 shadow-sm z-10">
-      <div className="flex items-center gap-2 justify-between h-16 px-6">
+    <header className="bg-white dark:bg-bodydark/50 shadow-sm z-10 px-4 rounded-xl mx-3 my-3">
+      <div className="flex items-center gap-2 justify-between h-14 px-2">
         <button
           aria-controls="sidebar"
           onClick={(e) => {
@@ -66,22 +68,23 @@ const Header = (props: {
           </span>
         </button>
 
-        {/* Search */}
-        <div className="flex items-center flex-1">
-          <div className="relative w-full max-w-md">
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <Search size={18} className="text-gray-400" />
-            </div>
-            <input
-              type="text"
-              placeholder="Search..."
-              className="block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-bodydark2 rounded-md bg-gray-50 dark:bg-bodydark2/30 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
+        {/* Dummy CopyRef */}
+        <div className="flex items-center space-x-2 px-3 py-1 border dark:border-gray-800 border-gray-400 rounded">
+          <span className="text-xs text-gray-700 dark:text-gray-500">
+            kjbfl463
+          </span>
+          <IoCopy size={20} className="text-cyan-500" />
         </div>
 
         {/* Right side buttons */}
-        <div className="flex items-center space-x-4">
+        <div className="flex items-center space-x-2">
+          <Link
+            to="/dashboard/practice"
+            className="text-xs px-4 py-1 max-sm:hidden rounded border border-cyan-900 hover:bg-cyan-950 text-cyan-500 font-medium"
+          >
+            PRACTICE
+          </Link>
+
           {/* Notifications with Dropdown */}
           <div className="relative">
             <button
@@ -116,6 +119,7 @@ const Header = (props: {
               </div>
             )}
           </div>
+          <DarkModeSwitcher />
 
           {/* User Profile with Dropdown */}
           <div className="relative">
@@ -126,7 +130,6 @@ const Header = (props: {
               <div className="h-8 w-8 rounded-full bg-blue-500 flex items-center justify-center text-white">
                 <User size={16} />
               </div>
-              <span className="hidden md:inline-block">{user?.firstName}</span>
             </button>
 
             {showProfileDropdown && (

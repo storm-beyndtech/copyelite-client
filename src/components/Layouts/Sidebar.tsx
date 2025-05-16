@@ -2,7 +2,6 @@ import { useEffect, useRef } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import Logo from '../../assets/copyelite-logo.svg';
 import { contextData } from '../../context/AuthContext';
-import DarkModeSwitcher from './DarkModeSwitcher';
 import SidebarDropdown from './SidebarDropdown';
 import {
   Home,
@@ -53,7 +52,7 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen }: SidebarProps) {
   return (
     <aside
       ref={sidebar}
-      className={`text-xs absolute left-0 top-0 z-999999 flex h-screen w-72.5 flex-col overflow-y-hidden bg-bodydark1 lg:dark:bg-bodydark1/40 duration-300 ease-linear lg:static lg:translate-x-0 ${
+      className={`text-xs absolute left-0 top-0 z-999999 flex h-screen w-72.5 flex-col overflow-y-hidden bg-gray-50/90 dark:bg-bodydark/30 duration-300 ease-linear lg:static lg:translate-x-0 ${
         sidebarOpen ? 'translate-x-0' : '-translate-x-full'
       }`}
     >
@@ -61,7 +60,6 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen }: SidebarProps) {
         <NavLink to="/">
           <img src={Logo} alt="Logo" className="h-9 w-auto" />
         </NavLink>
-        <DarkModeSwitcher />
         <button
           ref={trigger}
           onClick={() => setSidebarOpen(!sidebarOpen)}

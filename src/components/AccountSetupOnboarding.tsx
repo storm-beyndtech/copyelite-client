@@ -4,6 +4,8 @@ import { AnimatedSection } from './ui/animated-section';
 import Logo from '../assets/copyelite-logo.svg';
 import { Link, useNavigate } from 'react-router-dom';
 import Alert from './ui/Alert';
+import GTranslateProvider from './ui/GTranslateProvider';
+import { contextData } from '@/context/AuthContext';
 
 // Types for our form sections
 type FormSection = {
@@ -30,6 +32,8 @@ const AccountSetupOnboarding = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
+  const { login, user } = contextData();
+  const url = import.meta.env.VITE_REACT_APP_SERVER_URL;
 
   // Form data for all sections
   const [formSections, setFormSections] = useState<FormSection[]>([
@@ -145,13 +149,7 @@ const AccountSetupOnboarding = () => {
           type: 'select',
           required: true,
           value: 'Daily',
-          options: [
-            'Daily',
-            'Weekly',
-            'Monthly',
-            'Quarterly',
-            'Occasionally',
-          ],
+          options: ['Daily', 'Weekly', 'Monthly', 'Quarterly', 'Occasionally'],
         },
         {
           id: 'instruments',
@@ -219,9 +217,9 @@ const AccountSetupOnboarding = () => {
           options: [
             'Under 50k',
             '50k - 100k',
-            '100k - 200k', 
+            '100k - 200k',
             '200k - 500k',
-            'Over 500k'
+            'Over 500k',
           ],
         },
         {
@@ -235,7 +233,7 @@ const AccountSetupOnboarding = () => {
             'Self-Employment',
             'Investments',
             'Trading Profits',
-            'Other'
+            'Other',
           ],
         },
         {
@@ -317,56 +315,63 @@ const AccountSetupOnboarding = () => {
     try {
       setIsLoading(true);
       setError(null);
-      
+
       // Validate all sections before submitting
       const isValid = formSections.every((section) => {
         if (section.id === 'client-declaration') return true;
         return section.fields.every(
-          (field) => !field.required || field.value.trim() !== ''
+          (field) => !field.required || field.value.trim() !== '',
         );
       });
-      
+
       if (!isValid) {
-        setError('Please complete all required fields in all sections before submitting.');
+        setError(
+          'Please complete all required fields in all sections before submitting.',
+        );
         setIsLoading(false);
         return;
       }
-      
-      // Format form data for API submission
-      const formData = formSections.reduce((data, section) => {
-        section.fields.forEach(field => {
-          data[field.id] = field.value;
-        });
-        return data;
-      }, {} as Record<string, string>);
 
-      console.log(formData)
-      
-      // Submit to API
-      const response = await fetch('https://api.example.com/onboarding', {
-        method: 'POST',
-        headers: { 
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('token')}` 
+      // Format form data for API submission
+      const formData = formSections.reduce(
+        (data, section) => {
+          section.fields.forEach((field) => {
+            data[field.id] = field.value;
+          });
+          return data;
         },
-        body: JSON.stringify(formData)
+        {} as Record<string, string>,
+      );
+
+      console.log(formData);
+
+      // Submit to API
+      const response = await fetch(`${url}/users/update-profile`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ ...formData, email: user.email }),
       });
-      
+
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.message || 'Failed to complete account setup');
+        throw new Error(
+          errorData.message || 'Failed to complete account setup',
+        );
       }
-      
+
       // On success
       const data = await response.json();
-      console.log('Account setup completed successfully:', data);
-      
+
       // Navigate to dashboard
+      login(data.user);
       navigate('/dashboard');
-      
     } catch (err) {
       console.error('Error submitting form:', err);
-      setError(err instanceof Error ? err.message : 'An unexpected error occurred');
+      setError(
+        err instanceof Error ? err.message : 'An unexpected error occurred',
+      );
     } finally {
       setIsLoading(false);
     }
@@ -396,7 +401,7 @@ const AccountSetupOnboarding = () => {
             <p>
               By pressing the "SUBMIT" button below, I hereby confirm and
               acknowledge that the information provided above is true accurate,
-              and I further confirm and acknowledge that ProTrader-Copy will
+              and I further confirm and acknowledge that Copyelite will
               rely on this information in the opening of my trading account
             </p>
           </div>
@@ -577,10 +582,7 @@ const AccountSetupOnboarding = () => {
               <div className="bg-gray-600 w-4 h-4 rounded-full" />
             </div>
           </div>
-          <div className="bg-gray-800 text-white px-4 py-1.5 flex items-center rounded">
-            <span>Select Language</span>
-            <span className="ml-1">▼</span>
-          </div>
+          <GTranslateProvider />
           <button className="text-white bg-transparent px-2 py-1.5 border border-gray-700 rounded">
             Logout
           </button>
@@ -591,7 +593,6 @@ const AccountSetupOnboarding = () => {
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row px-4 py-8 gap-8">
         {/* Left Form Panel */}
         <div className="w-full md:w-2/3 bg-gray-800 rounded-lg p-6 shadow-lg">
-          
           <AnimatedSection>
             <h2 className="text-white text-xl font-semibold mb-2">
               {formSections[activeSection].title}
@@ -620,7 +621,7 @@ const AccountSetupOnboarding = () => {
             {activeSection > 0 && (
               <button
                 onClick={handleBack}
-                className="flex items-center justify-center px-4 py-3 bg-transparent border border-cyan-500 text-cyan-400 rounded w-48 hover:bg-cyan-900 hover:bg-opacity-20 transition-colors"
+                className="flex items-center justify-center px-4 py-2 font-medium text-sm bg-transparent border border-cyan-500 text-cyan-400 rounded w-48 hover:bg-cyan-900 hover:bg-opacity-20 transition-colors"
               >
                 <ChevronLeft size={18} />
                 <span className="ml-2">Back</span>
@@ -630,7 +631,7 @@ const AccountSetupOnboarding = () => {
               <button
                 onClick={handleNext}
                 disabled={!isSectionValid(activeSection)}
-                className={`ml-auto px-4 py-3 bg-cyan-500 text-white rounded w-48 transition-all 
+                className={`ml-auto px-4 py-2 font-medium text-sm bg-cyan-500 text-white rounded w-48 transition-all 
                   ${
                     isSectionValid(activeSection)
                       ? 'hover:bg-cyan-600'
@@ -643,7 +644,7 @@ const AccountSetupOnboarding = () => {
               <button
                 onClick={handleSubmit}
                 disabled={isLoading || !isSectionValid(activeSection)}
-                className={`ml-auto px-4 py-3 bg-cyan-500 text-white rounded w-48 hover:bg-cyan-600 transition-colors flex items-center justify-center
+                className={`ml-auto px-4 py-2 font-medium text-sm bg-cyan-500 text-white rounded w-48 hover:bg-cyan-600 transition-colors flex items-center justify-center
                   ${
                     isLoading || !isSectionValid(activeSection)
                       ? 'opacity-50 cursor-not-allowed'
@@ -666,7 +667,7 @@ const AccountSetupOnboarding = () => {
         {/* Right Progress Panel */}
         <div className="w-full md:w-1/3 bg-gray-800 rounded-lg p-6 shadow-lg h-min">
           <h3 className="text-white text-lg font-semibold mb-4">
-            Upload Documents
+            Upload Account
           </h3>
           <ul className="space-y-4">
             {formSections.map((section, index) => (
@@ -702,29 +703,6 @@ const AccountSetupOnboarding = () => {
             ))}
           </ul>
         </div>
-      </div>
-
-      {/* Chat button */}
-      <div className="fixed bottom-6 right-6 flex items-center">
-        <div className="bg-white text-black py-2 px-4 rounded-full shadow-lg mr-2">
-          <span>Chat with us </span>
-          <span className="text-yellow-500">👋</span>
-        </div>
-        <button className="w-12 h-12 flex items-center justify-center rounded-full bg-blue-600 text-white shadow-lg">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-          </svg>
-        </button>
       </div>
     </div>
   );

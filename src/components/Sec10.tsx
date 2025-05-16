@@ -248,7 +248,7 @@ const Sec10 = () => {
                 </div>
                 <span> traders </span>
                 <span className="text-blue-400">are online</span> trading with
-                ProTrader
+                Copyelite
               </motion.h1>
               <motion.div variants={itemVariants} className="mx-auto w-fit">
                 <button className="mt-6 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-md transition-all">
