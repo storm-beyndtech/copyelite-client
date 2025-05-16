@@ -6,7 +6,7 @@ import ChartSlide from '@/components/ChartSlide';
 import MiniBals from '@/components/MiniBals';
 import NoDepositAlert from '@/components/NoDepositAlert';
 import PageLoader from '@/components/PageLoader';
-// import TraderGrid from '@/components/TraderGrid';
+import TraderGrid from '@/components/TraderGrid';
 import UsdChart from '@/components/UsdChart';
 import { contextData } from '@/context/AuthContext';
 
@@ -84,7 +84,7 @@ export default function Dashboard() {
       </div>
 
       <div className="py-8">
-        {/* <TraderGrid traders={traders} onCopyTrader={copyTrader} /> */}
+        <TraderGrid traders={traders} onCopyTrader={copyTrader} />
       </div>
 
       <MiniBals />

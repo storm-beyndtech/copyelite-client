@@ -5,7 +5,7 @@ import { FcGoogle } from 'react-icons/fc';
 import Alert from '@/components/ui/Alert';
 import { bounceAnimation, logoAnimation } from '@/lib/utils';
 import logo from '../../assets/copyelite-logo.png';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import DarkModeSwitcher from '@/components/Layouts/DarkModeSwitcher';
 import GTranslateProvider from '@/components/ui/GTranslateProvider';
 
@@ -14,7 +14,7 @@ interface RegistrationFormState {
   username: string;
   email: string;
   password: string;
-  country: string;
+  referredBy: string;
   termsAccepted: boolean;
 }
 
@@ -30,7 +30,7 @@ const Register: React.FC = () => {
     username: '',
     email: '',
     password: '',
-    country: 'Nigeria',
+    referredBy: '',
     termsAccepted: false,
   });
 
@@ -40,6 +40,8 @@ const Register: React.FC = () => {
     'idle' | 'success' | 'error'
   >('idle');
   const [showPassword, setShowPassword] = useState(false);
+  const url = import.meta.env.VITE_REACT_APP_SERVER_URL;
+  const navigate = useNavigate();
 
   // Validation function placeholder
   const validateForm = (): boolean => {
@@ -76,14 +78,20 @@ const Register: React.FC = () => {
     if (!validateForm()) return;
 
     setIsSubmitting(true);
+    const bodyData = {
+      email: formData.email,
+      username: formData.username,
+      password: formData.password,
+      referredBy: formData.referredBy,
+    };
     try {
       // Placeholder for actual API call
-      const response = await fetch('/api/register', {
+      const response = await fetch(`${url}/users/signup`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(bodyData),
       });
 
       if (!response.ok) {
@@ -92,14 +100,12 @@ const Register: React.FC = () => {
 
       // Handle successful registration
       setSubmitStatus('success');
-      // Reset form after successful submission
-      setFormData({
-        username: '',
-        email: '',
-        password: '',
-        country: 'Nigeria',
-        termsAccepted: false,
-      });
+
+      setTimeout(() => {
+        navigate('/verify-otp', {
+          state: { ...bodyData, pageType: 'registration-page' },
+        });
+      }, 2000);
     } catch (error) {
       // Handle registration error
       setSubmitStatus('error');
@@ -253,23 +259,6 @@ const Register: React.FC = () => {
                   <p className="text-red-500 text-sm mt-1">{errors.email}</p>
                 )}
               </div>
-            </div>
-
-            {/* Country Dropdown */}
-            <div>
-              <label htmlFor="country" className="inputLabel">
-                Country
-              </label>
-              <select
-                id="country"
-                name="country"
-                value={formData.country}
-                onChange={handleChange}
-                className="w-full px-4 py-2 rounded-md border text-sm border-gray-300 dark:border-gray-700 bg-white dark:bg-transparent text-gray-900 dark:text-white focus:outline-none focus:ring-2 placeholder:opacity-50 focus:border-blue-500 dark:focus:border-blue-400"
-              >
-                <option value="Nigeria">Nigeria</option>
-                {/* Add more countries */}
-              </select>
             </div>
 
             {/* Password Field */}

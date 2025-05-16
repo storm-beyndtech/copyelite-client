@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import Alert from '@/components/ui/Alert';
 import { bounceAnimation, logoAnimation } from '@/lib/utils';
-import logo from '../../assets/copyelite-logo.png';
+import logo from '../assets/copyelite-logo.png';
 import { Link } from 'react-router-dom';
 import DarkModeSwitcher from '@/components/Layouts/DarkModeSwitcher';
 
@@ -13,10 +13,22 @@ export type OTPPageType =
   | 'login-verification'
   | 'withdraw-verification';
 
+// User data interface
+interface UserData {
+  email?: string;
+  username?: string;
+  password?: string;
+  referredBy?: string;
+  phoneNumber?: string;
+  withdrawalAmount?: number;
+  withdrawalAddress?: string;
+}
+
 interface OTPVerificationProps {
   pageType: OTPPageType;
   otpLength?: number;
   resendDelay?: number; // in seconds
+  userData: UserData; // New prop for user data
   onSuccess?: () => void;
   onError?: (error: string) => void;
 }
@@ -25,6 +37,7 @@ const OTPVerification: React.FC<OTPVerificationProps> = ({
   pageType = 'register-verification',
   otpLength = 6,
   resendDelay = 60,
+  userData,
   onSuccess,
   onError,
 }) => {
@@ -62,13 +75,43 @@ const OTPVerification: React.FC<OTPVerificationProps> = ({
     return () => clearInterval(interval);
   }, [countdown]);
 
+  // Determine which contact method was used for sending OTP
+  const getContactMethod = () => {
+    if (userData.email) return userData.email;
+    if (userData.phoneNumber) return userData.phoneNumber;
+    return 'your contact information';
+  };
+
+  // Mask the contact information for display
+  const maskContactInfo = (info: string) => {
+    if (!info) return '';
+
+    // Handle email
+    if (info.includes('@')) {
+      const [username, domain] = info.split('@');
+      return `${username.substring(0, 2)}${'*'.repeat(
+        Math.max(2, username.length - 4),
+      )}${username.slice(-2)}@${domain}`;
+    }
+
+    // Handle phone number
+    else if (/^\d+$/.test(info.replace(/\D/g, ''))) {
+      const digits = info.replace(/\D/g, '');
+      return `${'*'.repeat(Math.max(0, digits.length - 4))}${digits.slice(-4)}`;
+    }
+
+    return info;
+  };
+
   // Determine page title and descriptions based on pageType
   const getPageContent = () => {
+    const maskedContact = maskContactInfo(getContactMethod());
+
     switch (pageType) {
       case 'register-verification':
         return {
           title: 'Verify Your Account',
-          description: 'Enter the verification code we sent to your email',
+          description: `Enter the verification code we sent to ${maskedContact}`,
           successMessage: 'Account verified successfully!',
           errorMessage: 'Invalid verification code. Please try again.',
           redirectUrl: '/login',
@@ -77,8 +120,7 @@ const OTPVerification: React.FC<OTPVerificationProps> = ({
       case 'reset-password':
         return {
           title: 'Reset Password',
-          description:
-            'Enter the verification code we sent to recover your password',
+          description: `Enter the verification code we sent to ${maskedContact} to recover your password`,
           successMessage:
             'Verification successful. Redirecting to reset your password...',
           errorMessage: 'Invalid verification code. Please try again.',
@@ -88,7 +130,7 @@ const OTPVerification: React.FC<OTPVerificationProps> = ({
       case 'login-verification':
         return {
           title: '2-Step Verification',
-          description: 'Enter the security code we sent to your email or phone',
+          description: `Enter the security code we sent to ${maskedContact}`,
           successMessage:
             'Verification successful! Redirecting to dashboard...',
           errorMessage: 'Invalid verification code. Please try again.',
@@ -98,8 +140,7 @@ const OTPVerification: React.FC<OTPVerificationProps> = ({
       case 'withdraw-verification':
         return {
           title: 'Verify Withdrawal',
-          description:
-            'Enter the security code to confirm your withdrawal request',
+          description: `Enter the security code sent to ${maskedContact} to confirm your withdrawal request`,
           successMessage: 'Withdrawal verification successful!',
           errorMessage: 'Invalid verification code. Please try again.',
           redirectUrl: '/transactions',
@@ -108,7 +149,7 @@ const OTPVerification: React.FC<OTPVerificationProps> = ({
       default:
         return {
           title: 'Verification Required',
-          description: 'Enter the verification code we sent',
+          description: `Enter the verification code we sent to ${maskedContact}`,
           successMessage: 'Verification successful!',
           errorMessage: 'Invalid verification code. Please try again.',
           redirectUrl: '/dashboard',
@@ -181,6 +222,47 @@ const OTPVerification: React.FC<OTPVerificationProps> = ({
     setActiveInput(focusIndex);
   };
 
+  // Get the appropriate request payload based on page type
+  const getRequestPayload = () => {
+    const basePayload = {
+      otp: otp.join(''),
+      type: pageType,
+    };
+
+    switch (pageType) {
+      case 'register-verification':
+        return {
+          ...basePayload,
+          username: userData.username,
+          email: userData.email,
+          password: userData.password,
+        };
+      case 'reset-password':
+        return {
+          ...basePayload,
+          email: userData.email || '',
+          username: userData.username || '',
+        };
+      case 'login-verification':
+        return {
+          ...basePayload,
+          email: userData.email || '',
+          username: userData.username || '',
+          password: userData.password || '',
+        };
+      case 'withdraw-verification':
+        return {
+          ...basePayload,
+          email: userData.email || '',
+          username: userData.username || '',
+          amount: userData.withdrawalAmount,
+          address: userData.withdrawalAddress,
+        };
+      default:
+        return basePayload;
+    }
+  };
+
   // Handle form submission
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -195,16 +277,16 @@ const OTPVerification: React.FC<OTPVerificationProps> = ({
     setIsSubmitting(true);
 
     try {
+      // Prepare the request payload based on the page type
+      const payload = getRequestPayload();
+
       // Placeholder for actual API call
       const response = await fetch('/api/verify-otp', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          otp: otp.join(''),
-          type: pageType,
-        }),
+        body: JSON.stringify(payload),
       });
 
       if (!response.ok) {
@@ -244,15 +326,21 @@ const OTPVerification: React.FC<OTPVerificationProps> = ({
     setCanResend(false);
 
     try {
+      // Prepare the resend request data
+      const resendData = {
+        type: pageType,
+        email: userData.email || '',
+        username: userData.username || '',
+        phoneNumber: userData.phoneNumber || '',
+      };
+
       // Placeholder for actual API call
       const response = await fetch('/api/resend-otp', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          type: pageType,
-        }),
+        body: JSON.stringify(resendData),
       });
 
       if (!response.ok) {
@@ -264,7 +352,9 @@ const OTPVerification: React.FC<OTPVerificationProps> = ({
 
       // Show success message
       setSubmitStatus('success');
-      setErrorMessage('');
+      setErrorMessage(
+        'A new verification code has been sent to your contact information.',
+      );
 
       // Clear any existing error
       setTimeout(() => {
@@ -275,6 +365,22 @@ const OTPVerification: React.FC<OTPVerificationProps> = ({
       setErrorMessage('Failed to resend code. Please try again later.');
     }
   };
+
+  // Determine back link based on page type
+  const getBackLink = () => {
+    switch (pageType) {
+      case 'register-verification':
+        return '/register';
+      case 'reset-password':
+        return '/forgot-password';
+      case 'withdraw-verification':
+        return '/withdraw';
+      default:
+        return '/login';
+    }
+  };
+
+  const backLink = getBackLink();
 
   return (
     <div className="min-h-screen grid grid-cols-5 overflow-hidden bg-gray-50 dark:bg-bodydark">
@@ -316,8 +422,13 @@ const OTPVerification: React.FC<OTPVerificationProps> = ({
       {/* Right Side - OTP Verification Form */}
       <div className="md:col-span-3 col-span-5 p-8 space-y-6">
         <div className="flex items-center justify-end gap-3">
-          <Link to="/login" className="text-sm font-semibold text-brandblue">
-            Back to Login
+          <Link to={backLink} className="text-sm font-semibold text-brandblue">
+            Back to{' '}
+            {pageType === 'register-verification'
+              ? 'Registration'
+              : pageType === 'reset-password'
+                ? 'Reset Password'
+                : 'Login'}
           </Link>
 
           <div className="w-[68px] h-[24px] py-1 relative bg-gray-50 rounded">

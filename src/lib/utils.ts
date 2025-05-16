@@ -378,6 +378,225 @@ export const etfs = {
 };
 
 
+export const standardPlan = [
+  {
+    pips: {
+      min: 20,
+      max: 25,
+    },
+    title: 'STANDARD',
+    truepoints: [
+      'Minimum: ﹩3,000',
+      'Maximum: ﹩4,999',
+      '10% Trade Commission',
+      '24/7 active support',
+    ],
+  },
+  {
+    pips: {
+      min: 25,
+      max: 30,
+    },
+    title: 'MASTER',
+    truepoints: [
+      'Minimum: ﹩5,000',
+      'Maximum: ﹩9,999',
+      '10% Trade Commission',
+      '24/7 active support',
+    ],
+  },
+  {
+    pips: {
+      min: 30,
+      max: 35,
+    },
+    title: 'PREMIUM',
+    truepoints: [
+      'Minimum: ﹩10,000',
+      'Maximum: ﹩19,999',
+      '10% Trade Commission',
+      '24/7 active support',
+    ],
+  },
+  {
+    title: 'ULTIMATE',
+    pips: {
+      min: 35,
+      max: 40,
+    },
+    truepoints: [
+      'Minimum: ﹩20,000',
+      'Maximum: ﹩49,999',
+      '10% Trade Commission',
+      '24/7 active support',
+    ],
+  },
+  {
+    pips: {
+      min: 40,
+      max: 45,
+    },
+    title: 'CORPORATE',
+    truepoints: [
+      'Minimum: ﹩50,000',
+      'Maximum: Unlimited',
+      '10% Trade Commission',
+      '24/7 active support',
+    ],
+  },
+];
+
+export const advancedPlan = [
+  {
+    pips: {
+      min: 30,
+      max: 40,
+    },
+    title: 'STANDARD',
+    truepoints: [
+      'Minimum: ﹩1,000',
+      'Maximum: ﹩9,999',
+      '10% Trade Commission',
+      '24/7 active support',
+    ],
+  },
+  {
+    pips: {
+      min: 40,
+      max: 45,
+    },
+    title: 'MASTER PLUS',
+    truepoints: [
+      'Minimum: ﹩10,000',
+      'Maximum: ﹩19,999',
+      '10% Trade Commission',
+      '24/7 active support',
+    ],
+  },
+  {
+    pips: {
+      min: 50,
+      max: 60,
+    },
+    title: 'PREMIUM',
+    truepoints: [
+      'Minimum: ﹩20,000',
+      'Maximum: ﹩49,999',
+      '10% Trade Commission',
+      '24/7 active support',
+    ],
+  },
+  {
+    title: 'ULTIMATE',
+    pips: {
+      min: 60,
+      max: 70,
+    },
+    truepoints: [
+      'Minimum: ﹩50,000',
+      'Maximum: ﹩99,999',
+      '10% Trade Commission',
+      '24/7 active support',
+    ],
+  },
+  {
+    pips: {
+      min: 70,
+      max: 80,
+    },
+    title: 'CORPORATE',
+    truepoints: [
+      'Minimum: ﹩100,000',
+      'Maximum: Unlimited',
+      '10% Trade Commission',
+      '24/7 active support',
+    ],
+  },
+];
+
+export const NFP = [
+  {
+    pips: {
+      min: 100,
+      max: 124,
+    },
+    title: 'STARTER',
+    truepoints: [
+      'Minimum: ﹩50,000',
+      'Maximum: ﹩99,999',
+      '10% Trade Commission',
+      '24/7 active support',
+    ],
+  },
+  {
+    pips: {
+      min: 150,
+      max: undefined,
+    },
+    title: 'PREMIUM',
+    truepoints: [
+      'Minimum: ﹩100,000',
+      'Maximum: ﹩149,999',
+      '10% Trade Commission',
+      '24/7 active support',
+    ],
+  },
+  {
+    pips: {
+      min: 200,
+      max: undefined,
+    },
+    title: 'ULTIMATE',
+    truepoints: [
+      'Minimum: ﹩150,000',
+      'Maximum: Unlimited',
+      '10% Trade Commission',
+      '24/7 active support',
+    ],
+  },
+];
+
+export const BTC = [
+  {
+    pips: {
+      min: 65,
+      max: 70,
+    },
+    title: 'BASIC',
+    truepoints: ['1 - 1.5 BTC', '10% Trade Commission', '24/7 active support'],
+  },
+  {
+    pips: {
+      min: 70,
+      max: 75,
+    },
+    title: 'STANDARD',
+    truepoints: ['5 - 14.9 BTC', '10% Trade Commission', '24/7 active support'],
+  },
+  {
+    pips: {
+      min: 80,
+      max: 85,
+    },
+    title: 'PREMIUM',
+    truepoints: [
+      '15 - 29.9 BTC',
+      '10% Trade Commission',
+      '24/7 active support',
+    ],
+  },
+  {
+    pips: {
+      min: 90,
+      max: 95,
+    },
+    title: 'PRO',
+    truepoints: ['30+ BTC', '10% Trade Commission', '24/7 active support'],
+  },
+];
+
+
+
 export const testimonies = [
   {
     title: 'Product Manager | Capsule',

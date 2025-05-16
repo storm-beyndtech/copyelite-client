@@ -39,6 +39,7 @@ import { useEffect, useState } from 'react';
 import DefaultLayout from './components/Layouts/DefaultLayout';
 import Dashboard from './pages/Dashboard/Dashboard';
 import UserOnboarding from './pages/Auth/UserOnboarding';
+import OtpPage from './pages/Auth/OtpPage';
 
 function App() {
   const location = useLocation();
@@ -139,6 +140,7 @@ function App() {
             <Route index element={<Dashboard />} />
           </Route>
 
+          <Route path="/verify-otp" element={<OtpPage />} />
           <Route path="/account-setup" element={<UserOnboarding />} />
 
           {user ? (
