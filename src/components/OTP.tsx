@@ -3,8 +3,9 @@ import { motion } from 'framer-motion';
 import Alert from '@/components/ui/Alert';
 import { bounceAnimation, logoAnimation } from '@/lib/utils';
 import logo from '../assets/copyelite-logo.png';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import DarkModeSwitcher from '@/components/Layouts/DarkModeSwitcher';
+import { contextData } from '@/context/AuthContext';
 
 // OTP Page Types
 export type OTPPageType =
@@ -27,10 +28,8 @@ interface UserData {
 interface OTPVerificationProps {
   pageType: OTPPageType;
   otpLength?: number;
-  resendDelay?: number; // in seconds
-  userData: UserData; // New prop for user data
-  onSuccess?: () => void;
-  onError?: (error: string) => void;
+  resendDelay?: number;
+  userData: UserData;
 }
 
 const OTPVerification: React.FC<OTPVerificationProps> = ({
@@ -38,8 +37,6 @@ const OTPVerification: React.FC<OTPVerificationProps> = ({
   otpLength = 6,
   resendDelay = 60,
   userData,
-  onSuccess,
-  onError,
 }) => {
   // Create an array of refs for the OTP input fields
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
@@ -52,6 +49,9 @@ const OTPVerification: React.FC<OTPVerificationProps> = ({
   const [errorMessage, setErrorMessage] = useState<string>('');
   const [countdown, setCountdown] = useState<number>(resendDelay);
   const [canResend, setCanResend] = useState<boolean>(false);
+  const navigate = useNavigate();
+  const { login } = contextData();
+  const url = import.meta.env.VITE_REACT_APP_SERVER_URL;
 
   // Initialize the input refs array
   useEffect(() => {
@@ -281,7 +281,7 @@ const OTPVerification: React.FC<OTPVerificationProps> = ({
       const payload = getRequestPayload();
 
       // Placeholder for actual API call
-      const response = await fetch('/api/verify-otp', {
+      const response = await fetch(`${url}/users/verify-otp`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -295,25 +295,21 @@ const OTPVerification: React.FC<OTPVerificationProps> = ({
 
       // Handle successful verification
       setSubmitStatus('success');
-
-      // Call success callback if provided
-      if (onSuccess) {
-        onSuccess();
-      }
+      login(await response.json())
 
       // Redirect to appropriate page
       setTimeout(() => {
-        window.location.href = pageContent.redirectUrl;
+        if (pageType === 'register-verification') {
+          navigate('/dashboard');
+        }
+        if (pageType === 'login-verification') {
+          navigate('/dashboard');
+        }
       }, 2000);
     } catch (error) {
       // Handle error
       setSubmitStatus('error');
       setErrorMessage(pageContent.errorMessage);
-
-      // Call error callback if provided
-      if (onError) {
-        onError(error instanceof Error ? error.message : String(error));
-      }
     } finally {
       setIsSubmitting(false);
     }

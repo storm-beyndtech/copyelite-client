@@ -5,7 +5,7 @@ import { FcGoogle } from 'react-icons/fc';
 import Alert from '@/components/ui/Alert';
 import { bounceAnimation, logoAnimation } from '@/lib/utils';
 import logo from '../../assets/copyelite-logo.png';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import DarkModeSwitcher from '@/components/Layouts/DarkModeSwitcher';
 import GTranslateProvider from '@/components/ui/GTranslateProvider';
 
@@ -34,6 +34,8 @@ const Login: React.FC = () => {
     'idle' | 'success' | 'error'
   >('idle');
   const [showPassword, setShowPassword] = useState(false);
+  const url = import.meta.env.VITE_REACT_APP_SERVER_URL;
+  const navigate = useNavigate();
 
   // Validation function
   const validateForm = (): boolean => {
@@ -59,7 +61,7 @@ const Login: React.FC = () => {
     setIsSubmitting(true);
     try {
       // Placeholder for actual API call
-      const response = await fetch('/api/login', {
+      const response = await fetch(`${url}/users/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -73,10 +75,13 @@ const Login: React.FC = () => {
 
       // Handle successful login
       setSubmitStatus('success');
+
       // Redirect or handle successful login
       setTimeout(() => {
-        window.location.href = '/dashboard';
-      }, 1500);
+        navigate('/verify-otp', {
+          state: { ...formData, pageType: 'login-verification' },
+        });
+      }, 2000);
     } catch (error) {
       // Handle login error
       setSubmitStatus('error');
