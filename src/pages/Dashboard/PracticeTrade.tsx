@@ -2,7 +2,7 @@ import { useState, useEffect, FC } from 'react';
 import { ArrowUp, ArrowDown, ChevronDown } from 'lucide-react';
 import RecentDemoTrades from '@/components/RecentDemoTrades';
 import { contextData } from '@/context/AuthContext';
-import DemoDropdown from '@/components/ui/DemoDropDown';
+import DemoDropdown from '@/components/ui/DemoDropdown';
 
 interface DropdownOption {
   value: string;
