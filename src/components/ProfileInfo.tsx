@@ -144,7 +144,7 @@ export default function ProfileInfo() {
       if (!file.type.startsWith('image/')) {
         setErrors((prev) => ({
           ...prev,
-          image: 'Please select a valid image file',
+          profileImage: 'Please select a valid image file',
         }));
         return;
       }
@@ -153,12 +153,12 @@ export default function ProfileInfo() {
       if (file.size > 5 * 1024 * 1024) {
         setErrors((prev) => ({
           ...prev,
-          image: 'Image size must be less than 5MB',
+          profileImage: 'Image size must be less than 5MB',
         }));
         return;
       }
 
-      setFormData((prev) => ({ ...prev, image: file }));
+      setFormData((prev) => ({ ...prev, profileImage: file }));
 
       // Clear image error if it exists
       if (errors.profileImage) {
@@ -234,9 +234,9 @@ export default function ProfileInfo() {
 
       {/* General Error */}
       {errors.general && (
-        <div className="mb-4 p-4 bg-red-100 dark:bg-red-900 border border-red-300 dark:border-red-700 rounded-md">
-          <p className="text-red-800 dark:text-red-300 text-sm flex items-center">
-            <AlertCircle size={16} className="mr-2" />
+        <div className="mb-4 p-4 bg-red-100 dark:bg-red-950/60 border border-red-300 dark:border-red-700 rounded-md">
+          <p className="text-red-800 dark:text-red-500 font-semibold text-sm flex items-center">
+            <AlertCircle size={16} className="mr-2 flex-shrink-0 text-4xl" />
             {errors.general}
           </p>
         </div>
@@ -247,11 +247,17 @@ export default function ProfileInfo() {
         <div className="lg:col-span-1">
           <div className="bg-gray-100 dark:bg-gray-800 p-4 rounded-lg">
             <div className="w-full h-64 sm:h-80 bg-gray-200 dark:bg-gray-700 rounded-md mb-4 flex items-center justify-center overflow-hidden">
-              {formData.profileImage ? (
+              {formData.profileImage instanceof File ? (
                 <img
                   src={URL.createObjectURL(formData.profileImage)}
-                  alt="Profile"
-                  className="w-full h-full object-cover rounded-md"
+                  alt="Profile Preview"
+                  className="w-full h-full object-cover"
+                />
+              ) : formData.profileImage ? (
+                <img
+                  src={formData.profileImage}
+                  alt="Profile from URL"
+                  className="w-full h-full object-cover"
                 />
               ) : (
                 <User size={80} className="text-gray-400 dark:text-gray-500" />
@@ -261,23 +267,23 @@ export default function ProfileInfo() {
             {/* User Info Display */}
             <div className="space-y-3 text-sm">
               <div className="text-gray-600 dark:text-gray-400">
-                <p className="font-medium">TO56918330324293382624</p>
+                <p className="font-medium">{user.username}</p>
                 <p className="text-xs">Username</p>
               </div>
               <div className="text-gray-600 dark:text-gray-400">
-                <p className="font-medium">kithameleonstore@gmail.com</p>
+                <p className="font-medium">{user.email}</p>
                 <p className="text-xs">Email</p>
               </div>
               <div className="text-gray-600 dark:text-gray-400">
-                <p className="font-medium">+6092574786</p>
+                <p className="font-medium">{user.phone}</p>
                 <p className="text-xs">Mobile</p>
               </div>
               <div className="text-gray-600 dark:text-gray-400">
-                <p className="font-medium">United States</p>
+                <p className="font-medium">{user.country}</p>
                 <p className="text-xs">Country</p>
               </div>
               <div className="text-gray-600 dark:text-gray-400">
-                <p className="font-medium">447 Broadway, 2nd floor</p>
+                <p className="font-medium">{user.streetAddress}</p>
                 <p className="text-xs">Address</p>
               </div>
             </div>
@@ -439,7 +445,7 @@ export default function ProfileInfo() {
                 type="file"
                 id="profileImage"
                 className="hidden"
-                accept="image/*"
+                accept="image/jpeg,image/png,image/jpg,image/gif"
                 onChange={handleImageChange}
               />
               <span className="text-gray-600 dark:text-gray-400 text-sm">

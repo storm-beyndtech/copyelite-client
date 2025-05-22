@@ -23,7 +23,7 @@ export default function UserReferrals() {
     const fetchReferrals = async () => {
       setLoading(true);
       try {
-        const response = await fetch(`${url}/referrals/${user.username}`);
+        const response = await fetch(`${url}/users/referrals/${user.username}`);
 
         const data = await response.json();
         if (response.ok) {
