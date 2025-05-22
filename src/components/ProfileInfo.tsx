@@ -192,6 +192,7 @@ export default function ProfileInfo() {
       formPayload.append('streetAddress', formData.streetAddress);
       formPayload.append('email', user.email);
 
+      console.log(formData.profileImage);
       // Append the image only if it exists
       if (formData.profileImage) {
         formPayload.append('profileImage', formData.profileImage);
