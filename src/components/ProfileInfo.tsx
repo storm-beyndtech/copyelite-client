@@ -66,7 +66,7 @@ export default function ProfileInfo() {
     city: '',
     zipCode: '',
     profileImage: null,
-    streetAddress: ''
+    streetAddress: '',
   });
 
   useEffect(() => {
@@ -171,7 +171,6 @@ export default function ProfileInfo() {
     }
   };
   const handleSubmit = async () => {
-    setSubmitting(true);
     setSuccessMessage('');
     setErrors({});
 
@@ -181,6 +180,7 @@ export default function ProfileInfo() {
     }
 
     try {
+      setSubmitting(true);
       const formPayload = new FormData();
 
       // Append only the scalar fields
