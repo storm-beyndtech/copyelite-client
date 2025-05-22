@@ -3,6 +3,7 @@ import { AnimatedSection } from '@/components/ui/animated-section';
 import { Users, Star } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import ChartSlide from './ChartSlide';
+import { Link } from 'react-router-dom';
 const words = ['Everyone', 'Investors', 'Experts', 'Beginners'];
 
 export default function Hero() {
@@ -59,14 +60,14 @@ export default function Hero() {
             trade. If they profit, you profit too. Open your account in minutes!
           </p>
 
-          <div className="mb-8">
+          <Link to="/register" className="mb-8">
             <Button
               size="lg"
-              className="hover:opacity-90 text-white px-20 py-3 text-lg"
+              className="w-60 hover:opacity-90 text-white px-20 py-3 text-lg"
             >
               Get Started
             </Button>
-          </div>
+          </Link>
         </AnimatedSection>
 
         <AnimatedSection delay={0.3}>

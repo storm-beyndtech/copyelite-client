@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { Award, TrendingUp, BarChart2 } from 'lucide-react';
 import { AnimatedSection } from './ui/animated-section';
+import { Link } from 'react-router-dom';
 
 // Logos for review sites
 const reviewSites = [
@@ -240,9 +241,11 @@ const Sec10 = () => {
                 Copyelite
               </motion.h1>
               <motion.div variants={itemVariants} className="w-fit">
-                <button className="mt-6 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-md transition-all">
-                  Start Trading Now
-                </button>
+                <Link to="/register" className="block">
+                  <button className="mt-6 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-md transition-all">
+                    Start Trading Now
+                  </button>
+                </Link>
               </motion.div>
             </motion.div>
           </div>

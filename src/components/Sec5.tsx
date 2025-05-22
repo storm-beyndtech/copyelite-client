@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import { motion, useAnimation, useInView } from 'framer-motion';
 import { Button } from './ui/button';
 import { Coins, Timer, UserRound, UsersRound } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 interface TraderProfile {
   id: string;
@@ -93,9 +94,11 @@ const TraderCard: React.FC<{ trader: TraderProfile; traderIndex: number }> = ({
             )}
           </div>
         </div>
-        <button className="bg-blue-400 hover:bg-blue-600 text-white text-[10px] px-4 py-[1px] rounded-full font-semibold transition-colors duration-300">
-          COPY
-        </button>
+        <Link to="/register">
+          <button className="bg-blue-400 hover:bg-blue-600 text-white text-[10px] px-4 py-[1px] rounded-full font-semibold transition-colors duration-300">
+            COPY
+          </button>
+        </Link>
       </div>
 
       <div className="mb-4">

@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { AnimatedSection } from './ui/animated-section';
 
 // Main Features Component
@@ -118,9 +119,12 @@ const Sec7 = () => {
                   designed to give you the best value and enhance your trading
                   experience.
                 </p>
-                <button className="bg-white text-gray-900 text-sm font-bold py-2 px-7 hover:bg-gray-100 transition-colors">
-                  Open Account
-                </button>
+
+                <Link to="/register" className="block">
+                  <button className="bg-white text-gray-900 text-sm font-bold py-2 px-7 hover:bg-gray-100 transition-colors">
+                    Open Account
+                  </button>
+                </Link>
               </div>
 
               <img

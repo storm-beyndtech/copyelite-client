@@ -144,11 +144,11 @@ export default function Withdraw() {
                 </label>
                 <input
                   onChange={handleAmountChange}
-                  value={amount}
+                  value={amount === 0 ? '' : amount}
                   type="number"
                   id="amount"
                   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-900 dark:border-gray-800 dark:placeholder-gray-400 dark:text-white"
-                  placeholder="Enter Withdraw Amount"
+                  placeholder="$0.00"
                   required
                   min={0}
                 />

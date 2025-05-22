@@ -18,7 +18,7 @@ interface Trade {
   date: string;
 }
 
-const RecentDemoTrades = () => {
+const RecentDemoTrades = ({ changes }: any) => {
   const [trades, setTrades] = useState<Trade[]>([]);
   const { user } = contextData();
   const [searchQuery, setSearchQuery] = useState('');
@@ -30,7 +30,7 @@ const RecentDemoTrades = () => {
   const fetchTrades = async () => {
     setLoading(true);
     try {
-      const res = await fetch(`${url}/demo-trades`);
+      const res = await fetch(`${url}/trades/demo-trades/${user.email}`);
       const data = await res.json();
 
       if (res.ok) {
@@ -61,7 +61,7 @@ const RecentDemoTrades = () => {
   // Fetch trades on component mount
   useEffect(() => {
     fetchTrades();
-  }, []);
+  }, [changes]);
 
   // Filter trades based on search query
   const filteredTrades = trades.filter((trade) => {
@@ -77,11 +77,11 @@ const RecentDemoTrades = () => {
     <div className="w-full bg-white dark:bg-gray-950 rounded-lg shadow-sm overflow-hidden">
       <div className="p-4 border-b border-gray-200 dark:border-gray-900">
         <div className="flex items-center justify-between">
-          <h2 className="text-base font-semibold text-gray-800 dark:text-white">
-            Recent Demo Trades
+          <h2 className="text-sm font-semibold text-gray-800 dark:text-white">
+            Demo Trades
           </h2>
           {lastUpdated && (
-            <div className="flex items-center text-xs text-gray-500 dark:text-gray-400">
+            <div className="flex items-center text-[10px] text-gray-500 dark:text-gray-400">
               <span>Updated {lastUpdated}</span>
               <button
                 onClick={fetchTrades}
