@@ -22,9 +22,11 @@ interface TradingViewWidgetProps {
 }
 
 // TradingView widget component
-const TradingViewWidget: FC<TradingViewWidgetProps> = ({ symbol, theme }) => {
+export const TradingViewWidget: FC<TradingViewWidgetProps> = ({
+  symbol,
+  theme,
+}) => {
   useEffect(() => {
-    console.log("i'm here");
     const createWidget = () => {
       if (
         document.getElementById('tradingview_widget') &&
@@ -64,9 +66,7 @@ const TradingViewWidget: FC<TradingViewWidgetProps> = ({ symbol, theme }) => {
     };
   }, [symbol, theme]);
 
-  return (
-    <div id="tradingview_widget" className="w-full h-full min-h-[500px]"></div>
-  );
+  return <div id="tradingview_widget" className="w-full h-full"></div>;
 };
 
 // Dropdown select component
@@ -168,7 +168,7 @@ const PracticeTrade: FC = () => {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Left column - Chart */}
           <div className="lg:col-span-2 bg-white dark:bg-gray-950 shadow overflow-hidden">
-            <div className="h-full">
+            <div className="h-full min-h-[500px]">
               <TradingViewWidget symbol={symbol} theme={theme} />
             </div>
           </div>

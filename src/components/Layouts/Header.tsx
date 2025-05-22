@@ -11,7 +11,7 @@ const Header = (props: {
   const [showNotificationDropdown, setShowNotificationDropdown] =
     useState(false);
   const [showProfileDropdown, setShowProfileDropdown] = useState(false);
-  const { logout } = contextData();
+  const { logout, user } = contextData();
 
   const toggleNotificationDropdown = () => {
     setShowNotificationDropdown(!showNotificationDropdown);
@@ -21,6 +21,17 @@ const Header = (props: {
   const toggleProfileDropdown = () => {
     setShowProfileDropdown(!showProfileDropdown);
     setShowNotificationDropdown(false);
+  };
+
+  const handleCopy = async (textToCopy: string) => {
+    try {
+      await navigator.clipboard.writeText(
+        `https://interactive-copyelite.com/register/${textToCopy}`,
+      );
+      alert('Text copied to clipboard');
+    } catch (err) {
+      console.log('Failed to copy text: ', err);
+    }
   };
 
   return (
@@ -68,7 +79,10 @@ const Header = (props: {
         </button>
 
         {/* Dummy CopyRef */}
-        <div className="flex items-center space-x-2 px-4 py-1 border dark:border-gray-800 border-gray-400 rounded">
+        <div
+          onClick={() => handleCopy(user.username)}
+          className="flex items-center space-x-2 px-4 py-1 border dark:border-gray-800 border-gray-400 rounded"
+        >
           <span className="text-xs font-medium text-gray-600 dark:text-gray-300">
             Copy Referral Link
           </span>

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import {
   TrendingUp,
   TrendingDown,
@@ -7,11 +7,14 @@ import {
   Target,
   AlertTriangle,
 } from 'lucide-react';
+import { contextData } from '@/context/AuthContext';
+import { TradingViewWidget } from './PracticeTrade';
 
 export default function TechnicalInsight() {
-  const [selectedSymbol, setSelectedSymbol] = useState('BTCUSD');
+  const [selectedSymbol, setSelectedSymbol] = useState('AAPL');
   const [timeframe, setTimeframe] = useState('4h');
   const [loading, setLoading] = useState(false);
+  const { theme } = contextData();
 
   // Mock technical analysis data
   const [technicalData, setTechnicalData] = useState({
@@ -25,54 +28,18 @@ export default function TechnicalInsight() {
   });
 
   const symbols = [
-    { symbol: 'BTCUSD', name: 'Bitcoin' },
-    { symbol: 'ETHUSD', name: 'Ethereum' },
-    { symbol: 'EURUSD', name: 'EUR/USD' },
-    { symbol: 'GBPUSD', name: 'GBP/USD' },
-    { symbol: 'AAPL', name: 'Apple Inc.' },
+    { symbol: 'AAPL', name: 'Apple Inc. (AAPL)' },
+    { symbol: 'MSFT', name: 'Microsoft Corp. (MSFT)' },
+    { symbol: 'GOOGL', name: 'Alphabet Inc. (GOOGL)' },
+    { symbol: 'AMZN', name: 'Amazon.com Inc. (AMZN)' },
+    { symbol: 'TSLA', name: 'Tesla Inc. (TSLA)' },
   ];
 
   const timeframes = ['1m', '5m', '15m', '1h', '4h', '1D', '1W'];
 
-  useEffect(() => {
-    // Load TradingView widget
-    const script = document.createElement('script');
-    script.src =
-      'https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js';
-    script.async = true;
-
-    // Detect current theme
-    const isDark =
-      document.documentElement.classList.contains('dark') ||
-      window.matchMedia('(prefers-color-scheme: dark)').matches;
-
-    script.innerHTML = JSON.stringify({
-      autosize: true,
-      symbol: selectedSymbol,
-      interval: timeframe,
-      timezone: 'Etc/UTC',
-      theme: isDark ? 'dark' : 'light',
-      style: '1',
-      locale: 'en',
-      toolbar_bg: isDark ? '#1f2937' : '#f1f3f6',
-      enable_publishing: false,
-      allow_symbol_change: true,
-      backgroundColor: isDark ? '#1f2937' : '#ffffff',
-      gridColor: isDark ? '#374151' : '#e5e7eb',
-      container_id: 'tradingview_chart',
-    });
-
-    const chartContainer = document.getElementById('tradingview_chart');
-    if (chartContainer) {
-      chartContainer.innerHTML = '';
-      chartContainer.appendChild(script);
-    }
-  }, [selectedSymbol, timeframe]);
-
   const handleSymbolChange = (symbol: any) => {
     setLoading(true);
     setSelectedSymbol(symbol);
-    // Simulate API call delay
     setTimeout(() => {
       setTechnicalData({
         ...technicalData,
@@ -87,15 +54,15 @@ export default function TechnicalInsight() {
   };
 
   return (
-    <div className="w-full p-6 bg-gray-50 dark:bg-gray-900 min-h-screen">
+    <div className="w-full p-4 sm:p-6 bg-gray-50 dark:bg-gray-900 min-h-screen">
       <div className="max-w-7xl mx-auto">
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-8">
+        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white mb-6 sm:mb-8">
           Technical Insight Dashboard
         </h1>
 
         {/* Controls */}
-        <div className="flex flex-wrap gap-4 mb-6">
-          <div className="flex-auto min-w-64">
+        <div className="flex flex-col sm:flex-row gap-4 mb-6">
+          <div className="flex-1 min-w-0">
             <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
               Select Symbol
             </label>
@@ -112,7 +79,7 @@ export default function TechnicalInsight() {
             </select>
           </div>
 
-          <div className="flex-auto min-w-48">
+          <div className="flex-1 min-w-0">
             <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
               Timeframe
             </label>
@@ -130,11 +97,11 @@ export default function TechnicalInsight() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
           {/* Technical Analysis Panel */}
-          <div className="lg:col-span-1">
-            <div className="bg-white border border-gray-200 rounded-lg shadow p-6 dark:bg-gray-800 dark:border-gray-700 mb-6">
-              <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-4 flex items-center">
+          <div className="xl:col-span-1 space-y-6">
+            <div className="bg-white border border-gray-200 rounded-lg shadow p-4 sm:p-6 dark:bg-gray-800 dark:border-gray-700">
+              <h3 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white mb-4 flex items-center">
                 <Activity className="mr-2" size={20} />
                 Technical Analysis
               </h3>
@@ -152,7 +119,7 @@ export default function TechnicalInsight() {
                       Signal:
                     </span>
                     <span
-                      className={`px-3 py-1 rounded-full text-sm font-bold ${
+                      className={`px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm font-bold ${
                         technicalData.signal === 'BUY'
                           ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300'
                           : 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300'
@@ -160,12 +127,12 @@ export default function TechnicalInsight() {
                     >
                       {technicalData.signal === 'BUY' ? (
                         <>
-                          <TrendingUp className="inline mr-1" size={16} />
+                          <TrendingUp className="inline mr-1" size={14} />
                           BUY
                         </>
                       ) : (
                         <>
-                          <TrendingDown className="inline mr-1" size={16} />
+                          <TrendingDown className="inline mr-1" size={14} />
                           SELL
                         </>
                       )}
@@ -177,7 +144,7 @@ export default function TechnicalInsight() {
                       Strength:
                     </span>
                     <div className="flex items-center space-x-2">
-                      <div className="w-24 bg-gray-200 rounded-full h-2 dark:bg-gray-700">
+                      <div className="w-16 sm:w-24 bg-gray-200 rounded-full h-2 dark:bg-gray-700">
                         <div
                           className={`h-2 rounded-full ${
                             technicalData.strength > 70
@@ -189,113 +156,114 @@ export default function TechnicalInsight() {
                           style={{ width: `${technicalData.strength}%` }}
                         ></div>
                       </div>
-                      <span className="text-sm font-bold text-gray-900 dark:text-white">
+                      <span className="text-xs sm:text-sm font-bold text-gray-900 dark:text-white">
                         {technicalData.strength}%
                       </span>
                     </div>
                   </div>
 
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm font-medium text-gray-600 dark:text-gray-300">
-                      RSI:
-                    </span>
-                    <span className="text-sm font-bold text-gray-900 dark:text-white">
-                      {technicalData.rsi}
-                    </span>
+                  <div className="grid grid-cols-2 gap-4 text-sm">
+                    <div className="flex justify-between">
+                      <span className="text-gray-600 dark:text-gray-300">
+                        RSI:
+                      </span>
+                      <span className="font-bold text-gray-900 dark:text-white">
+                        {technicalData.rsi}
+                      </span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-600 dark:text-gray-300">
+                        MACD:
+                      </span>
+                      <span className="font-bold text-gray-900 dark:text-white">
+                        {technicalData.macd}
+                      </span>
+                    </div>
                   </div>
 
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm font-medium text-gray-600 dark:text-gray-300">
-                      MACD:
-                    </span>
-                    <span className="text-sm font-bold text-gray-900 dark:text-white">
-                      {technicalData.macd}
-                    </span>
-                  </div>
-
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm font-medium text-gray-600 dark:text-gray-300">
-                      Support:
-                    </span>
-                    <span className="text-sm font-bold text-green-600">
-                      ${technicalData.support.toLocaleString()}
-                    </span>
-                  </div>
-
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm font-medium text-gray-600 dark:text-gray-300">
-                      Resistance:
-                    </span>
-                    <span className="text-sm font-bold text-red-600">
-                      ${technicalData.resistance.toLocaleString()}
-                    </span>
+                  <div className="grid grid-cols-1 gap-2 text-sm">
+                    <div className="flex justify-between items-center">
+                      <span className="text-gray-600 dark:text-gray-300">
+                        Support:
+                      </span>
+                      <span className="font-bold text-green-600">
+                        ${technicalData.support.toLocaleString()}
+                      </span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-gray-600 dark:text-gray-300">
+                        Resistance:
+                      </span>
+                      <span className="font-bold text-red-600">
+                        ${technicalData.resistance.toLocaleString()}
+                      </span>
+                    </div>
                   </div>
                 </div>
               )}
             </div>
 
             {/* Quick Actions */}
-            <div className="bg-white border border-gray-200 rounded-lg shadow p-6 dark:bg-gray-800 dark:border-gray-700">
-              <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-4 flex items-center">
+            <div className="bg-white border border-gray-200 rounded-lg shadow p-4 sm:p-6 dark:bg-gray-800 dark:border-gray-700">
+              <h3 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white mb-4 flex items-center">
                 <Target className="mr-2" size={20} />
                 Quick Actions
               </h3>
-              <div className="space-y-3">
-                <button className="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-medium py-2.5 px-4 rounded-lg transition-all duration-200 shadow-sm hover:shadow-md border border-emerald-600 hover:border-emerald-700">
+              <div className="space-y-2">
+                <button className="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-medium py-2 px-4 rounded-lg transition-all duration-200 shadow-sm hover:shadow-md border border-emerald-600 hover:border-emerald-700 text-sm sm:text-base">
                   Set Buy Alert
                 </button>
-                <button className="w-full bg-rose-500 hover:bg-rose-600 text-white font-medium py-2.5 px-4 rounded-lg transition-all duration-200 shadow-sm hover:shadow-md border border-rose-600 hover:border-rose-700">
+                <button className="w-full bg-red-600 hover:bg-rose-700 text-white font-medium py-2 px-4 rounded-lg transition-all duration-200 shadow-sm hover:shadow-md border border-rose-600 hover:border-rose-700 text-sm sm:text-base">
                   Set Sell Alert
-                </button>
-                <button className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 px-4 rounded-lg transition-all duration-200 shadow-sm hover:shadow-md border border-blue-700 hover:border-blue-800">
-                  Add to Watchlist
                 </button>
               </div>
             </div>
           </div>
 
           {/* TradingView Chart */}
-          <div className="lg:col-span-2">
-            <div className="bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 h-200">
+          <div className="xl:col-span-2">
+            <div className="bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 h-full">
               <div className="p-4 border-b border-gray-200 dark:border-gray-700">
-                <h3 className="text-xl font-semibold text-gray-900 dark:text-white flex items-center">
+                <h3 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white flex items-center">
                   <BarChart3 className="mr-2" size={20} />
-                  Price Chart - {selectedSymbol}
+                  Symbol Overview - {selectedSymbol}
                 </h3>
               </div>
-              <div id="tradingview_chart" className="h-80 rounded-b-lg"></div>
+              <div className="h-full max-h-100">
+                <TradingViewWidget theme={theme} symbol={selectedSymbol} />
+              </div>
             </div>
           </div>
         </div>
 
         {/* Market Overview */}
-        <div className="mt-6 bg-white border border-gray-200 rounded-lg shadow p-6 dark:bg-gray-800 dark:border-gray-700">
-          <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-4 flex items-center">
+        <div className="mt-6 bg-white border border-gray-200 rounded-lg shadow p-4 sm:p-6 dark:bg-gray-800 dark:border-gray-700">
+          <h3 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white mb-4 flex items-center">
             <AlertTriangle className="mr-2" size={20} />
             Market Overview
           </h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {symbols.slice(0, 4).map((item, index) => (
               <div
                 key={item.symbol}
-                className="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg"
+                className="p-3 sm:p-4 bg-gray-50 dark:bg-gray-700 rounded-lg"
               >
                 <div className="flex justify-between items-center mb-2">
-                  <span className="font-medium text-gray-900 dark:text-white">
+                  <span className="font-medium text-gray-900 dark:text-white text-sm sm:text-base">
                     {item.symbol}
                   </span>
                   <span
-                    className={`text-sm ${
+                    className={`text-xs sm:text-sm ${
                       index % 2 === 0 ? 'text-green-600' : 'text-red-600'
                     }`}
                   >
                     {index % 2 === 0 ? '+2.5%' : '-1.2%'}
                   </span>
                 </div>
-                <div className="text-lg font-bold text-gray-900 dark:text-white">
+                <div className="text-base sm:text-lg font-bold text-gray-900 dark:text-white">
                   ${(Math.random() * 50000 + 10000).toFixed(2)}
                 </div>
-                <div className="text-sm text-gray-600 dark:text-gray-300">
+                <div className="text-xs sm:text-sm text-gray-600 dark:text-gray-300">
                   Vol: {(Math.random() * 1000000).toFixed(0)}
                 </div>
               </div>
