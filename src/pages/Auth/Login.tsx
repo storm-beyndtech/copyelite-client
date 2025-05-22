@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { Eye, EyeOff } from 'lucide-react';
 import { FcGoogle } from 'react-icons/fc';
 import Alert from '@/components/ui/Alert';
-import { bounceAnimation, logoAnimation } from '@/lib/utils';
+import { bounceAnimation } from '@/lib/utils';
 import logo from '../../assets/copyelite-logo.png';
 import { Link, useNavigate } from 'react-router-dom';
 import DarkModeSwitcher from '@/components/Layouts/DarkModeSwitcher';
@@ -82,8 +82,10 @@ const Login: React.FC = () => {
         body: JSON.stringify(payload),
       });
 
+      const resData = await response.json()
+
       if (!response.ok) {
-        throw new Error('Login failed');
+        throw new Error(resData.message);
       }
 
       // Handle successful login
@@ -133,19 +135,9 @@ const Login: React.FC = () => {
     <div className="min-h-screen grid grid-cols-5 overflow-hidden bg-gray-50 dark:bg-bodydark">
       {/* Left Side - Marketing Content */}
       <div className="md:col-span-2 relative bg-bodydark hidden md:flex flex-col justify-center">
-        <div className="absolute top-0 left-0 z-[4] w-full h-full bg-gradient-to-b from-brandblue/30 via-brandblue/10 to-bodydark"></div>
+        <div className="absolute top-0 left-0 z-[4] w-full h-full bg-gradient-to-b from-brandblue/20 via-brandblue/10 to-bodydark"></div>
 
-        {/* Spinning Copyelite logo in top-left */}
-        <div className="absolute top-[650px] -left-20 overflow-hidden w-[560px] h-[560px] -translate-x-1/2 -translate-y-1/2 opacity-60">
-          <motion.img
-            src="https://protradercopy.com/wp-content/themes/ProTrader-Copy/images/market-transaction-animation.webp"
-            alt="Copyelite Logo"
-            className="w-full h-full"
-            animate={logoAnimation}
-          />
-        </div>
-
-        <div className="absolute z-10 top-0 left-0 pt-10 lg:px-20 px-5 flex flex-col gap-6">
+        <div className="absolute z-10 top-0 left-0 pt-10 lg:pl-10 pl-5 flex flex-col gap-6">
           {/* Logo Placeholder */}
           <Link to="/" className="">
             <img src={logo} alt="logo" className="w-35" />
@@ -158,9 +150,9 @@ const Login: React.FC = () => {
 
           <motion.div className="flex" animate={bounceAnimation}>
             <img
-              src="https://protradercopy.com/static/images/about/startingright.png"
+              src="https://res.cloudinary.com/ddb1vjioq/image/upload/v1747727915/Adobe_Express_-_file_6_aore83.png"
               alt="Login"
-              className="w-[80%]"
+              className="w-full"
             />
           </motion.div>
         </div>

@@ -5,12 +5,6 @@ const Sec7 = () => {
   return (
     <div className="bg-bodydark py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-5xl mx-auto">
-        <AnimatedSection>
-          <h2 className="text-4xl font-bold text-center mb-12 text-cyan-400">
-            Other features at your service
-          </h2>
-        </AnimatedSection>
-
         <div className="grid grid-cols-8 gap-6">
           {/* Safety and Security */}
           <AnimatedSection

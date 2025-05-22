@@ -401,8 +401,8 @@ const AccountSetupOnboarding = () => {
             <p>
               By pressing the "SUBMIT" button below, I hereby confirm and
               acknowledge that the information provided above is true accurate,
-              and I further confirm and acknowledge that Copyelite will
-              rely on this information in the opening of my trading account
+              and I further confirm and acknowledge that Copyelite will rely on
+              this information in the opening of my trading account
             </p>
           </div>
         </AnimatedSection>

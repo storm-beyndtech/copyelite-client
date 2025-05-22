@@ -1,6 +1,5 @@
+import ProofOfIdentificationForm from '@/components/ProofOfIdentificationForm';
 
 export default function KYC() {
-  return (
-    <div>KYC</div>
-  )
+  return <ProofOfIdentificationForm />;
 }

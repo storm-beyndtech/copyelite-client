@@ -1,9 +1,8 @@
 import { contextData } from '@/context/AuthContext';
-import { Bell, User, LogOut, LayoutDashboard } from 'lucide-react';
+import { Bell, User, LogOut, LayoutDashboard, Copy } from 'lucide-react';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import DarkModeSwitcher from './DarkModeSwitcher';
-import { IoCopy } from 'react-icons/io5';
 
 const Header = (props: {
   sidebarOpen: string | boolean | undefined;
@@ -25,7 +24,7 @@ const Header = (props: {
   };
 
   return (
-    <header className="bg-white dark:bg-bodydark/50 shadow-sm z-10 px-4 rounded-xl mx-3 my-3">
+    <header className="bg-white dark:bg-gray-950 shadow-sm z-10 px-4 rounded-xl mx-3 my-3">
       <div className="flex items-center gap-2 justify-between h-14 px-2">
         <button
           aria-controls="sidebar"
@@ -69,20 +68,20 @@ const Header = (props: {
         </button>
 
         {/* Dummy CopyRef */}
-        <div className="flex items-center space-x-2 px-3 py-1 border dark:border-gray-800 border-gray-400 rounded">
-          <span className="text-xs text-gray-700 dark:text-gray-500">
-            kjbfl463
+        <div className="flex items-center space-x-2 px-4 py-1 border dark:border-gray-800 border-gray-400 rounded">
+          <span className="text-xs font-medium text-gray-600 dark:text-gray-300">
+            Copy Referral Link
           </span>
-          <IoCopy size={20} className="text-cyan-500" />
+          <Copy size={20} className="text-black dark:text-brandblue" />
         </div>
 
         {/* Right side buttons */}
         <div className="flex items-center space-x-2">
           <Link
             to="/dashboard/practice"
-            className="text-xs px-4 py-1 max-sm:hidden rounded border border-cyan-900 hover:bg-cyan-950 text-cyan-500 font-medium"
+            className="text-xs px-4 py-1.5 text-white max-sm:hidden rounded hover:bg-gray-800 bg-blue-500 font-semibold"
           >
-            PRACTICE
+            Practice Area
           </Link>
 
           {/* Notifications with Dropdown */}

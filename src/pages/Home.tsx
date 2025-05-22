@@ -8,11 +8,12 @@ import Sec2 from '@/components/Sec2';
 import Sec3 from '@/components/Sec3';
 import TabbedSections from '@/components/Sec4';
 import Sec5 from '@/components/Sec5';
-import Sec6 from '@/components/Sec6';
 import Sec7 from '@/components/Sec7';
 import Sec8 from '@/components/Sec8';
 import Sec9 from '@/components/Sec9';
+import SpreadSteps from '@/components/SpreadSteps';
 import StepsSection from '@/components/StepsSection';
+import { testimonies } from '@/lib/utils';
 
 export default function Home() {
   return (
@@ -21,14 +22,14 @@ export default function Home() {
       <Hero />
       <FeaturesSection />
       <Sec2 />
-      <Sec3 />
-      <TabbedSections />
-      <Sec5 />
-      <Sec6 />
-      <Reviews />
-      <Sec7 />
-      <Sec8 />
       <Sec9 />
+      <Sec5 />
+      <SpreadSteps />
+      <TabbedSections />
+      <Sec7 />
+      <Reviews data={testimonies} />
+      <Sec8 />
+      <Sec3 />
       <Sec10 />
       <StepsSection />
       <Footer />

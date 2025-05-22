@@ -22,6 +22,32 @@ section {
   width: 100%;
 }
 
+.bgRadial {
+  background: radial-gradient(
+    circle,
+    #00030d 10%,
+    #00030d 30%,
+    #000104 30%,
+    #000104 60%,
+    #00030d 60%,
+    #00030d 100%,
+    #000104 100%
+  );
+}
+
+.dark .bgRadialDark {
+  background: radial-gradient(
+    circle,
+    #00030d 10%,
+    #00030d 30%,
+    #000104 30%,
+    #000104 60%,
+    #00030d 60%,
+    #00030d 100%,
+    #000104 100%
+  );
+}
+
 h3,
 p {
   font-family: 'Palanquin' !important;
@@ -87,11 +113,6 @@ p {
 * {
   scrollbar-color: #888 transparent;
   scrollbar-width: thin;
-}
-
-/* third-party libraries CSS */
-#tv-attr-logo {
-  display: none;
 }
 
 .custom-dots {

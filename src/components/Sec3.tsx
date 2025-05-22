@@ -23,14 +23,9 @@ const Sec3 = () => {
 
   return (
     <>
-      <section
-        className="relative text-white py-40 px-4 sm:px-8 lg:px-20 overflow-hidden"
-        // style={{
-        //   backgroundImage: 'radial-gradient(circle, #01a7d3 0%)',
-        // }}
-      >
+      <section className="relative text-white py-40 px-4 sm:px-8 lg:px-20 overflow-hidden">
         <div className="absolute inset-0 flex justify-center items-center z-0">
-          <div className="w-[440px] h-[440px] bg-[#01a7d3] rounded-full blur-[100px]"></div>
+          <div className="w-[200px] h-[200px] bg-brandblue rounded-full blur-[100px]"></div>
         </div>
         <div className="max-ctn relative flex flex-col lg:flex-row justify-between items-center text-center lg:text-left gap-y-16">
           {/* LEFT TEXT */}

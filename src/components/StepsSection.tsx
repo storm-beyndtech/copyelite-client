@@ -30,7 +30,7 @@ const StepsSection = () => {
   };
 
   return (
-    <div className="relative bg-[#050a17] text-white py-32 overflow-hidden">
+    <div className="relative bg-bodydark text-white py-32 overflow-hidden">
       {/* Background light effects */}
       <div className="absolute inset-0 flex items-center justify-center">
         <div className="w-full max-w-4xl h-full relative">

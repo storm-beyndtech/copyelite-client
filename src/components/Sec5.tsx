@@ -24,11 +24,11 @@ const BenefitCard: React.FC<{ icon: React.ReactNode; title: string }> = ({
   icon,
   title,
 }) => (
-  <div className="bg-white rounded-2xl p-6 flex flex-col items-center justify-center text-center h-40 shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100 hover:border-green-100 group">
-    <div className="bg-green-50 p-4 rounded-full text-green-500 mb-4 group-hover:bg-green-500 group-hover:text-white transition-all duration-300">
+  <div className="bg-white rounded-2xl p-6 flex flex-col items-center justify-center text-center h-40 shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100 hover:border-blue-100 group">
+    <div className="bg-blue-50 p-4 rounded-full text-blue-500 mb-4 group-hover:bg-blue-500 group-hover:text-white transition-all duration-300">
       {icon}
     </div>
-    <p className="text-gray-600 font-semibold group-hover:text-green-600 transition-colors duration-300">
+    <p className="text-gray-600 font-semibold group-hover:text-blue-600 transition-colors duration-300">
       {title}
     </p>
   </div>
@@ -74,12 +74,12 @@ const TraderCard: React.FC<{ trader: TraderProfile; traderIndex: number }> = ({
         hidden: { opacity: 0, y: 20 },
         visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
       }}
-      className="bg-white rounded-2xl p-6 relative overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 border border-gray-100 hover:border-green-200"
+      className="bg-white rounded-2xl p-6 relative overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 border border-gray-100 hover:border-blue-200"
       whileHover={{ y: -5 }}
     >
       <div className="flex justify-between items-center mb-6">
         <div className="flex items-center">
-          <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-green-100 mr-3">
+          <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-blue-100 mr-3">
             <img
               src={avatarUrls[traderIndex] || avatarUrl}
               alt={trader.name}
@@ -93,14 +93,14 @@ const TraderCard: React.FC<{ trader: TraderProfile; traderIndex: number }> = ({
             )}
           </div>
         </div>
-        <button className="bg-green-400 hover:bg-green-600 text-white text-[10px] px-4 py-[1px] rounded-full font-semibold transition-colors duration-300">
+        <button className="bg-blue-400 hover:bg-blue-600 text-white text-[10px] px-4 py-[1px] rounded-full font-semibold transition-colors duration-300">
           COPY
         </button>
       </div>
 
       <div className="mb-4">
         <div className="flex items-baseline">
-          <span className="text-green-500 text-3xl font-bold">
+          <span className="text-blue-500 text-3xl font-bold">
             +{trader.gainPercentage}%
           </span>
         </div>
@@ -115,7 +115,7 @@ const TraderCard: React.FC<{ trader: TraderProfile; traderIndex: number }> = ({
           <span
             className={`text-xs px-3 py-1 rounded-full font-medium ${
               trader.risk === 'Low'
-                ? 'bg-green-50 text-green-600'
+                ? 'bg-blue-50 text-blue-600'
                 : trader.risk === 'Medium'
                   ? 'bg-yellow-50 text-yellow-600'
                   : 'bg-red-50 text-red-600'
@@ -137,7 +137,7 @@ const TraderCard: React.FC<{ trader: TraderProfile; traderIndex: number }> = ({
       <div className="absolute bottom-0 right-0 h-20 overflow-hidden">
         <svg
           viewBox="0 0 100 40"
-          className="w-full h-20 text-green-400 opacity-20"
+          className="w-full h-20 text-blue-400 opacity-20"
         >
           <defs>
             <linearGradient
@@ -203,7 +203,7 @@ const CopyTrading: React.FC<CopyTradingProps> = ({ traders }) => {
     <div className="bg-gradient-to-b from-gray-50 to-gray-100 p-4 md:p-8">
       {/* Background decorations */}
       <div className="fixed top-0 left-0 right-0 bottom-0 pointer-events-none overflow-hidden -z-10">
-        <div className="absolute top-0 right-0 w-96 h-96 bg-green-100 rounded-full opacity-10 -translate-y-1/2 translate-x-1/2 blur-3xl"></div>
+        <div className="absolute top-0 right-0 w-96 h-96 bg-blue-100 rounded-full opacity-10 -translate-y-1/2 translate-x-1/2 blur-3xl"></div>
         <div className="absolute bottom-0 left-0 w-96 h-96 bg-blue-100 rounded-full opacity-10 translate-y-1/2 -translate-x-1/2 blur-3xl"></div>
       </div>
 

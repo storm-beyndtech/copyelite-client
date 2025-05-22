@@ -161,14 +161,12 @@ const Sec10 = () => {
   };
 
   return (
-    <div className="relative bg-[#050a17] text-white overflow-hidden pt-16 pb-32">
+    <div className="relative bg-black/95 text-white overflow-hidden pt-16 pb-32">
       {/* Background elements */}
-      <div className="absolute top-0 right-0 w-full h-full bg-bodydark z-0"></div>
       <div className="absolute top-150 -left-40 w-60 h-60 bg-blue-500/30 blur-3xl rounded-full" />
-      <div className="absolute bottom-0 right-0 w-60 h-60 bg-cyan-500/20 blur-3xl rounded-full" />
 
       {/* Animated logo */}
-      <div className="absolute top-150 -left-20 opacity-20 hidden lg:block">
+      <div className="absolute top-150 -left-20 opacity-10 hidden lg:block">
         <motion.div className="w-60 h-60 relative" animate={logoAnimation}>
           <div className="w-full h-full rounded-full border-2 border-blue-400/30"></div>
           <div className="absolute top-1/2 left-1/2 w-1 h-1 bg-blue-400 rounded-full transform -translate-x-1/2 -translate-y-1/2"></div>
@@ -177,33 +175,24 @@ const Sec10 = () => {
       </div>
 
       <div className="relative z-10 max-ctn">
-        <div className="flex flex-col lg:flex-row items-center justify-center gap-8 mb-16">
+        <div className="flex flex-col lg:flex-row items-center justify-center gap-10 mb-30">
           {/* Left side with glowing thumbs up */}
-          <div className="w-full lg:w-1/3">
-            <div className="w-100 h-100 rounded-3xl my-auto mx-auto">
-              <video
-                muted
-                loop
-                playsInline
-                webkit-playsinline="true"
-                x5-playsinline="true"
-                style={{ mixBlendMode: 'multiply' }}
-                className="w-full"
-              >
-                <source
-                  src="https://www.monetamarkets.com/wp-content/themes/Moneta/videos/home_row8_video.mp4"
-                  type="video/mp4"
-                />
-                <source
-                  src="https://www.monetamarkets.com/wp-content/themes/Moneta/videos/home_row8_video.webm"
-                  type="video/webm"
-                />
-              </video>
-            </div>
+          <div className="w-115 h-100 rounded">
+            <video
+              src="https://videos-cdn.capex.com/66195e46-2098-4989-9ae6-27ae88e9b533/play_720p.mp4"
+              autoPlay
+              muted
+              loop
+              playsInline
+              style={{
+                width: '100%',
+                height: 'auto',
+              }}
+            />
           </div>
 
           {/* Right side with counter and text */}
-          <div className="w-full lg:max-w-3xl">
+          <div className="w-full lg:max-w-lg">
             <motion.div
               initial="hidden"
               whileInView="visible"
@@ -213,7 +202,7 @@ const Sec10 = () => {
             >
               <motion.h1
                 variants={itemVariants}
-                className="text-3xl text-center md:text-5xl font-bold !leading-[60px]"
+                className="text-3xl md:text-5xl font-bold !leading-[60px]"
               >
                 Find out why over
                 <div className="w-fit inline-flex">
@@ -250,7 +239,7 @@ const Sec10 = () => {
                 <span className="text-blue-400">are online</span> trading with
                 Copyelite
               </motion.h1>
-              <motion.div variants={itemVariants} className="mx-auto w-fit">
+              <motion.div variants={itemVariants} className="w-fit">
                 <button className="mt-6 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-md transition-all">
                   Start Trading Now
                 </button>
@@ -304,7 +293,7 @@ const Sec10 = () => {
         {/* Stats section */}
         <AnimatedSection delay={0.8}>
           <div className="max-w-5xl mx-auto mt-20 grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="bg-gray-800/30 backdrop-blur-sm p-6 rounded-lg border border-white/5 flex flex-col items-center text-center">
+            <div className="bg-gray-800/30 backdrop-blur-sm p-6 rounded-lg border border-gray-600/5 flex flex-col">
               <BarChart2 className="text-blue-400 mb-4" size={36} />
               <h3 className="text-xl font-semibold mb-2">Advanced Analytics</h3>
               <p className="text-white/70 text-sm">
@@ -312,7 +301,7 @@ const Sec10 = () => {
               </p>
             </div>
 
-            <div className="bg-gray-800/30 backdrop-blur-sm p-6 rounded-lg border border-white/5 flex flex-col items-center text-center">
+            <div className="bg-gray-800/30 backdrop-blur-sm p-6 rounded-lg border border-gray-600/5 flex flex-col">
               <TrendingUp className="text-blue-400 mb-4" size={36} />
               <h3 className="text-xl font-semibold mb-2">Smart Copy Trading</h3>
               <p className="text-white/70 text-sm">
@@ -320,7 +309,7 @@ const Sec10 = () => {
               </p>
             </div>
 
-            <div className="bg-gray-800/30 backdrop-blur-sm p-6 rounded-lg border border-white/5 flex flex-col items-center text-center">
+            <div className="bg-gray-800/30 backdrop-blur-sm p-6 rounded-lg border border-gray-600/5 flex flex-col">
               <Award className="text-blue-400 mb-4" size={36} />
               <h3 className="text-xl font-semibold mb-2">
                 Award-Winning Platform

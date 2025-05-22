@@ -32,8 +32,8 @@ module.exports = {
         transparent: 'transparent',
         white: '#FFFFFF',
         body: '#64748B',
-        bodydark: '#070c1b',
-        brandblue: '#01a7d3',
+        bodydark: '#05060c',
+        brandblue: '#0088FF',
         primary: '#3C50E0',
         secondary: '#80CAEE',
         stroke: '#E2E8F0',
@@ -63,6 +63,12 @@ module.exports = {
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',
         background: 'hsl(var(--background))',
+        backgroundImage: {
+          radial: 'radial-gradient(var(--tw-gradient-stops))',
+          'radial-at-top': 'radial-gradient(at top, var(--tw-gradient-stops))',
+          'radial-at-center':
+            'radial-gradient(at center, var(--tw-gradient-stops))',
+        },
         foreground: 'hsl(var(--foreground))',
         primary: {
           DEFAULT: 'hsl(var(--primary))',

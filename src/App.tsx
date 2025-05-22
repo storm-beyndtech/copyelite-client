@@ -40,6 +40,19 @@ import DefaultLayout from './components/Layouts/DefaultLayout';
 import Dashboard from './pages/Dashboard/Dashboard';
 import UserOnboarding from './pages/Auth/UserOnboarding';
 import OtpPage from './pages/Auth/OtpPage';
+import Deposit from './pages/Dashboard/Deposit';
+import Withdraw from './pages/Dashboard/Withdraw';
+import Trades from './pages/Dashboard/Trades';
+import TradeHistory from './components/TradeHistory';
+import Transactions from './pages/Dashboard/Transactions';
+import TechnicalInsight from './pages/Dashboard/TechnicalInsight';
+import TradingCourses from './pages/Dashboard/TradingCourses';
+import EconomicCalendar from './pages/Dashboard/EconomicCalendar';
+import Ranking from './pages/Dashboard/Ranking';
+import Settings from './pages/Dashboard/Settings';
+import KYC from './pages/Dashboard/KYC';
+import LoginHistory from './pages/Dashboard/LoginHistory';
+import PracticeTrade from './pages/Dashboard/PracticeTrade';
 
 function App() {
   const location = useLocation();
@@ -203,6 +216,54 @@ function App() {
 
                   <Route path="/dashboard/" element={<DefaultLayout />}>
                     <Route index element={<Dashboard />} />
+                    <Route path="/dashboard/deposit" element={<Deposit />} />
+                    <Route
+                      path="/dashboard/withdrawal"
+                      element={<Withdraw />}
+                    />
+                    <Route path="/dashboard/copytrading" element={<Trades />} />
+                    <Route
+                      path="/dashboard/copy-trade-history"
+                      element={<TradeHistory />}
+                    />
+                    <Route
+                      path="/dashboard/demo-trade-history"
+                      element={<TradeHistory />}
+                    />
+                    <Route
+                      path="/dashboard/transactions"
+                      element={<Transactions />}
+                    />
+                    <Route
+                      path="/dashboard/practice"
+                      element={<PracticeTrade />}
+                    />
+                    <Route
+                      path="/dashboard/technical-insights"
+                      element={<TechnicalInsight />}
+                    />
+                    <Route
+                      path="/dashboard/trading-courses"
+                      element={<TradingCourses />}
+                    />
+                    <Route
+                      path="/dashboard/economic-calendar"
+                      element={<EconomicCalendar />}
+                    />
+                    <Route
+                      path="/dashboard/loyalty-status"
+                      element={<Ranking />}
+                    />
+                    <Route path="/dashboard/settings" element={<Settings />} />
+                    <Route
+                      path="/dashboard/notifications"
+                      element={<Transactions />}
+                    />
+                    <Route path="/dashboard/kyc" element={<KYC />} />
+                    <Route
+                      path="/dashboard/login-history"
+                      element={<LoginHistory />}
+                    />
                   </Route>
                 </>
               ) : (

@@ -44,7 +44,7 @@ export default function NavBar() {
     <header className="fixed top-0 left-0 z-999999 right-0 w-full">
       {/* Top Utility Nav */}
       <div
-        className={`bg-gray-900/80 relative z-9 ${
+        className={`bg-gray-900/90 relative z-9 ${
           isScrolled ? '' : 'border-b-[40px] border-bodydark'
         } customBlur`}
       >
@@ -71,13 +71,13 @@ export default function NavBar() {
           </div>
           <div className="flex items-center space-x-4 ml-auto">
             <Link to="/register">
-              <button className="px-4 py-1 bg-red-500 hover:bg-red-600 text-white text-sm rounded transition-colors">
+              <button className="px-4 py-1 bg-transparent border border-blue-600 text-white text-sm rounded transition-colors">
                 Sign up
               </button>
             </Link>
 
             <Link to="/login">
-              <button className="px-4 py-1 bg-teal-500 hover:bg-teal-600 text-white text-sm rounded transition-colors">
+              <button className="px-4 py-1 bg-blue-500 hover:bg-blue-600 text-white text-sm rounded transition-colors">
                 Login
               </button>
             </Link>

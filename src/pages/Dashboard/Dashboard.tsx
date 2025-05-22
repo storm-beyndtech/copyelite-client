@@ -3,6 +3,12 @@ import NoDepositAlert from '@/components/NoDepositAlert';
 import PageLoader from '@/components/PageLoader';
 import TraderGrid from '@/components/TraderGrid';
 import { contextData } from '@/context/AuthContext';
+import Balance from '@/components/Balance';
+import NoKycAlert from '@/components/NoKycAlert';
+import StockChart from '@/components/StockChart';
+import RecentTrades from '@/components/RecentTrades';
+import RecentTransactions from '@/components/RecentTransactions';
+import MiniBals from '@/components/MiniBals';
 
 const url = import.meta.env.VITE_REACT_APP_SERVER_URL;
 
@@ -55,15 +61,37 @@ export default function Dashboard() {
   }, [user]);
 
   if (!user) return <PageLoader />;
+  console.log(user);
 
   return (
     <>
       {balancePlusWithdraw === 0 && <NoDepositAlert />}
+      {!user.documentNumber && <NoKycAlert />}
 
-      <div className="w-full flex gap-5 my-5 max-[900px]:flex-col"></div>
+      <div className="w-full flex gap-5 my-5 max-[900px]:flex-col">
+        <div className="w-full">
+          <TraderGrid traders={traders} onCopyTrader={copyTrader} />
+        </div>
+        <div className="w-full flex-shrink-0 max-w-fit">
+          <Balance user={user} trades={2} />
+        </div>
+      </div>
 
-      <div className="py-8">
-        <TraderGrid traders={traders} onCopyTrader={copyTrader} />
+      <div className="w-full my-5">
+        <MiniBals />
+      </div>
+
+      <div className="w-full flex flex-wrap gap-5 my-5 max-[900px]:flex-col">
+        <div className="w-full flex-1">
+          <RecentTrades />
+        </div>
+        <div className="w-full flex-1">
+          <RecentTransactions />
+        </div>
+      </div>
+
+      <div className="h-125 flex items-center justify-center mb-4 rounded-3xl shadow-1 bg-white bg-opacity-90 dark:bg-gray-950">
+        <StockChart />
       </div>
     </>
   );

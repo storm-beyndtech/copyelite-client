@@ -1,39 +1,17 @@
-import { useEffect, useRef, memo, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 
 interface BigChartProps {
-  symbol: string;
-  interval?: string;
-  theme?: 'light' | 'dark';
-  backgroundColor?: string;
-  height?: string;
-  width?: string;
-  allowSymbolChange?: boolean;
-  style?: number;
+  symbol?: string;
 }
 
-function BigChart({
-  symbol = '',
-  interval = 'D',
-  theme = 'dark',
-  backgroundColor = 'transparent',
-  height = '100%',
-  width = '100%',
-  allowSymbolChange = true,
-  style = 1,
-}: BigChartProps) {
+const BigChart: React.FC<BigChartProps> = ({ symbol = 'NASDAQ:AAPL' }) => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [chartKey, setChartKey] = useState<string>(
-    `tv-${symbol}-${interval}-${theme}`,
-  );
 
   useEffect(() => {
-    // Clean up previous chart when inputs change
-    if (containerRef.current) {
-      containerRef.current.innerHTML = '';
-    }
+    if (!containerRef.current) return;
 
-    // Generate new key to force re-render when props change
-    setChartKey(`tv-${symbol}-${interval}-${theme}-${Date.now()}`);
+    // Clear any existing widget
+    containerRef.current.innerHTML = '';
 
     const script = document.createElement('script');
     script.src =
@@ -43,43 +21,26 @@ function BigChart({
     script.innerHTML = JSON.stringify({
       autosize: true,
       symbol: symbol,
-      interval: interval,
+      interval: 'D',
       timezone: 'Etc/UTC',
-      theme: theme,
-      style: style,
+      theme: 'transparent',
+      backgroundColor: 'rgba(0, 0, 0, 0.001)',
+      style: '1',
       locale: 'en',
+      allow_symbol_change: true,
+      support_host: 'https://www.tradingview.com',
     });
 
-    if (containerRef.current) {
-      containerRef.current.appendChild(script);
-    }
-
-    return () => {
-      // Cleanup function
-      if (containerRef.current) {
-        const scriptElements =
-          containerRef.current.getElementsByTagName('script');
-        while (scriptElements.length > 0) {
-          if (scriptElements[0].parentNode) {
-            scriptElements[0].parentNode.removeChild(scriptElements[0]);
-          }
-        }
-      }
-    };
-  }, [symbol, interval, theme, style, allowSymbolChange]);
+    containerRef.current.appendChild(script);
+  }, [symbol]);
 
   return (
     <div
-      key={chartKey}
-      className="tradingview-widget-container"
       ref={containerRef}
-      style={{
-        height: height,
-        width: width,
-        backgroundColor: backgroundColor,
-      }}
+      className="tradingview-widget-container bg-white dark:bg-gray-900 rounded-lg shadow-md"
+      style={{ width: '100%', height: '100%' }}
     />
   );
-}
+};
 
-export default memo(BigChart);
+export default BigChart;

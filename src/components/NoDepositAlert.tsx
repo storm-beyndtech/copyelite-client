@@ -6,7 +6,7 @@ export default function NoDepositAlert() {
 
   return (
     show && (
-      <div className="flex items-center p-4 mb-4 text-yellow-800 rounded-lg bg-yellow-50/70 dark:bg-gray-900/50 dark:text-yellow-500">
+      <div className="flex items-center p-3 mb-2 text-yellow-700 rounded-xl shadow bg-yellow-50/20 dark:bg-gray-900/50 dark:text-yellow-500">
         <svg
           className="flex-shrink-0 w-4 h-4"
           fill="currentColor"
@@ -15,13 +15,13 @@ export default function NoDepositAlert() {
           <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
         </svg>
         <span className="sr-only">Info</span>
-        <div className="ms-3 text-sm font-medium">
+        <div className="ms-3 text-xs font-medium">
           Your balance is empty. Please make{' '}
           <Link
             to="/dashboard/deposit"
             className="font-semibold text-green-500"
           >
-            deposit
+            Deposit
           </Link>{' '}
           for your next trade.
         </div>

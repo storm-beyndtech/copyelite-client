@@ -1,25 +1,16 @@
 import React from 'react';
-import { motion } from 'framer-motion';
-import { logoAnimation } from '@/lib/utils';
 import logo from '../assets/copyelite-logo.png';
+import { SiSpinrilla } from 'react-icons/si';
 
 const PageLoader: React.FC = () => {
   return (
     <div className="fixed inset-0 z-[9999999] bg-[#070c1b] flex items-center justify-center noRight">
       <div className="absolute w-[465px] h-[140px] flex items-center justify-center gap-[10px] transition-all duration-500 ease-in-out">
-        <motion.div
-          className="w-[140px] h-[140px] flex items-center justify-center"
-          animate={logoAnimation}
+        <div
+          className="w-[140px] h-[140px] flex items-center justify-center spin"
         >
-          <img
-            loading="lazy"
-            src="https://protradercopy.com/wp-content/themes/ProTrader-Copy/images/moneta-logo-icon.png"
-            width={120}
-            height={120}
-            style={{ transform: 'scale(1.15)' }}
-            alt="Copyelite icon"
-          />
-        </motion.div>
+          <SiSpinrilla className="text-9xl text-brandblue" />
+        </div>
         <div className="load-text">
           <img
             loading="lazy"

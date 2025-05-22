@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import Alert from '@/components/ui/Alert';
-import { bounceAnimation, logoAnimation } from '@/lib/utils';
+import { bounceAnimation } from '@/lib/utils';
 import logo from '../../assets/copyelite-logo.png';
 import { Link } from 'react-router-dom';
 import DarkModeSwitcher from '@/components/Layouts/DarkModeSwitcher';
@@ -103,17 +103,7 @@ const ResetPassword: React.FC = () => {
       <div className="md:col-span-2 relative bg-bodydark hidden md:flex flex-col justify-center">
         <div className="absolute top-0 left-0 z-[4] w-full h-full bg-gradient-to-b from-brandblue/30 via-brandblue/10 to-bodydark"></div>
 
-        {/* Spinning Copyelite logo in top-left */}
-        <div className="absolute top-[650px] -left-20 overflow-hidden w-[560px] h-[560px] -translate-x-1/2 -translate-y-1/2 opacity-60">
-          <motion.img
-            src="https://protradercopy.com/wp-content/themes/ProTrader-Copy/images/market-transaction-animation.webp"
-            alt="Copyelite Logo"
-            className="w-full h-full"
-            animate={logoAnimation}
-          />
-        </div>
-
-        <div className="absolute z-10 top-0 left-0 pt-10 lg:px-20 px-5 flex flex-col gap-6">
+        <div className="absolute z-10 top-0 left-0 pt-10 lg:px-20 pl-5 flex flex-col gap-6">
           {/* Logo Placeholder */}
           <Link to="/" className="">
             <img src={logo} alt="logo" className="w-35" />
@@ -126,9 +116,9 @@ const ResetPassword: React.FC = () => {
 
           <motion.div className="flex" animate={bounceAnimation}>
             <img
-              src="https://protradercopy.com/static/images/about/startingright.png"
-              alt="Forgot Password"
-              className="w-[70%]"
+              src="https://res.cloudinary.com/ddb1vjioq/image/upload/v1747727915/Adobe_Express_-_file_6_aore83.png"
+              alt="Reset"
+              className="w-[100%]"
             />
           </motion.div>
         </div>

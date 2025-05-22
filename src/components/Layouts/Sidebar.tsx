@@ -5,12 +5,15 @@ import { contextData } from '../../context/AuthContext';
 import SidebarDropdown from './SidebarDropdown';
 import {
   Home,
-  ScrollText,
   BarChart2,
   Coins,
-  Gift,
+  ListTree,
   LogOut,
   Menu,
+  Landmark,
+  Layers,
+  Combine,
+  Award,
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -52,7 +55,7 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen }: SidebarProps) {
   return (
     <aside
       ref={sidebar}
-      className={`text-xs absolute left-0 top-0 z-999999 flex h-screen w-72.5 flex-col overflow-y-hidden bg-gray-50/90 dark:bg-bodydark/30 duration-300 ease-linear lg:static lg:translate-x-0 ${
+      className={`text-xs absolute left-0 top-0 z-999999 flex h-screen w-72.5 flex-col overflow-y-hidden bg-gray-950 duration-300 ease-linear lg:static lg:translate-x-0 ${
         sidebarOpen ? 'translate-x-0' : '-translate-x-full'
       }`}
     >
@@ -78,10 +81,10 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen }: SidebarProps) {
               <NavLink
                 to="/dashboard"
                 className={`text-xs group relative flex items-center gap-2.5 rounded-sm py-2.5 px-7.5 text-gray-300 font-montserrat duration-300 ease-in-out hover:bg-black dark:hover:bg-black ${
-                  pathname === '/dashboard' && 'bg-black'
+                  pathname === '/dashboard' && 'bg-blue-500/5'
                 }`}
               >
-                <Home strokeWidth={1.5} className="text-xl" />
+                <Home strokeWidth={1.5} className="text-xl text-blue-400" />
                 Dashboard
               </NavLink>
             </li>
@@ -89,10 +92,12 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen }: SidebarProps) {
             {/* Transactions drop down */}
             <SidebarDropdown
               title="Payments"
-              icon={<ScrollText strokeWidth={1.5} className="text-xl" />}
+              icon={
+                <Landmark strokeWidth={1.5} className="text-xl text-blue-400" />
+              }
               links={[
-                { label: 'Deposit', href: 'deposit' },
-                { label: 'Withdrawal', href: 'withdrawal' },
+                { label: 'Deposit', href: '/dashboard/deposit' },
+                { label: 'Withdrawal', href: '/dashboard/withdrawal' },
               ]}
             />
 
@@ -100,10 +105,13 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen }: SidebarProps) {
               <NavLink
                 to="/dashboard/copytrading"
                 className={`text-xs group relative flex items-center gap-2.5 rounded-sm py-2.5 px-7.5 text-gray-300 font-montserrat duration-300 ease-in-out hover:bg-black dark:hover:bg-black ${
-                  pathname === '/dashboard/copytrading' && 'bg-black'
+                  pathname === '/dashboard/copytrading' && 'bg-blue-500/5'
                 }`}
               >
-                <BarChart2 strokeWidth={1.5} className="text-xl" />
+                <BarChart2
+                  strokeWidth={1.5}
+                  className="text-xl text-blue-400"
+                />
                 Copytrading
               </NavLink>
             </li>
@@ -111,21 +119,29 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen }: SidebarProps) {
             {/* Trade History drop down */}
             <SidebarDropdown
               title="Trade History"
-              icon={<BarChart2 strokeWidth={1.5} className="text-xl" />}
+              icon={
+                <Layers strokeWidth={1.5} className="text-xl text-blue-400" />
+              }
               links={[
-                { label: 'Copy Trade History', href: 'copy-trade-history' },
-                { label: 'Demo Trade History', href: 'demo-trade-history' },
+                {
+                  label: 'Copy Trade History',
+                  href: '/dashboard/copy-trade-history',
+                },
+                {
+                  label: 'Demo Trade History',
+                  href: '/dashboard/demo-trade-history',
+                },
               ]}
             />
 
             <li>
               <NavLink
-                to="/dashboard/all-transactions"
+                to="/dashboard/transactions"
                 className={`text-xs group relative flex items-center gap-2.5 rounded-sm py-2.5 px-7.5 text-gray-300 font-montserrat duration-300 ease-in-out hover:bg-black dark:hover:bg-black ${
-                  pathname.includes('all-transactions') && 'bg-black'
+                  pathname.includes('transactions') && 'bg-blue-500/5'
                 }`}
               >
-                <Coins strokeWidth={1.5} className="text-xl" />
+                <Coins strokeWidth={1.5} className="text-xl text-blue-400" />
                 All Transactions
               </NavLink>
             </li>
@@ -135,11 +151,22 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen }: SidebarProps) {
             {/* Market tools drop down */}
             <SidebarDropdown
               title="Market Tools"
-              icon={<BarChart2 strokeWidth={1.5} className="text-xl" />}
+              icon={
+                <Combine strokeWidth={1.5} className="text-xl text-blue-400" />
+              }
               links={[
-                { label: 'Technical Insights', href: 'technical-insights' },
-                { label: 'Trading Courses', href: 'trading-courses' },
-                { label: 'Econimic Calendar', href: 'econimic-calendar' },
+                {
+                  label: 'Technical Insights',
+                  href: '/dashboard/technical-insights',
+                },
+                {
+                  label: 'Trading Courses',
+                  href: '/dashboard/trading-courses',
+                },
+                {
+                  label: 'Econimic Calendar',
+                  href: '/dashboard/economic-calendar',
+                },
               ]}
             />
 
@@ -147,10 +174,10 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen }: SidebarProps) {
               <NavLink
                 to="/dashboard/loyalty-status"
                 className={`text-xs group relative flex items-center gap-2.5 rounded-sm py-2.5 px-7.5 text-gray-300 font-montserrat duration-300 ease-in-out hover:bg-black dark:hover:bg-black ${
-                  pathname.includes('affiliate') && 'bg-black'
+                  pathname.includes('affiliate') && 'bg-blue-500/5'
                 }`}
               >
-                <Gift strokeWidth={1.5} className="text-xl" />
+                <Award strokeWidth={1.5} className="text-xl text-blue-400" />
                 Loyalty Status
               </NavLink>
             </li>
@@ -159,12 +186,20 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen }: SidebarProps) {
           <ul className="flex flex-col gap-1.5">
             <SidebarDropdown
               title="More"
-              icon={<BarChart2 strokeWidth={1.5} className="text-xl" />}
+              icon={
+                <ListTree strokeWidth={1.5} className="text-xl text-blue-400" />
+              }
               links={[
-                { label: 'Settings', href: 'settings' },
-                { label: 'All Notifications', href: 'notifications' },
-                { label: 'Account Verification', href: 'account-verification' },
-                { label: 'Login History', href: 'login-history' },
+                { label: 'Settings', href: '/dashboard/settings' },
+                {
+                  label: 'All Notifications',
+                  href: '/dashboard/notifications',
+                },
+                {
+                  label: 'Account Verification',
+                  href: '/dashboard/kyc',
+                },
+                { label: 'Login History', href: '/dashboard/login-history' },
               ]}
             />
 
@@ -172,7 +207,7 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen }: SidebarProps) {
               className="cursor-pointer text-xs group relative flex items-center gap-2.5 rounded-sm py-2.5 px-7.5 text-gray-300 font-montserrat duration-300 ease-in-out hover:bg-black dark:hover:bg-black"
               onClick={() => logout()}
             >
-              <LogOut strokeWidth={1.5} className="text-xl" />
+              <LogOut strokeWidth={1.5} className="text-xl text-blue-400" />
               Sign out
             </li>
           </ul>

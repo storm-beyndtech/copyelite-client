@@ -1,8 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
 import { LineChart, Line, ResponsiveContainer, YAxis, Area } from 'recharts';
-import { motion } from 'framer-motion';
-import { Button } from './ui/button';
-import { logoAnimation } from '@/lib/utils';
 import { AnimatedSection } from './ui/animated-section';
 
 // Type definitions
@@ -15,17 +12,8 @@ interface MarketItem {
   data: number[];
 }
 
-interface PlatformItem {
-  image: string;
-  features: string[];
-}
-
 type MarketDataType = {
   [key: string]: MarketItem[];
-};
-
-type PlatformDataType = {
-  [key: string]: PlatformItem;
 };
 
 // Generate realistic chart data with natural patterns
@@ -241,63 +229,6 @@ const marketData: MarketDataType = {
   ],
 };
 
-// Updated platform data with professional images
-const platformData: PlatformDataType = {
-  'Metatrader 4': {
-    image: 'https://www.icmarkets.com/assets/images/about-meta-trader.webp',
-    features: [
-      'Powerful Charting and Automated Trading',
-      'Servers in New York, London, and more!',
-      'Ultra-fast order execution under 15ms',
-      'Advanced Market Analysis Tools',
-      'Full EA Support with Custom Indicators',
-    ],
-  },
-  'Metatrader 5': {
-    image: 'https://www.icmarkets.com/assets/images/mt5.webp',
-    features: [
-      'Pro Depth and Strategy Tester',
-      'Integrated Economic Calendar',
-      'Supports Stocks and Futures',
-      'Hedging and Netting Accounts',
-      'Professional Multi-Asset Platform',
-    ],
-  },
-  ProTrader: {
-    image:
-      'https://images.pexels.com/photos/6347711/pexels-photo-6347711.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
-    features: [
-      'Institutional-Grade Analysis',
-      'Advanced Orders & Algorithms',
-      'Customizable Trading Interface',
-      'Real-time News Integration',
-      'One-Click Trading Execution',
-    ],
-  },
-  AppTrader: {
-    image:
-      'https://images.pexels.com/photos/6347711/pexels-photo-6347711.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
-    features: [
-      'Mobile-First Trading Experience',
-      'Biometric Security Features',
-      'Instant Trade Notifications',
-      'Market Overview Dashboard',
-      'Commission-Free Trading',
-    ],
-  },
-  'CopyTrader App': {
-    image:
-      'https://images.pexels.com/photos/6347711/pexels-photo-6347711.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
-    features: [
-      'Follow Top Traders Globally',
-      'Automated Position Copying',
-      'Real-time Performance Analytics',
-      'Risk Management Controls',
-      'Diversified Portfolio Building',
-    ],
-  },
-};
-
 // Market section component
 export const MarketSection: React.FC = () => {
   const [activeMarket, setActiveMarket] = useState<string>('Share CFDs');
@@ -346,8 +277,8 @@ export const MarketSection: React.FC = () => {
   }, [activeMarket, marketTabs]);
 
   return (
-    <AnimatedSection delay={1}>
-      <div className="max-w-5xl mx-auto py-20 px-4">
+    <AnimatedSection delay={0.3}>
+      <div className="max-ctn max-w-5xl py-20">
         <h2 className="text-center text-2xl font-semibold mb-2">
           Trade Global Markets at the Lowest Costs!
         </h2>
@@ -367,7 +298,7 @@ export const MarketSection: React.FC = () => {
                 ref={(el) => (tabRefs.current[index] = el)}
                 className={`pb-2 px-4 text-sm whitespace-nowrap ${
                   activeMarket === tab
-                    ? 'text-cyan-400 font-semibold'
+                    ? 'text-blue-400 font-semibold'
                     : 'text-white/60'
                 }`}
                 onClick={() => setActiveMarket(tab)}
@@ -379,12 +310,12 @@ export const MarketSection: React.FC = () => {
           <div className="absolute bottom-0 left-0 w-full h-0.5 bg-white/20">
             <div
               ref={indicatorRef}
-              className="absolute h-0.5 bg-cyan-400 transition-all duration-300 ease-in-out"
+              className="absolute h-0.5 bg-blue-400 transition-all duration-300 ease-in-out"
             />
           </div>
         </div>
 
-        <div className="bg-[#0D1229]/60 backdrop-blur-md rounded-xl p-4 shadow-lg w-full max-w-4xl mx-auto">
+        <div className="bg-gray-900/20 customBlur rounded-xl p-4 shadow-lg w-full">
           {marketData[activeMarket]?.map((item: MarketItem, i: number) => (
             <div
               key={i}
@@ -475,168 +406,16 @@ export const MarketSection: React.FC = () => {
   );
 };
 
-// Platform section component
-export const PlatformSection: React.FC = () => {
-  const [activePlatform, setActivePlatform] = useState<string>('Metatrader 4');
-  const platformTabs: string[] = Object.keys(platformData);
-  const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
-  const indicatorRef = useRef<HTMLDivElement | null>(null);
-
-  // Update indicator position
-  useEffect(() => {
-    const updateIndicator = () => {
-      const activeIndex = platformTabs.indexOf(activePlatform);
-      const activeTab = tabRefs.current[activeIndex];
-      const indicator = indicatorRef.current;
-
-      if (activeTab && indicator) {
-        // Get tab dimensions and position
-        const tabRect = activeTab.getBoundingClientRect();
-        const parentRect = activeTab.parentElement?.getBoundingClientRect() || {
-          left: 0,
-        };
-
-        // Calculate relative position and set indicator position
-        const tabLeft = tabRect.left - parentRect.left;
-
-        indicator.style.left = `${tabLeft}px`;
-        indicator.style.width = `${tabRect.width}px`;
-      }
-    };
-
-    updateIndicator();
-    // Also update on window resize
-    window.addEventListener('resize', updateIndicator);
-    return () => window.removeEventListener('resize', updateIndicator);
-  }, [activePlatform, platformTabs]);
-
-  return (
-    <AnimatedSection>
-      <div className="max-w-5xl mx-auto py-20 px-4">
-        <h2 className="text-4xl font-bold text-center mb-4">
-          Stable. Powerful. <span className="text-white/80">Super-Fast.</span>
-        </h2>
-        <p className="text-center text-sm leading-7 text-white/60 max-w-3xl mx-auto mb-8">
-          Seamlessly integrated and built for high-performance trading, we
-          connect your trading platforms to the closest Equinix data centre to
-          you,{' '}
-          <strong className="text-white/70 font-semibold">
-            giving you the fastest possible trade execution
-          </strong>{' '}
-          to gain the edge you need to stay ahead of the markets.
-        </p>
-
-        <div className="relative border-b border-white/5 mb-10 max-w-fit mx-auto">
-          <div className="flex justify-center space-x-6 overflow-x-auto">
-            {platformTabs.map((tab, index) => (
-              <button
-                key={tab}
-                ref={(el) => (tabRefs.current[index] = el)}
-                className={`pb-2 px-4 text-sm whitespace-nowrap ${
-                  activePlatform === tab
-                    ? 'text-cyan-400 font-semibold'
-                    : 'text-white/60'
-                }`}
-                onClick={() => setActivePlatform(tab)}
-              >
-                {tab}
-              </button>
-            ))}
-          </div>
-          <div className="absolute bottom-0 left-0 w-full h-0.5 bg-white/20">
-            <div
-              ref={indicatorRef}
-              className="absolute h-0.5 bg-cyan-400 transition-all duration-300 ease-in-out"
-            />
-          </div>
-        </div>
-
-        <div className="flex flex-col lg:flex-row items-center justify-center gap-10">
-          <div className="w-full max-w-md rounded-xl shadow-lg overflow-hidden bg-[#0D1229]/60 backdrop-blur-md border border-white/10">
-            <div className="w-full h-70 overflow-hidden relative">
-              <img
-                src={platformData[activePlatform].image}
-                alt={activePlatform}
-                className="w-full h-full object-cover transition-transform hover:scale-105 duration-700"
-              />
-            </div>
-          </div>
-
-          <ul className="space-y-4 max-w-md">
-            {platformData[activePlatform]?.features.map(
-              (feat: string, i: number) => (
-                <li key={i} className="flex items-start space-x-3">
-                  <span className="flex-shrink-0 w-5 h-5 rounded-full bg-cyan-500/30 flex items-center justify-center text-cyan-400">
-                    ✓
-                  </span>
-                  <span className="text-sm text-white/80">{feat}</span>
-                </li>
-              ),
-            )}
-            <motion.li className="pt-4" whileTap={{ scale: 0.95 }}>
-              <Button size="lg" className="hover:opacity-90 text-white">
-                Get Started Now
-              </Button>
-            </motion.li>
-          </ul>
-        </div>
-      </div>
-    </AnimatedSection>
-  );
-};
-
 // Combined component
 const TabbedSections: React.FC = () => {
-
   return (
     <div className="relative bg-transparent text-white overflow-hidden">
-      {/* Background Effects with Blur */}
-      <div className="absolute inset-0 bg-bodydark backdrop-blur-lg z-0"></div>
-
-      {/* Spinning Copyelite logo in top-left */}
-      <div className="absolute top-150 -left-20 z-2 overflow-hidden w-180 h-180 -translate-x-1/2 -translate-y-1/2 opacity-70">
-        <motion.img
-          src="https://protradercopy.com/wp-content/themes/ProTrader-Copy/images/market-transaction-animation.webp"
-          alt="Copyelite Logo"
-          className="w-full h-full"
-          animate={logoAnimation}
-        />
-        <div className="absolute top-0 left-0 w-full h-full  bg-gradient-to-b from-[#1218260d] via-bodydark to-bodydark"></div>
-      </div>
-
-      <div className="absolute top-40 -left-40 w-60 h-60 bg-cyan-500/30 blur-3xl rounded-full" />
-      <div className="absolute bottom-0 right-0 w-60 h-60 bg-cyan-500/30 blur-3xl rounded-full" />
+      <div className="absolute top-40 -left-40 w-60 h-60 bg-blue-500/30 blur-3xl rounded-full" />
 
       {/* Content with relative positioning */}
       <div className="relative z-10">
         {/* Market Section */}
         <MarketSection />
-
-        {/* Platform Section */}
-        <PlatformSection />
-
-        {/* Additional Info Section */}
-        <AnimatedSection>
-          <div className="max-w-5xl mx-auto py-10 px-4 border-t border-white/10">
-            <p className="text-center text-xs text-white/40 mb-2">
-              Markets move fast, it takes superior trading platforms to keep up!
-            </p>
-            <div className="flex justify-center items-center space-x-8">
-              <div className="text-center">
-                <div className="text-2xl font-bold text-cyan-400">15ms</div>
-                <div className="text-xs text-white/60">Order Execution</div>
-              </div>
-              <div className="text-center">
-                <div className="text-2xl font-bold text-cyan-400">99.9%</div>
-                <div className="text-xs text-white/60">Uptime</div>
-              </div>
-              <div className="text-center">
-                <div className="text-2xl font-bold text-cyan-400">24/7</div>
-                <div className="text-xs text-white/60">Support</div>
-              </div>
-            </div>
-          </div>
-        </AnimatedSection>
       </div>
     </div>
   );

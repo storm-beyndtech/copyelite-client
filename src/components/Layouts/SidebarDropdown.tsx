@@ -38,7 +38,7 @@ export default function SidebarDropdown({
             {links.map((link, i) => (
               <li key={i}>
                 <NavLink
-                  to={`/admin/${link.href}`}
+                  to={link.href}
                   className={({ isActive }) =>
                     'group relative flex items-center gap-2.5 rounded-md px-7.5 text-white/30 duration-300 ease-in-out hover:text-white ' +
                     (isActive && '!text-white')

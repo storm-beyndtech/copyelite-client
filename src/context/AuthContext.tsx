@@ -5,6 +5,7 @@ const AuthContext = createContext<any>(null);
 
 export const AuthProvider = ({ children }: any) => {
   const [user, setUser] = useState(null);
+  const [theme, setTheme] = useState("");
   const [fetching, setFetching] = useState(true);
   const url = import.meta.env.VITE_REACT_APP_SERVER_URL;
   const location = useLocation();
@@ -82,7 +83,7 @@ export const AuthProvider = ({ children }: any) => {
   }, [location.pathname]);
 
   return (
-    <AuthContext.Provider value={{ user, fetching, fetchUser, login, logout }}>
+    <AuthContext.Provider value={{ user, fetching, fetchUser, login, logout, setTheme, theme }}>
       {children}
     </AuthContext.Provider>
   );

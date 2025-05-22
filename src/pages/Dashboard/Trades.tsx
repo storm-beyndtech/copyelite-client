@@ -1,9 +1,9 @@
 import DisplayActiveTrade from '@/components/DisplayActiveTrade';
 import TraderGrid from '@/components/TraderGrid';
-import UsdChart from '@/components/UsdChart';
-import Balance from '@/components/balance/Balance';
+import Balance from '@/components/Balance';
 import { contextData } from '@/context/AuthContext';
 import { useEffect, useState } from 'react';
+import SmallStockChart from '@/components/SmallStockChart';
 
 export default function Trades() {
   const [tradeData, setTradeData] = useState<any>([]);
@@ -78,10 +78,10 @@ export default function Trades() {
     <>
       <div className="w-full flex gap-5 my-4 max-[900px]:flex-col">
         <div className="flex-none">
-          <Balance type="trade" user={user} />
+          <Balance user={user} trades={tradeData.length} />
         </div>
-        <div className="flex-auto shadow-1">
-          <UsdChart />
+        <div className="w-full h-56 flex items-center justify-center mb-4 rounded-3xl shadow-1 bg-white bg-opacity-90 dark:bg-gray-950">
+          <SmallStockChart />
         </div>
       </div>
 
