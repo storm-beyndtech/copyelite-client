@@ -1,3 +1,4 @@
+import { contextData } from '@/context/AuthContext';
 import { RefreshCw, Eye, EyeOff } from 'lucide-react';
 import { useState } from 'react';
 
@@ -25,6 +26,7 @@ export default function ChangePassword() {
   const [loading, setLoading] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
   const [serverError, setServerError] = useState('');
+  const { user } = contextData();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -83,16 +85,15 @@ export default function ChangePassword() {
     setServerError('');
 
     try {
-      const token = localStorage.getItem('token'); // or your auth context
       const response = await fetch(`${url}/change-password`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
           currentPassword: formData.currentPassword,
           newPassword: formData.newPassword,
+          id: user._id,
         }),
       });
 
