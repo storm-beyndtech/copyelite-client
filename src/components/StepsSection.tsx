@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 import { AnimatedSection } from './ui/animated-section';
+import { Link } from 'react-router-dom';
 
 const StepsSection = () => {
   // Animation variants
@@ -124,15 +125,17 @@ const StepsSection = () => {
 
             {/* Button */}
             <motion.div variants={itemVariants} className="flex justify-center">
-              <motion.button
-                variants={buttonVariants}
-                initial="initial"
-                whileHover="hover"
-                whileTap="tap"
-                className="bg-blue-500 hover:bg-blue-600 text-white font-medium py-3 px-12 rounded-md transition-colors shadow-lg shadow-blue-500/30"
-              >
-                Get Started
-              </motion.button>
+              <Link to="/register">
+                <motion.button
+                  variants={buttonVariants}
+                  initial="initial"
+                  whileHover="hover"
+                  whileTap="tap"
+                  className="bg-blue-500 hover:bg-blue-600 text-white font-medium py-3 px-12 rounded-md transition-colors shadow-lg shadow-blue-500/30"
+                >
+                  Get Started
+                </motion.button>
+              </Link>
             </motion.div>
           </motion.div>
         </AnimatedSection>

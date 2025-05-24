@@ -303,9 +303,11 @@ const CopyTrading: React.FC<CopyTradingProps> = ({ traders }) => {
         </motion.div>
 
         <motion.div className="text-center mt-12" whileTap={{ scale: 0.95 }}>
-          <Button size="md" animate className="hover:opacity-90 text-white">
-            Start Copying
-          </Button>
+          <Link to="/register">
+            <Button size="md" animate className="hover:opacity-90 text-white">
+              Start Copying
+            </Button>
+          </Link>
         </motion.div>
       </motion.div>
 
@@ -335,9 +337,11 @@ const CopyTrading: React.FC<CopyTradingProps> = ({ traders }) => {
         </div>
 
         <motion.div className="text-center mt-12" whileTap={{ scale: 0.95 }}>
-          <Button size="md" animate className="hover:opacity-90 text-white">
-            Start Copying
-          </Button>
+          <Link to="/register">
+            <Button size="md" animate className="hover:opacity-90 text-white">
+              Start Copying
+            </Button>
+          </Link>
         </motion.div>
       </motion.div>
     </div>

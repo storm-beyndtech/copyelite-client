@@ -51,19 +51,19 @@ export default function NavBar() {
         <div className="max-w-7xl mx-auto flex items-center justify-between py-3 px-4">
           <div className="hidden sm:flex items-center space-x-6">
             <a
-              href="#"
+              href="/economic-calendar"
               className="text-sm text-gray-300 hover:text-white transition-colors"
             >
               Market News
             </a>
             <a
-              href="#"
+              href="/register"
               className="text-sm text-gray-300 hover:text-white transition-colors"
             >
               Demo Account
             </a>
             <a
-              href="#"
+              href="/contact"
               className="text-sm text-gray-300 hover:text-white transition-colors"
             >
               Contact Us
