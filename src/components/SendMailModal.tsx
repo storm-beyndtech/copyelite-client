@@ -1,5 +1,5 @@
 import { FormEvent, useState } from 'react';
-import s from '../pages/login/Login.module.css';
+import Alert from './ui/Alert';
 
 export default function SendMailModal({ emails, onClose }: any) {
   const [message, setMessage] = useState('');
@@ -97,8 +97,8 @@ export default function SendMailModal({ emails, onClose }: any) {
                 </button>
               </div>
 
-              {error && <p className={s.formError}>{error}</p>}
-              {success && <p className={s.formSuccess}>{success}</p>}
+              {error && <Alert type="error" message={error} />}
+              {success && <Alert type="success" message={success as any} />}
             </form>
           </div>
         </div>

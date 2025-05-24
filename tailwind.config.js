@@ -33,6 +33,8 @@ module.exports = {
         white: '#FFFFFF',
         body: '#64748B',
         bodydark: '#05060c',
+        bodydark1: '#05060c',
+        bodydark2: '#05060c',
         brandblue: '#0088FF',
         primary: '#3C50E0',
         secondary: '#80CAEE',

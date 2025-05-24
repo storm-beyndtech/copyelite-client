@@ -61,7 +61,6 @@ export default function Dashboard() {
   }, [user]);
 
   if (!user) return <PageLoader />;
-  console.log(user);
 
   return (
     <>

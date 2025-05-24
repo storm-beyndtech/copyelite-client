@@ -1,17 +1,16 @@
 import { contextData } from '@/context/AuthContext';
-import { Bell, User, LogOut, LayoutDashboard, Copy } from 'lucide-react';
+import { Bell, Search, User, LogOut, LayoutDashboard } from 'lucide-react';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import DarkModeSwitcher from './DarkModeSwitcher';
 
-const Header = (props: {
+const AdminHeader = (props: {
   sidebarOpen: string | boolean | undefined;
   setSidebarOpen: (arg0: boolean) => void;
 }) => {
   const [showNotificationDropdown, setShowNotificationDropdown] =
     useState(false);
   const [showProfileDropdown, setShowProfileDropdown] = useState(false);
-  const { logout, user } = contextData();
+  const { logout } = contextData();
 
   const toggleNotificationDropdown = () => {
     setShowNotificationDropdown(!showNotificationDropdown);
@@ -23,20 +22,9 @@ const Header = (props: {
     setShowNotificationDropdown(false);
   };
 
-  const handleCopy = async (textToCopy: string) => {
-    try {
-      await navigator.clipboard.writeText(
-        `https://interactive-copyelite.com/register/${textToCopy}`,
-      );
-      alert('Text copied to clipboard');
-    } catch (err) {
-      console.log('Failed to copy text: ', err);
-    }
-  };
-
   return (
-    <header className="bg-white dark:bg-gray-950 shadow-sm z-10 px-4 rounded-xl mx-3 my-3">
-      <div className="flex items-center gap-2 justify-between h-14 px-2">
+    <header className="bg-white dark:bg-gray-950 shadow-sm z-10">
+      <div className="flex items-center gap-2 justify-between h-16 px-6">
         <button
           aria-controls="sidebar"
           onClick={(e) => {
@@ -78,26 +66,22 @@ const Header = (props: {
           </span>
         </button>
 
-        {/* Dummy CopyRef */}
-        <div
-          onClick={() => handleCopy(user.username)}
-          className="flex items-center space-x-2 px-4 py-1 border dark:border-gray-800 border-gray-400 rounded"
-        >
-          <span className="text-xs font-medium text-gray-600 dark:text-gray-300">
-            Copy Referral Link
-          </span>
-          <Copy size={20} className="text-black dark:text-brandblue" />
+        {/* Search */}
+        <div className="flex items-center flex-1">
+          <div className="relative w-full max-w-md">
+            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <Search size={18} className="text-gray-400" />
+            </div>
+            <input
+              type="text"
+              placeholder="Search..."
+              className="block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-slate-800 rounded-md bg-gray-50 dark:bg-gray-900/30 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
         </div>
 
         {/* Right side buttons */}
-        <div className="flex items-center space-x-2">
-          <Link
-            to="/dashboard/practice"
-            className="text-xs px-4 py-1.5 text-white max-sm:hidden rounded hover:bg-gray-800 bg-blue-500 font-semibold"
-          >
-            Practice Area
-          </Link>
-
+        <div className="flex items-center space-x-4">
           {/* Notifications with Dropdown */}
           <div className="relative">
             <button
@@ -116,23 +100,22 @@ const Header = (props: {
 
                   <div className="border-t border-gray-200 dark:border-gray-700 mt-2 pt-2">
                     <Link
-                      to="/dashboard/transactions"
+                      to="/admin/manage-deposits"
                       className="block px-4 py-2 text-sm text-green-600 dark:text-green-400 font-medium"
                     >
-                      View all transactions
+                      View all deposits
                     </Link>
                     <Link
-                      to="/dashboard/copy-trade-history"
+                      to="/admin/manage-withdrawals"
                       className="block px-4 py-2 text-sm text-blue-600 dark:text-blue-400 font-medium"
                     >
-                      View all trades
+                      View all withdrawals
                     </Link>
                   </div>
                 </div>
               </div>
             )}
           </div>
-          <DarkModeSwitcher />
 
           {/* User Profile with Dropdown */}
           <div className="relative">
@@ -143,13 +126,14 @@ const Header = (props: {
               <div className="h-8 w-8 rounded-full bg-blue-500 flex items-center justify-center text-white">
                 <User size={16} />
               </div>
+              <span className="hidden md:inline-block">Admin</span>
             </button>
 
             {showProfileDropdown && (
-              <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-bodydark/70 customBlur rounded-md shadow-lg overflow-hidden z-20 border border-gray-200 dark:border-gray-800">
+              <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-bodydark1/90 customBlur rounded-md shadow-lg overflow-hidden z-20 border border-gray-200 dark:border-gray-700">
                 <div className="py-1">
                   <Link
-                    to="/dashboard"
+                    to="/admin"
                     className="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
                   >
                     <LayoutDashboard size={16} className="mr-2" />
@@ -172,4 +156,4 @@ const Header = (props: {
   );
 };
 
-export default Header;
+export default AdminHeader;

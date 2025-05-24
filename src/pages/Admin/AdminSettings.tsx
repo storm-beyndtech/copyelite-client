@@ -1,7 +1,7 @@
+import Alert from '@/components/ui/Alert';
 import { useEffect, useState } from 'react';
-import s from '../login/Login.module.css';
 
-export default function Settings() {
+export default function AdminSettings() {
   const [coins, setCoins] = useState([
     { name: '', address: '', network: '', price: 0 },
   ]);
@@ -77,9 +77,9 @@ export default function Settings() {
   return (
     <form
       onSubmit={handleSubmit}
-      className="relative bg-white rounded-lg shadow dark:bg-gray-800"
+      className="relative bg-white rounded-lg shadow dark:bg-gray-900/50 customBlur border dark:border-gray-800"
     >
-      <div className="flex items-start justify-between p-4 border-b rounded-t dark:border-gray-600">
+      <div className="flex items-start justify-between p-4 border-b rounded-t dark:border-gray-900">
         <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
           Edit Utility Details
         </h3>
@@ -164,10 +164,8 @@ export default function Settings() {
             </div>
           </div>
         ))}
-        {error && <p className={s.formError}>{error}</p>}
-        {success && (
-          <p className={s.formSuccess}>Utils Updated Successfully...</p>
-        )}
+        {error && <Alert type="error" message={error} />}
+        {success && <Alert type="success" message={success as any} />}
       </div>
 
       <div className="flex items-center p-6 space-x-3 rtl:space-x-reverse border-t border-gray-200 rounded-b dark:border-gray-600">
@@ -178,7 +176,7 @@ export default function Settings() {
         >
           Add New Coin
         </button>
-        
+
         <button
           type="submit"
           className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"

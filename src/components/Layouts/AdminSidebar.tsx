@@ -1,20 +1,21 @@
 import { useEffect, useRef } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
-import Logo from '../../assets/fav.svg';
+import Logo from '../../assets/fav.png';
 import { contextData } from '../../context/AuthContext';
 import DarkModeSwitcher from './DarkModeSwitcher';
 import SidebarDropdown from './SidebarDropdown';
 import {
   Home,
-  ScrollText,
   Users,
   BarChart2,
   Globe,
   MessageSquare,
-  Coins,
-  Gift,
   LogOut,
   Menu,
+  ShieldAlert,
+  Settings,
+  ArrowUpFromLine,
+  ArrowDownFromLine,
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -45,7 +46,7 @@ export default function AdminSidebar({
     };
     document.addEventListener('click', clickHandler);
     return () => document.removeEventListener('click', clickHandler);
-  });
+  }, []);
 
   useEffect(() => {
     const keyHandler = ({ keyCode }: KeyboardEvent) => {
@@ -54,7 +55,7 @@ export default function AdminSidebar({
     };
     document.addEventListener('keydown', keyHandler);
     return () => document.removeEventListener('keydown', keyHandler);
-  });
+  }, []);
 
   return (
     <aside
@@ -87,7 +88,7 @@ export default function AdminSidebar({
                 to="/"
                 className={`text-xs group relative flex items-center gap-2.5 rounded-sm py-2.5 px-7.5 text-gray-300 font-montserrat duration-300 ease-in-out hover:bg-black dark:hover:bg-black`}
               >
-                <Globe strokeWidth={1.5} className="text-xl" />
+                <Globe strokeWidth={1.5} className="text-green-400 text-xl" />
                 Main Website
               </NavLink>
             </li>
@@ -99,42 +100,68 @@ export default function AdminSidebar({
                   pathname === '/admin' && 'bg-black'
                 }`}
               >
-                <Home strokeWidth={1.5} className="text-xl" />
+                <Home strokeWidth={1.5} className="text-green-400 text-xl" />
                 Dashboard
               </NavLink>
             </li>
           </ul>
 
           <ul className="mb-10 flex flex-col gap-1.5">
+            <li>
+              <NavLink
+                to="/admin/trades"
+                className={`text-xs group relative flex items-center gap-2.5 rounded-sm py-2.5 px-7.5 text-gray-300 font-montserrat duration-300 ease-in-out hover:bg-black dark:hover:bg-black ${
+                  pathname.includes('trades') && 'bg-black'
+                }`}
+              >
+                <BarChart2
+                  strokeWidth={1.5}
+                  className="text-green-400 text-xl"
+                />
+                Manage Trades
+              </NavLink>
+            </li>
+
             {/* Users Dropdown Menu */}
             <SidebarDropdown
               title="Users"
-              icon={<Users strokeWidth={1.5} className="text-xl" />}
+              icon={
+                <Users strokeWidth={1.5} className="text-green-400 text-xl" />
+              }
               links={[
-                { label: 'Add User', href: 'add-user' },
-                { label: 'Manage Users', href: 'manage-users' },
-                { label: 'Users Account', href: 'users-account' },
-                { label: 'Users Account Limit', href: 'users-account-limit' },
+                { label: 'Active Users', href: 'active-users' },
+                { label: 'Banned Users', href: 'banned-users' },
               ]}
             />
 
             {/* Transactions drop down */}
             <SidebarDropdown
-              title="Transactions"
-              icon={<ScrollText strokeWidth={1.5} className="text-xl" />}
+              title="Manage Deposits"
+              icon={
+                <ArrowUpFromLine
+                  strokeWidth={1.5}
+                  className="text-green-400 text-xl"
+                />
+              }
               links={[
-                { label: 'Deposit', href: 'manage-deposits' },
-                { label: 'Withdrawal', href: 'manage-withdrawals' },
+                { label: 'Approved Deposits', href: 'approved-deposits' },
+                { label: 'Pending Deposits', href: 'pending-deposits' },
+                { label: 'Rejected Deposits', href: 'rejected-deposits' },
               ]}
             />
 
-            {/* Trade drop down */}
             <SidebarDropdown
-              title="Trade"
-              icon={<BarChart2 strokeWidth={1.5} className="text-xl" />}
+              title="Manage Withdrawals"
+              icon={
+                <ArrowDownFromLine
+                  strokeWidth={1.5}
+                  className="text-green-400 text-xl"
+                />
+              }
               links={[
-                { label: 'Manage Trader', href: 'manage-traders' },
-                { label: 'Trade History', href: 'trade-history' },
+                { label: 'Approved Withdrawals', href: 'approved-withdrawals' },
+                { label: 'Pending Withdrawals', href: 'pending-withdrawals' },
+                { label: 'Rejected Withdrawals', href: 'rejected-withdrawals' },
               ]}
             />
           </ul>
@@ -142,25 +169,16 @@ export default function AdminSidebar({
           <ul className="flex flex-col gap-1.5">
             <li>
               <NavLink
-                to="/admin/manage-assets"
+                to="/admin/kyc"
                 className={`text-xs group relative flex items-center gap-2.5 rounded-sm py-2.5 px-7.5 text-gray-300 font-montserrat duration-300 ease-in-out hover:bg-black dark:hover:bg-black ${
-                  pathname.includes('manage-assets') && 'bg-black'
+                  pathname.includes('kyc') && 'bg-black'
                 }`}
               >
-                <Coins strokeWidth={1.5} className="text-xl" />
-                Manage Assets
-              </NavLink>
-            </li>
-
-            <li>
-              <NavLink
-                to="/admin/affiliate"
-                className={`text-xs group relative flex items-center gap-2.5 rounded-sm py-2.5 px-7.5 text-gray-300 font-montserrat duration-300 ease-in-out hover:bg-black dark:hover:bg-black ${
-                  pathname.includes('affiliate') && 'bg-black'
-                }`}
-              >
-                <Gift strokeWidth={1.5} className="text-xl" />
-                Affiliate
+                <ShieldAlert
+                  strokeWidth={1.5}
+                  className="text-green-400 text-xl"
+                />
+                Kyc
               </NavLink>
             </li>
           </ul>
@@ -173,8 +191,26 @@ export default function AdminSidebar({
                   pathname.includes('mails') && 'bg-black'
                 }`}
               >
-                <MessageSquare strokeWidth={1.5} className="text-xl" />
+                <MessageSquare
+                  strokeWidth={1.5}
+                  className="text-green-400 text-xl"
+                />
                 Mails
+              </NavLink>
+            </li>
+
+            <li>
+              <NavLink
+                to="/admin/settings"
+                className={`text-xs group relative flex items-center gap-2.5 rounded-sm py-2.5 px-7.5 text-gray-300 font-montserrat duration-300 ease-in-out hover:bg-black dark:hover:bg-black ${
+                  pathname.includes('settings') && 'bg-black'
+                }`}
+              >
+                <Settings
+                  strokeWidth={1.5}
+                  className="text-green-400 text-xl"
+                />
+                Settings
               </NavLink>
             </li>
 
@@ -182,7 +218,7 @@ export default function AdminSidebar({
               className="cursor-pointer text-xs group relative flex items-center gap-2.5 rounded-sm py-2.5 px-7.5 text-gray-300 font-montserrat duration-300 ease-in-out hover:bg-black dark:hover:bg-black"
               onClick={() => logout()}
             >
-              <LogOut strokeWidth={1.5} className="text-xl" />
+              <LogOut strokeWidth={1.5} className="text-green-400 text-xl" />
               Sign out
             </li>
           </ul>

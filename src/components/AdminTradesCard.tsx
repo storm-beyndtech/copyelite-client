@@ -1,11 +1,11 @@
-import { useEffect, useState } from "react";
-import { PiChartBarHorizontalThin } from "react-icons/pi";
+import { useEffect, useState } from 'react';
+import { PiChartBarHorizontalThin } from 'react-icons/pi';
 
 export default function AdminTradeCards() {
-  const [transactions, setTransactions] = useState<any[]>([])
-  const [totalTrades, setTotalTrades] = useState(0)
-  const [totalInterest, setTotalInterest] = useState(0)
-  const [pendingTrades, setPendingTrades] = useState(0)
+  const [transactions, setTransactions] = useState<any[]>([]);
+  const [totalTrades, setTotalTrades] = useState(0);
+  const [totalInterest, setTotalInterest] = useState(0);
+  const [pendingTrades, setPendingTrades] = useState(0);
   const url = import.meta.env.VITE_REACT_APP_SERVER_URL;
 
   const fetchTradeTransactions = async () => {
@@ -22,76 +22,75 @@ export default function AdminTradeCards() {
 
   useEffect(() => {
     fetchTradeTransactions();
-    
+
     if (transactions.length > 0) {
       const tradesTransactions = transactions.filter(
-        (transaction: any) => transaction.type === "trade" 
+        (transaction: any) => transaction.type === 'trade',
       );
 
-      const tradesSum = tradesTransactions
-      .filter((transaction: any) => transaction.status === "success").length
+      const tradesSum = tradesTransactions.filter(
+        (transaction: any) => transaction.status === 'success',
+      ).length;
 
       const interestSum = tradesTransactions
-      .filter((transaction: any) => transaction.status === "success")
-      .reduce((sum: number, transaction: any) => sum + transaction.tradeData.interest, 0);
-      
-      const pendingSum = tradesTransactions
-        .filter((transaction: any) => transaction.status === "pending").length
+        .filter((transaction: any) => transaction.status === 'success')
+        .reduce(
+          (sum: number, transaction: any) =>
+            sum + transaction.tradeData.interest,
+          0,
+        );
 
+      const pendingSum = tradesTransactions.filter(
+        (transaction: any) => transaction.status === 'pending',
+      ).length;
 
-        setTotalTrades(tradesSum)
-        setPendingTrades(pendingSum)
-        setTotalInterest(interestSum)
+      setTotalTrades(tradesSum);
+      setPendingTrades(pendingSum);
+      setTotalInterest(interestSum);
     }
   }, [transactions.length]);
 
-
-
-
-  
   return (
     <div className="grid grid-cols-3 max-lg:grid-cols-1 gap-4 mb-4">
-      <div className="flex flex-col gap-1 px-3 py-2 rounded-lg bg-gray-50 dark:bg-gray-800 border-l border-l-sky-600">
-          <div className="w-full flex flex-row-reverse items-end justify-between">
-            <h2 className="text-3xl -mb-2 text-gray-700 dark:text-white">
-              {Number(totalTrades)}
-              <span className="text-xs text-gray-600 pl-[2px]"></span>
-            </h2>
-            <PiChartBarHorizontalThin className="text-4xl text-blue-600"/>
-          </div>
+      <div className="flex flex-col gap-2 p-3 rounded-lg bg-white dark:border-gray-900 border-gray-200 dark:bg-gray-950/70 border shadow-lg">
+        <div className="w-full flex flex-row-reverse items-end justify-between">
+          <h2 className="text-4xl text-gray-700 dark:text-white">
+            {Number(totalTrades)}
+          </h2>
+          <PiChartBarHorizontalThin className="text-4xl text-blue-600" />
+        </div>
 
-          <p className="text-xs font-light flex text-gray-400 dark:text-gray-500">
-            All Trades
-          </p>
+        <p className="text-xs font-light flex text-gray-600 dark:text-gray-300">
+          All Trades
+        </p>
       </div>
 
-      <div className="flex flex-col gap-1 px-3 py-2 rounded-lg bg-gray-50 dark:bg-gray-800 border-l border-l-warning">
-          <div className="w-full flex flex-row-reverse items-end justify-between">
-            <h2 className="text-3xl -mb-2 text-gray-700 dark:text-white">
-              {Number(pendingTrades)}
-            </h2>
-            <PiChartBarHorizontalThin className="text-4xl text-warning"/>
-          </div>
+      <div className="flex flex-col gap-2 p-3 rounded-lg bg-white dark:border-gray-900 border-gray-200 dark:bg-gray-950/70 border shadow-lg">
+        <div className="w-full flex flex-row-reverse items-end justify-between">
+          <h2 className="text-4xl text-gray-700 dark:text-white">
+            {Number(pendingTrades)}
+          </h2>
+          <PiChartBarHorizontalThin className="text-4xl text-warning" />
+        </div>
 
-          <p className="text-sm font-light flex text-gray-400 dark:text-gray-500">
-            Pending Trades
-          </p>
+        <p className="text-xs font-light flex text-gray-600 dark:text-gray-300">
+          Pending Trades
+        </p>
       </div>
-      
-      <div className="flex flex-col gap-1 px-3 py-2 rounded-lg bg-gray-50 dark:bg-gray-800 border-l border-l-lime-300">
 
-          <div className="w-full flex flex-row-reverse items-end justify-between">
-            <h2 className="text-3xl -mb-2 text-gray-700 dark:text-white">
-              {Number(totalInterest).toLocaleString('en-US')}
-              <span className="text-xs text-gray-600 pl-[2px]">%</span>
-            </h2>
-            <PiChartBarHorizontalThin className="text-4xl text-lime-300"/>
-          </div>
+      <div className="flex flex-col gap-2 p-3 rounded-lg bg-white dark:border-gray-900 border-gray-200 dark:bg-gray-950/70 border shadow-lg">
+        <div className="w-full flex flex-row-reverse items-end justify-between">
+          <h2 className="text-4xl text-gray-700 dark:text-white">
+            {Number(totalInterest).toLocaleString('en-US')}
+            <span className="text-xs text-gray-600 pl-[2px]">%</span>
+          </h2>
+          <PiChartBarHorizontalThin className="text-4xl text-green-500" />
+        </div>
 
-          <p className="text-sm font-light flex text-gray-400 dark:text-gray-500">
-            Total Interest
-          </p>
+        <p className="text-xs font-light flex text-gray-600 dark:text-gray-300">
+          Total Interest
+        </p>
       </div>
     </div>
-    )
-  }
+  );
+}

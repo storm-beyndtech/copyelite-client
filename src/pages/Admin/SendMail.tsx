@@ -106,7 +106,7 @@ export default function SendMail() {
           className={`px-4 py-2 text-xs font-medium rounded ${
             filterType === 'all'
               ? 'bg-blue-600 text-white'
-              : 'bg-gray-200 dark:bg-gray-700'
+              : 'bg-gray-200 dark:bg-gray-700 text-white'
           }`}
         >
           All Users
@@ -116,7 +116,7 @@ export default function SendMail() {
           className={`px-4 py-2 text-xs font-medium rounded ${
             filterType === 'deposited'
               ? 'bg-blue-600 text-white'
-              : 'bg-gray-200 dark:bg-gray-700'
+              : 'bg-gray-200 dark:bg-gray-700 text-white'
           }`}
         >
           Deposited Users
@@ -126,7 +126,7 @@ export default function SendMail() {
           className={`px-4 py-2 text-xs font-medium rounded ${
             filterType === 'no-deposits'
               ? 'bg-blue-600 text-white'
-              : 'bg-gray-200 dark:bg-gray-700'
+              : 'bg-gray-200 dark:bg-gray-700 text-white'
           }`}
         >
           Users Without Deposits
@@ -136,7 +136,7 @@ export default function SendMail() {
           className={`px-4 py-2 text-xs font-medium rounded ${
             filterType === 'with-trades'
               ? 'bg-blue-600 text-white'
-              : 'bg-gray-200 dark:bg-gray-700'
+              : 'bg-gray-200 dark:bg-gray-700 text-white'
           }`}
         >
           Users With Trades
@@ -146,7 +146,7 @@ export default function SendMail() {
           className={`px-4 py-2 text-xs font-medium rounded ${
             filterType === 'with-withdrawals'
               ? 'bg-blue-600 text-white'
-              : 'bg-gray-200 dark:bg-gray-700'
+              : 'bg-gray-200 dark:bg-gray-700 text-white'
           }`}
         >
           Users With Withdrawals
@@ -223,7 +223,7 @@ export default function SendMail() {
             onClick={() => handleMailData(selectedUsers)}
             className="px-4 py-2 text-xs font-medium bg-blue-600 text-white rounded-lg hover:bg-blue-700"
           >
-            Send Mail to Selected ({selectedUsers.length})
+            text-white Send Mail to Selected ({selectedUsers.length})
           </button>
         </div>
       )}

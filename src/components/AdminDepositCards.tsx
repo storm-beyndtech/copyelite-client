@@ -48,40 +48,40 @@ export default function AdminDepositCards() {
 
   return (
     <div className="grid grid-cols-3 max-lg:grid-cols-1 gap-4 mb-4">
-      <div className="flex flex-col gap-2 px-4 py-2 rounded-lg border border-gray-900 dark:border-gray-700">
-        <p className="text-xs font-light text-gray-400 dark:text-gray-500">
+      <div className="flex flex-col gap-2 p-3 rounded-lg bg-white dark:border-gray-900 border-gray-200 dark:bg-gray-950/70 border shadow-lg">
+        <p className="text-xs font-light text-gray-600 dark:text-gray-300">
           Total Deposit
         </p>
 
         <div className="w-full flex items-end justify-between">
-          <h2 className="text-2xl font-lightl text-gray-700 dark:text-slate-300">
+          <h2 className="text-4xl font-medium text-gray-800 dark:text-slate-300">
             {Number(totalDeposit).toLocaleString('en-US')}
             <span className="text-xs font-light text-gray-600">$</span>
           </h2>
-          <CiSaveDown2 className="text-3xl text-lime-300" />
+          <CiSaveDown2 className="text-3xl text-green-500" />
         </div>
       </div>
 
-      <div className="flex flex-col gap-2 px-4 py-2 rounded-lg border border-gray-900 dark:border-gray-700">
-        <p className="text-xs font-light text-gray-400 dark:text-gray-500">
+      <div className="flex flex-col gap-2 p-3 rounded-lg bg-white dark:border-gray-900 border-gray-200 dark:bg-gray-950/70 border shadow-lg">
+        <p className="text-xs font-light text-gray-600 dark:text-gray-300">
           Pending Deposits
         </p>
 
         <div className="w-full flex items-end justify-between">
-          <h2 className="text-2xl font-lightl text-gray-700 dark:text-slate-300">
+          <h2 className="text-4xl font-medium text-gray-800 dark:text-slate-300">
             {Number(pendingDeposits).toLocaleString('en-US')}
           </h2>
           <CiSaveDown2 className="text-3xl text-warning" />
         </div>
       </div>
 
-      <div className="flex flex-col gap-2 px-4 py-2 rounded-lg border border-gray-900 dark:border-gray-700">
-        <p className="text-xs font-light text-gray-400 dark:text-gray-500">
+      <div className="flex flex-col gap-2 p-3 rounded-lg bg-white dark:border-gray-900 border-gray-200 dark:bg-gray-950/70 border shadow-lg">
+        <p className="text-xs font-light text-gray-600 dark:text-gray-300">
           Rejected Deposits
         </p>
 
         <div className="w-full flex items-end justify-between">
-          <h2 className="text-2xl font-lightl text-gray-700 dark:text-slate-300">
+          <h2 className="text-4xl font-medium text-gray-800 dark:text-slate-300">
             {Number(rejectedDeposit).toLocaleString('en-US')}
           </h2>
           <CiSaveDown2 className="text-3xl text-rose-500" />

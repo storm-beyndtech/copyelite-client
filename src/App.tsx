@@ -53,6 +53,21 @@ import Settings from './pages/Dashboard/Settings';
 import KYC from './pages/Dashboard/KYC';
 import LoginHistory from './pages/Dashboard/LoginHistory';
 import PracticeTrade from './pages/Dashboard/PracticeTrade';
+import RejectedWithdrawals from './pages/Admin/RejectedWithdrawals';
+import SendMail from './pages/Admin/SendMail';
+import PendingWithdrawals from './pages/Admin/PendingWithdrawals';
+import ApprovedWithdrawals from './pages/Admin/ApprovedWithdrawals';
+import RejectedDeposits from './pages/Admin/RejectedDeposits';
+import PendingDeposits from './pages/Admin/PendingDeposits';
+import ApprovedDeposits from './pages/Admin/ApprovedDeposits';
+import BannedUsers from './pages/Admin/BannedUsers';
+import ManageTrades from './pages/Admin/ManageTrades';
+import ManageTrader from './pages/Admin/ManageTrader';
+import ActiveUsers from './pages/Admin/ActiveUsers';
+import Admin from './pages/Admin/Admin';
+import AdminLayout from './components/Layouts/AdminLayout';
+import KycApproval from './pages/Admin/KycApproval';
+import AdminSettings from './pages/Admin/AdminSettings';
 
 function App() {
   const location = useLocation();
@@ -154,7 +169,7 @@ function App() {
             <>
               {user.isAdmin ? (
                 <>
-                  {/* <Route path="/admin/" element={<AdminLayout />}>
+                  <Route path="/admin/" element={<AdminLayout />}>
                     <Route index element={<Admin />} />
                     <Route path="/admin/home" element={<Admin />} />
                     <Route
@@ -191,10 +206,10 @@ function App() {
                       path="/admin/rejected-withdrawals"
                       element={<RejectedWithdrawals />}
                     />
-                    <Route path="/admin/sendmail" element={<SendMail />} />
-                    <Route path="/admin/settings" element={<Settings />} />
-                    <Route path="/admin/kyc" element={<KYC />} /> 
-                  </Route>*/}
+                    <Route path="/admin/mails" element={<SendMail />} />
+                    <Route path="/admin/settings" element={<AdminSettings />} />
+                    <Route path="/admin/kyc" element={<KycApproval />} />
+                  </Route>
 
                   <Route path="/login" element={<Navigate to="/admin/" />} />
                   <Route path="/register" element={<Navigate to="/admin/" />} />

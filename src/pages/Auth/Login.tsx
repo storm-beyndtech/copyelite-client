@@ -1,13 +1,14 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Eye, EyeOff } from 'lucide-react';
-import { FcGoogle } from 'react-icons/fc';
 import Alert from '@/components/ui/Alert';
 import { bounceAnimation } from '@/lib/utils';
 import logo from '../../assets/copyelite-logo.png';
 import { Link, useNavigate } from 'react-router-dom';
 import DarkModeSwitcher from '@/components/Layouts/DarkModeSwitcher';
 import GTranslateProvider from '@/components/ui/GTranslateProvider';
+import { GoogleLogin } from '@react-oauth/google';
+import { contextData } from '@/context/AuthContext';
 
 // Placeholder types for form state and errors
 interface LoginFormState {
@@ -22,6 +23,7 @@ interface LoginErrors {
 }
 
 const Login: React.FC = () => {
+  const { login } = contextData();
   const [formData, setFormData] = useState<LoginFormState>({
     emailOrUsername: '',
     password: '',
@@ -82,7 +84,7 @@ const Login: React.FC = () => {
         body: JSON.stringify(payload),
       });
 
-      const resData = await response.json()
+      const resData = await response.json();
 
       if (!response.ok) {
         throw new Error(resData.message);
@@ -131,6 +133,23 @@ const Login: React.FC = () => {
     }
   };
 
+  //Google login success
+  const onSuccessHandler = async ({ credential }: any) => {
+    const res = await fetch(`${url}/users/google`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ token: credential }),
+    });
+
+    const data = await res.json();
+    if (res.ok) {
+      login(data.user);
+      navigate('/dashboard');
+    } else {
+      setError(data.error);
+    }
+  };
+
   return (
     <div className="min-h-screen grid grid-cols-5 overflow-hidden bg-gray-50 dark:bg-bodydark">
       {/* Left Side - Marketing Content */}
@@ -176,11 +195,12 @@ const Login: React.FC = () => {
             Access your CopyElite account
           </p>
 
-          {/* Google Login Button */}
-          <button className="w-full font-medium flex items-center justify-center bg-white dark:bg-transparent border border-gray-300 dark:border-gray-700 text-gray-700 dark:text-white rounded-md py-2 hover:bg-gray-50 dark:hover:bg-gray-800 transition">
-            <FcGoogle className="mr-3 text-2xl" />
-            Login with Google
-          </button>
+          <GoogleLogin
+            onSuccess={onSuccessHandler}
+            onError={() => {
+              setError('Google login failed');
+            }}
+          />
 
           <div className="flex items-center my-5">
             <hr className="flex-grow border-t border-gray-300 dark:border-gray-700" />

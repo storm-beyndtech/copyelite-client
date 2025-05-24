@@ -41,7 +41,7 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen }: SidebarProps) {
     };
     document.addEventListener('click', clickHandler);
     return () => document.removeEventListener('click', clickHandler);
-  });
+  }, []);
 
   useEffect(() => {
     const keyHandler = ({ keyCode }: KeyboardEvent) => {
@@ -50,7 +50,7 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen }: SidebarProps) {
     };
     document.addEventListener('keydown', keyHandler);
     return () => document.removeEventListener('keydown', keyHandler);
-  });
+  }, []);
 
   return (
     <aside

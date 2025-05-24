@@ -1,7 +1,7 @@
 // components/TraderForm.tsx
 import { Trader } from '@/types/types';
 import React, { useState, useEffect, useRef } from 'react';
-import s from '../pages/register/Register.module.css';
+import Alert from './ui/Alert';
 
 interface TraderFormProps {
   trader: Trader | null;
@@ -522,7 +522,8 @@ const TraderForm: React.FC<TraderFormProps> = ({
             </div>
           </div>
         </div>
-        {error && <p className={s.formError}>{error}</p>}
+        
+        {error && <Alert type="error" message={error} />}
 
         <div className="mt-8 flex justify-end space-x-4">
           <button

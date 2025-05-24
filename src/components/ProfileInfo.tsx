@@ -88,29 +88,29 @@ export default function ProfileInfo() {
   const validateForm = (): boolean => {
     const newErrors: ValidationErrors = {};
 
-    if (!formData.firstName.trim()) {
+    if (!formData.firstName?.trim()) {
       newErrors.firstName = 'First name is required';
     }
 
-    if (!formData.lastName.trim()) {
+    if (!formData.lastName?.trim()) {
       newErrors.lastName = 'Last name is required';
     }
 
-    if (!formData.province.trim()) {
+    if (!formData.province?.trim()) {
       newErrors.province = 'Province is required';
     }
 
-    if (!formData.city.trim()) {
+    if (!formData.city?.trim()) {
       newErrors.city = 'City is required';
     }
 
-    if (!formData.zipCode.trim()) {
+    if (!formData.zipCode?.trim()) {
       newErrors.zipCode = 'Zip code is required';
     } else if (formData.zipCode.length < 4) {
       newErrors.zipCode = 'Please enter a valid zip code';
     }
 
-    if (!formData.streetAddress.trim()) {
+    if (!formData.streetAddress?.trim()) {
       newErrors.streetAddress = 'Address is required';
     }
 
