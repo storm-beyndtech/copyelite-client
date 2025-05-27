@@ -14,10 +14,10 @@ interface BalanceProps {
 export default function Balance({
   trades,
   user = {
-    deposit: 5250,
-    interest: 738,
-    bonus: 100,
-    username: 'user123',
+    deposit: 0,
+    interest: 0,
+    bonus: 0,
+    username: 'user',
   },
 }: BalanceProps) {
   const navigate = useNavigate();

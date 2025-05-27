@@ -15,11 +15,23 @@ const url = import.meta.env.VITE_REACT_APP_SERVER_URL;
 export default function Dashboard() {
   const { user, fetchUser } = contextData();
   const [traders, setTraders] = useState([]);
+  const [trades, setTrades] = useState([]);
   const [copiedTraderId, setCopiedTraderId] = useState<string | null>(null);
 
   const combinedBalance =
     user?.deposit + user?.trade + user?.interest + user?.bonus || 0;
   const balancePlusWithdraw = combinedBalance + (user?.withdraw || 0);
+
+  const fetchTrades = async () => {
+    try {
+      const res = await fetch(`${url}/trades`);
+      if (!res.ok) throw new Error('Failed to fetch traders');
+      const data = await res.json();
+      setTrades(data || []);
+    } catch (error) {
+      console.error('Error fetching traders:', error);
+    }
+  };
 
   const fetchTraders = async () => {
     try {
@@ -58,6 +70,7 @@ export default function Dashboard() {
 
   useEffect(() => {
     fetchTraders();
+    fetchTrades();
   }, [user]);
 
   if (!user) return <PageLoader />;
@@ -72,7 +85,7 @@ export default function Dashboard() {
           <TraderGrid traders={traders} onCopyTrader={copyTrader} />
         </div>
         <div className="w-full flex-shrink-0 max-w-fit">
-          <Balance user={user} trades={2} />
+          <Balance user={user} trades={trades.length} />
         </div>
       </div>
 
