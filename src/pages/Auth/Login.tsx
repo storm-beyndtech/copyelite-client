@@ -92,12 +92,10 @@ const Login: React.FC = () => {
 
       // Handle successful login
       setSubmitStatus('success');
-
+      login(resData.user);
       // Redirect or handle successful login
       setTimeout(() => {
-        navigate('/verify-otp', {
-          state: { ...payload, pageType: 'login-verification' },
-        });
+        navigate('/dashboard');
       }, 2000);
     } catch (error: any) {
       // Handle login error
@@ -305,7 +303,7 @@ const Login: React.FC = () => {
 
             {/* Alert Messages */}
             {submitStatus === 'success' && (
-              <Alert type="success" message="Login code was sent via mail." />
+              <Alert type="success" message="Login in dashboard..." />
             )}
             {submitStatus === 'error' && <Alert type="error" message={error} />}
 
