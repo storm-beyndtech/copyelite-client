@@ -6,10 +6,8 @@ const PageLoader: React.FC = () => {
   return (
     <div className="fixed inset-0 z-[9999999] bg-[#070c1b] flex items-center justify-center noRight">
       <div className="absolute w-[465px] h-[140px] flex items-center justify-center gap-[10px] transition-all duration-500 ease-in-out">
-        <div
-          className="w-[140px] h-[140px] flex items-center justify-center spin"
-        >
-          <SiSpinrilla className="text-9xl text-brandblue" />
+        <div className="w-[140px] h-[140px] flex items-center justify-center spin">
+          <SiSpinrilla className="text-9xl max-sm:text-5xl text-brandblue" />
         </div>
         <div className="load-text">
           <img
@@ -18,6 +16,7 @@ const PageLoader: React.FC = () => {
             alt="Copyelite logo text"
             width={308}
             height={107}
+            className="max-sm:w-40"
           />
         </div>
       </div>
