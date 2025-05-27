@@ -4,6 +4,7 @@ import { Users, Star } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import ChartSlide from './ChartSlide';
 import { Link } from 'react-router-dom';
+import heroVideo from '../assets/HeroVideo.mp4';
 const words = ['Everyone', 'Investors', 'Experts', 'Beginners'];
 
 export default function Hero() {
@@ -74,7 +75,7 @@ export default function Hero() {
           {/* Main trading graphic */}
           <div className="relative z-10 max-w-[540px]">
             <video
-              src="https://videos-cdn.capex.com/cf93e618-11b1-47f2-9b10-9b9adabaa2a5/play_720p.mp4"
+              src={heroVideo}
               autoPlay
               muted
               loop
