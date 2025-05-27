@@ -16,6 +16,7 @@ import {
   Settings,
   ArrowUpFromLine,
   ArrowDownFromLine,
+  User,
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -119,6 +120,18 @@ export default function AdminSidebar({
                   className="text-green-400 text-xl"
                 />
                 Manage Trades
+              </NavLink>
+            </li>
+
+            <li>
+              <NavLink
+                to="/admin/trader"
+                className={`text-xs group relative flex items-center gap-2.5 rounded-sm py-2.5 px-7.5 text-gray-300 font-montserrat duration-300 ease-in-out hover:bg-black dark:hover:bg-black ${
+                  pathname.includes('trader') && 'bg-black'
+                }`}
+              >
+                <User strokeWidth={1.5} className="text-green-400 text-xl" />
+                Manage Trader
               </NavLink>
             </li>
 
