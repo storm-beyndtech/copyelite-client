@@ -4,18 +4,29 @@ import Balance from '@/components/Balance';
 import { contextData } from '@/context/AuthContext';
 import { useEffect, useState } from 'react';
 import SmallStockChart from '@/components/SmallStockChart';
+import CopyTraderErrorModal from '@/components/CopyTraderErrorModal';
+import { useNavigate } from 'react-router-dom';
+import { Trader } from '@/types/types';
 
 export default function Trades() {
   const [tradeData, setTradeData] = useState<any>([]);
   const { user, fetchUser } = contextData();
   const [traders, setTraders] = useState([]);
   const [copiedTraderId, setCopiedTraderId] = useState<string | null>(null);
+  const [showError, setShowError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+  const navigate = useNavigate();
   const url = import.meta.env.VITE_REACT_APP_SERVER_URL;
+
+  const handleCopyError = (message: string) => {
+    setErrorMessage(message);
+    setShowError(true);
+  };
 
   const fetchTrades = async () => {
     try {
-      const res = await fetch(`${url}/trades`);
-      const data = await res.json();
+    const res = await fetch(`${url}/trades/user/${user._id}/trader/${user.traderId}`);
+    const data = await res.json();
 
       if (res.ok) {
         const filteredTrades = data.filter(
@@ -26,14 +37,9 @@ export default function Trades() {
         throw new Error(data.message);
       }
     } catch (error) {
-      console.error(error);
+      console.error('Error fetching trades:', error);
     }
   };
-
-  useEffect(() => {
-    fetchTrades();
-    console.log(tradeData);
-  }, [tradeData.length]);
 
   const fetchTraders = async () => {
     try {
@@ -46,29 +52,45 @@ export default function Trades() {
     }
   };
 
-  const copyTrader = async (traderId: string) => {
+  const copyTrader = async (trader: Trader) => {
     try {
-      const action = traderId === copiedTraderId ? 'uncopy' : 'copy';
+      const action = trader._id === copiedTraderId ? 'uncopy' : 'copy';
+
+      // Check minimum copy amount requirement
+      if (trader.minimumCopyAmount > user.deposit && action !== 'uncopy') {
+        handleCopyError(
+          `Insufficient balance. You need at least $${trader.minimumCopyAmount} to copy this trader.`,
+        );
+        return false;
+      }
 
       const response = await fetch(`${url}/users/update-user-trader`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ traderId, action, userId: user._id }),
+        body: JSON.stringify({
+          traderId: trader._id,
+          action,
+          userId: user._id,
+        }),
       });
 
       if (response.ok) {
-        setCopiedTraderId(action === 'copy' ? traderId : null);
+        setCopiedTraderId(action === 'copy' ? trader._id : null);
         fetchUser(user._id);
         return true;
       }
       return false;
-    } catch (error) {
-      console.error('Error copying trader:', error);
+    } catch (error: any) {
+      handleCopyError(`Error copying trader: ${error.message}.`);
       return false;
     }
   };
+
+  useEffect(() => {
+    fetchTrades();
+  }, [user]);
 
   useEffect(() => {
     fetchTraders();
@@ -76,6 +98,16 @@ export default function Trades() {
 
   return (
     <>
+      <CopyTraderErrorModal
+        isOpen={showError}
+        message={errorMessage}
+        onClose={() => setShowError(false)}
+        onDeposit={() => {
+          navigate('/dashboard/deposit');
+          setShowError(false);
+        }}
+      />
+
       <div className="w-full flex gap-5 my-4 max-[900px]:flex-col">
         <div className="flex-none">
           <Balance user={user} trades={tradeData.length} />

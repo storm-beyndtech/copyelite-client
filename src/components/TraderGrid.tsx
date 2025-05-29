@@ -5,21 +5,14 @@ import TraderCard from './TraderCard';
 
 interface TraderGridProps {
   traders: Trader[];
-  onCopyTrader: (traderId: string) => Promise<boolean>;
+  onCopyTrader: (trader:Trader) => Promise<boolean>;
 }
 
 const TraderGrid: React.FC<TraderGridProps> = ({ traders, onCopyTrader }) => {
-  const handleCopyTrader = async (traderId: string) => {
-    try {
-      await onCopyTrader(traderId);
-    } catch (err) {
-      console.log(err);
-    }
-  };
 
   return (
     <>
-      <TraderCard traders={traders} onCopy={handleCopyTrader} />
+      <TraderCard traders={traders} onCopy={onCopyTrader} />
 
       {traders.length === 0 && (
         <div className="text-center py-12">

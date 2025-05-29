@@ -2,14 +2,12 @@ import { useState, useEffect } from 'react';
 import {
   TrendingDown,
   TrendingUp,
-  ArrowRight,
   Clock,
   Search,
   RefreshCw,
   BarChart3,
 } from 'lucide-react';
 import { contextData } from '@/context/AuthContext';
-import { Link } from 'react-router-dom';
 
 // Updated TypeScript interface to match new schema
 interface DemoTrade {
@@ -24,7 +22,7 @@ interface DemoTrade {
   updatedAt: string;
 }
 
-const RecentDemoTrades = ({ changes }: any) => {
+const DemoTradeHistory = ({ changes }: any) => {
   const [trades, setTrades] = useState<DemoTrade[]>([]);
   const { user } = contextData();
   const [searchQuery, setSearchQuery] = useState('');
@@ -39,12 +37,10 @@ const RecentDemoTrades = ({ changes }: any) => {
       const data = await res.json();
 
       if (res.ok) {
-        const sortedTrades = data.trades
-          .sort(
-            (a: DemoTrade, b: DemoTrade) =>
-              new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
-          )
-          .slice(0, 4); // Limit to 4 recent trades
+        const sortedTrades = data.trades.sort(
+          (a: DemoTrade, b: DemoTrade) =>
+            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+        );
 
         setTrades(sortedTrades);
         setLastUpdated(
@@ -88,7 +84,7 @@ const RecentDemoTrades = ({ changes }: any) => {
       <div className="p-4 border-b border-gray-200 dark:border-gray-900">
         <div className="flex items-center justify-between">
           <h2 className="text-sm font-semibold text-gray-800 dark:text-white">
-            Recent Demo Trades
+            Demo Trades
           </h2>
           {lastUpdated && (
             <div className="flex items-center text-[10px] text-gray-500 dark:text-gray-400">
@@ -111,7 +107,7 @@ const RecentDemoTrades = ({ changes }: any) => {
         <div className="mt-2 relative">
           <input
             type="text"
-            placeholder="Search symbol or direction..."
+            placeholder="Search symbol, direction, or date..."
             className="w-full pl-8 pr-3 py-1.5 bg-gray-50 dark:bg-transparent border border-gray-200 dark:border-gray-800 rounded-md text-xs text-gray-700 dark:text-gray-200 placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-blue-400"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
@@ -120,7 +116,7 @@ const RecentDemoTrades = ({ changes }: any) => {
         </div>
       </div>
 
-      <div className="max-h-80 overflow-y-auto">
+      <div className="max-h-96 overflow-y-auto">
         {loading ? (
           <div className="p-8 flex justify-center items-center">
             <RefreshCw className="h-6 w-6 text-blue-500 animate-spin" />
@@ -151,13 +147,13 @@ const RecentDemoTrades = ({ changes }: any) => {
                         {trade.symbol.slice(0, 2).toUpperCase()}
                       </span>
                     </div>
-                    <div className="min-w-0 flex-1">
+                    <div className="min-w-0">
                       <div className="flex items-center space-x-1.5">
                         <h3 className="text-xs font-medium text-gray-800 dark:text-white">
                           {trade.symbol.toUpperCase()}
                         </h3>
                         <span
-                          className={`px-1 py-0.5 text-[10px] font-medium rounded ${
+                          className={`px-1 py-0 text-[10px] font-medium rounded ${
                             trade.marketDirection === 'buy'
                               ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'
                               : 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400'
@@ -214,27 +210,18 @@ const RecentDemoTrades = ({ changes }: any) => {
           <div className="py-12 flex flex-col items-center justify-center text-gray-500 dark:text-gray-400">
             <BarChart3 className="h-6 w-6 mb-2 text-gray-300 dark:text-gray-600" />
             <p className="text-sm">
-              {searchQuery ? 'No trades match your search' : 'No recent trades'}
+              {searchQuery ? 'No trades match your search' : 'No trades found'}
             </p>
             <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">
               {searchQuery
                 ? 'Try adjusting your search'
-                : 'Start trading to see activity'}
+                : 'Start trading to see your history'}
             </p>
           </div>
         )}
-      </div>
-
-      <div className="p-3 bg-gray-50 dark:bg-transparent border-t border-gray-200 dark:border-gray-900">
-        <Link to="/dashboard/demo-trade-history">
-          <button className="w-full flex items-center justify-center text-xs font-medium text-blue-500 dark:text-blue-400 hover:text-blue-600 dark:hover:text-blue-300 transition-colors">
-            View All Demo Trades
-            <ArrowRight className="h-3.5 w-3.5 ml-1" />
-          </button>
-        </Link>
       </div>
     </div>
   );
 };
 
-export default RecentDemoTrades;
+export default DemoTradeHistory;

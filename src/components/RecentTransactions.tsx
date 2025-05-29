@@ -8,6 +8,7 @@ import {
   FileText,
 } from 'lucide-react';
 import { contextData } from '@/context/AuthContext';
+import { Link } from 'react-router-dom';
 
 const RecentTransactions = () => {
   const [transactions, setTransactions] = useState<ITransaction[] | any[]>([]);
@@ -22,8 +23,17 @@ const RecentTransactions = () => {
       const res = await fetch(`${url}/transactions/user/${user.email}`);
       const data = await res.json();
 
-      if (res.ok) setTransactions(data.slice(-5));
-      else throw new Error(data.message);
+      if (res.ok) {
+        // Sort by createdAt (newest first) and take last 5
+        const sortedTransactions = data.sort(
+          (a: any, b: any) =>
+            new Date(b.createdAt || 0).getTime() -
+            new Date(a.createdAt || 0).getTime(),
+        );
+        setTransactions(sortedTransactions.slice(0, 4));
+      } else {
+        throw new Error(data.message);
+      }
 
       // Set last updated timestamp
       const now = new Date();
@@ -115,7 +125,13 @@ const RecentTransactions = () => {
                         Executed
                       </h3>
                       <p className="text-xs text-gray-500 dark:text-gray-400">
-                        {transaction.date}
+                        {new Date(transaction.date).toLocaleString('en-US', {
+                          year: 'numeric',
+                          month: 'short',
+                          day: 'numeric',
+                          hour: '2-digit',
+                          minute: '2-digit',
+                        })}
                       </p>
                     </div>
                   </div>
@@ -161,10 +177,12 @@ const RecentTransactions = () => {
       </div>
 
       <div className="p-3 bg-gray-50 dark:bg-transparent border-t border-gray-200 dark:border-gray-900">
-        <button className="w-full flex items-center justify-center text-xs font-medium text-blue-500 dark:text-blue-400 hover:text-blue-600 dark:hover:text-blue-300">
-          View all transactions
-          <ChevronRight className="h-3.5 w-3.5 ml-1" />
-        </button>
+        <Link to="/dashboard/transactions">
+          <button className="w-full flex items-center justify-center text-xs font-medium text-blue-500 dark:text-blue-400 hover:text-blue-600 dark:hover:text-blue-300">
+            View all transactions
+            <ChevronRight className="h-3.5 w-3.5 ml-1" />
+          </button>
+        </Link>
       </div>
     </div>
   );

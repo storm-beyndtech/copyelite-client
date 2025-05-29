@@ -90,14 +90,8 @@ export default function ProofOfIdentificationForm(): JSX.Element {
       newErrors.documentNumber = 'Document number is required';
     }
 
-    if (!formData.expiryDate.trim()) {
+    if (!formData.expiryDate) {
       newErrors.expiryDate = 'Expiry date is required';
-    } else {
-      // Simple date validation - check format DD/MM/YYYY
-      const datePattern = /^\d{2}\/\d{2}\/\d{4}$/;
-      if (!datePattern.test(formData.expiryDate)) {
-        newErrors.expiryDate = 'Date must be in DD/MM/YYYY format';
-      }
     }
 
     if (!formData.frontImage) {
@@ -155,7 +149,7 @@ export default function ProofOfIdentificationForm(): JSX.Element {
         body: submitData,
       });
 
-      const resData = await response.json()
+      const resData = await response.json();
 
       if (!response.ok) {
         throw new Error(resData.message);
@@ -173,7 +167,7 @@ export default function ProofOfIdentificationForm(): JSX.Element {
 
       if (frontImageRef.current) frontImageRef.current.value = '';
       if (backImageRef.current) backImageRef.current.value = '';
-    } catch (error:any) {
+    } catch (error: any) {
       setAlert({
         type: 'error',
         message: error.message,
@@ -357,7 +351,7 @@ export default function ProofOfIdentificationForm(): JSX.Element {
               Expiry Date
             </label>
             <input
-              type="text"
+              type="date"
               id="expiry-date"
               name="expiryDate"
               value={formData.expiryDate}

@@ -65,6 +65,7 @@ export default function ManageTrades() {
             Create new trade
           </button>
         </div>
+        
         {error && <Alert type="error" message={error} />}
         {success && <Alert type="success" message={success as any} />}
 

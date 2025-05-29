@@ -2,18 +2,29 @@ import { useState } from 'react';
 import Alert from './ui/Alert';
 
 export default function CreateTradeModal({ toggleModal }: any) {
-  const [stock, setStock] = useState('');
+  const [symbol, setSymbol] = useState('');
+  const [category, setCategory] = useState('');
   const [interest, setInterest] = useState(0);
   const [error, setError] = useState<null | string>(null);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const url = import.meta.env.VITE_REACT_APP_SERVER_URL;
 
+  const categories = [
+    'Forex',
+    'Crypto',
+    'Stocks',
+    'Commodities',
+    'Options',
+    'Mixed',
+  ];
+
   const startTrade = async (e: any) => {
     e.preventDefault();
     setError(null);
 
-    if (stock.length < 2) return setError('Stock must be above 1 character');
+    if (symbol.length < 2) return setError('Symbol must be above 1 character');
+    if (!category) return setError('Please select a category');
     if (!(interest >= 0))
       return setError('Interest cannot be less than 0 character');
 
@@ -25,7 +36,8 @@ export default function CreateTradeModal({ toggleModal }: any) {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          package: stock,
+          symbol,
+          category,
           interest: Number(interest / 100),
         }),
       });
@@ -49,16 +61,16 @@ export default function CreateTradeModal({ toggleModal }: any) {
           </h5>
           <div>
             <label
-              htmlFor="stock"
+              htmlFor="symbol"
               className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
             >
-              Stock
+              Symbol
             </label>
             <input
-              onChange={(e) => setStock(e.target.value)}
-              value={stock}
+              onChange={(e) => setSymbol(e.target.value)}
+              value={symbol}
               type="text"
-              id="stock"
+              id="symbol"
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
               placeholder="TSLA"
               required
@@ -67,16 +79,39 @@ export default function CreateTradeModal({ toggleModal }: any) {
 
           <div>
             <label
-              htmlFor="stock"
+              htmlFor="category"
+              className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+            >
+              Category
+            </label>
+            <select
+              onChange={(e) => setCategory(e.target.value)}
+              value={category}
+              id="category"
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+              required
+            >
+              <option value="">Select a category</option>
+              {categories.map((cat) => (
+                <option key={cat} value={cat}>
+                  {cat}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div>
+            <label
+              htmlFor="interest"
               className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
             >
               Interest
             </label>
             <input
               onChange={(e) => setInterest(Number(e.target.value))}
-              value={interest}
+              value={interest === 0 ? '' : interest}
               type="Number"
-              id="stock"
+              id="interest"
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
               placeholder="50%"
               required

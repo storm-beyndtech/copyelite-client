@@ -21,8 +21,17 @@ const TransactionsTable = () => {
       const res = await fetch(`${url}/transactions/user/${user.email}`);
       const data = await res.json();
 
-      if (res.ok) setTransactions(data);
-      else throw new Error(data.message);
+      if (res.ok) {
+        // Sort by createdAt (newest first) and take last 5
+        const sortedTransactions = data.sort(
+          (a: any, b: any) =>
+            new Date(b.createdAt || 0).getTime() -
+            new Date(a.createdAt || 0).getTime(),
+        );
+        setTransactions(sortedTransactions.slice(0, 4));
+      } else {
+        throw new Error(data.message);
+      }
 
       // Set last updated timestamp
       const now = new Date();
@@ -114,7 +123,13 @@ const TransactionsTable = () => {
                         Executed
                       </h3>
                       <p className="text-xs text-gray-500 dark:text-gray-400">
-                        {transaction.date}
+                        {new Date(transaction.date).toLocaleString('en-US', {
+                          year: 'numeric',
+                          month: 'short',
+                          day: 'numeric',
+                          hour: '2-digit',
+                          minute: '2-digit',
+                        })}
                       </p>
                     </div>
                   </div>

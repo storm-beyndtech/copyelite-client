@@ -9,6 +9,9 @@ import StockChart from '@/components/StockChart';
 import RecentTrades from '@/components/RecentTrades';
 import RecentTransactions from '@/components/RecentTransactions';
 import MiniBals from '@/components/MiniBals';
+import CopyTraderErrorModal from '@/components/CopyTraderErrorModal';
+import { useNavigate } from 'react-router-dom';
+import { Trader } from '@/types/types';
 
 const url = import.meta.env.VITE_REACT_APP_SERVER_URL;
 
@@ -17,10 +20,17 @@ export default function Dashboard() {
   const [traders, setTraders] = useState([]);
   const [trades, setTrades] = useState([]);
   const [copiedTraderId, setCopiedTraderId] = useState<string | null>(null);
+  const [showError, setShowError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+  const navigate = useNavigate();
 
-  const combinedBalance =
-    user?.deposit + user?.trade + user?.interest + user?.bonus || 0;
-  const balancePlusWithdraw = combinedBalance + (user?.withdraw || 0);
+  const handleCopyError = (message: string) => {
+    setErrorMessage(message);
+    setShowError(true);
+  };
+
+  const combinedBalance = user.deposit + user.interest + user.bonus || 0;
+  const balancePlusWithdraw = combinedBalance + (user.withdraw || 0);
 
   const fetchTrades = async () => {
     try {
@@ -44,26 +54,36 @@ export default function Dashboard() {
     }
   };
 
-  const copyTrader = async (traderId: string) => {
+  const copyTrader = async (trader: Trader) => {
     try {
-      const action = traderId === copiedTraderId ? 'uncopy' : 'copy';
+      const action = trader._id === copiedTraderId ? 'uncopy' : 'copy';
+      if (trader.minimumCopyAmount > user.deposit && action !== 'uncopy') {
+        handleCopyError(
+          `Insufficient balance. You need at least $${trader.minimumCopyAmount} to copy this trader.`,
+        );
+        return false;
+      }
 
       const response = await fetch(`${url}/users/update-user-trader`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ traderId, action, userId: user._id }),
+        body: JSON.stringify({
+          traderId: trader._id,
+          action,
+          userId: user._id,
+        }),
       });
 
       if (response.ok) {
-        setCopiedTraderId(action === 'copy' ? traderId : null);
+        setCopiedTraderId(action === 'copy' ? trader._id : null);
         fetchUser(user._id);
         return true;
       }
       return false;
-    } catch (error) {
-      console.error('Error copying trader:', error);
+    } catch (error: any) {
+      handleCopyError(`Error copying trader ${error.message}.`);
       return false;
     }
   };
@@ -79,20 +99,29 @@ export default function Dashboard() {
     <>
       {balancePlusWithdraw === 0 && <NoDepositAlert />}
       {!user.documentNumber && <NoKycAlert />}
+      <CopyTraderErrorModal
+        isOpen={showError}
+        message={errorMessage}
+        onClose={() => setShowError(false)}
+        onDeposit={() => {
+          navigate('/dashboard/deposit');
+          setShowError(false);
+        }}
+      />
 
       <div className="w-full flex gap-5 my-5 max-[900px]:flex-col">
-        <div className="w-full">
-          <TraderGrid traders={traders} onCopyTrader={copyTrader} />
-        </div>
-        <div className="w-full flex-shrink-0 max-w-fit">
+        <div className="flex-shrink-0">
           <Balance user={user} trades={trades.length} />
+        </div>
+
+        <div className="flex-grow overflow-x-auto">
+          <TraderGrid traders={traders} onCopyTrader={copyTrader} />
         </div>
       </div>
 
       <div className="w-full my-5">
         <MiniBals />
       </div>
-
       <div className="w-full flex flex-wrap gap-5 my-5 max-[900px]:flex-col">
         <div className="w-full flex-1">
           <RecentTrades />
@@ -101,7 +130,6 @@ export default function Dashboard() {
           <RecentTransactions />
         </div>
       </div>
-
       <div className="h-125 flex items-center justify-center mb-4 rounded-3xl shadow-1 bg-white bg-opacity-90 dark:bg-gray-950">
         <StockChart />
       </div>

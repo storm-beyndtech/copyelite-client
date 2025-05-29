@@ -29,13 +29,20 @@ const TradeHistory = () => {
   const fetchTrades = async () => {
     setLoading(true);
     try {
-      const res = await fetch(`${url}/trades`);
+      const res = await fetch(
+        `${url}/trades/user/${user._id}/trader/${user.traderId}`,
+      );
       const data = await res.json();
 
       if (res.ok) {
-        const filteredTrades = data.filter(
-          (trade: any) => new Date(trade.date) > new Date(user.createdAt),
-        );
+        const filteredTrades = data
+          .filter(
+            (trade: any) => new Date(trade.date) > new Date(user.createdAt),
+          )
+          .sort(
+            (a: any, b: any) =>
+              new Date(b.date).getTime() - new Date(a.date).getTime(),
+          ); // Newest first
 
         setTrades(filteredTrades);
 
@@ -136,7 +143,13 @@ const TradeHistory = () => {
                       </h3>
                       <div className="flex items-center text-xs text-gray-500 dark:text-gray-400">
                         <Clock className="h-3 w-3 mr-1" />
-                        {trade.date}
+                        {new Date(trade.date).toLocaleString('en-US', {
+                          year: 'numeric',
+                          month: 'short',
+                          day: 'numeric',
+                          hour: '2-digit',
+                          minute: '2-digit',
+                        })}
                       </div>
                     </div>
                   </div>

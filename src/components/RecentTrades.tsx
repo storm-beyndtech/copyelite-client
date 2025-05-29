@@ -9,6 +9,7 @@ import {
   BarChart3,
 } from 'lucide-react';
 import { contextData } from '@/context/AuthContext';
+import { Link } from 'react-router-dom';
 
 // TypeScript interfaces
 interface Trade {
@@ -30,15 +31,20 @@ const RecentTrades = () => {
   const fetchTrades = async () => {
     setLoading(true);
     try {
-      const res = await fetch(`${url}/trades`);
-      const data = await res.json();
+    const res = await fetch(`${url}/trades/user/${user._id}/trader/${user.traderId}`);
+    const data = await res.json();
 
       if (res.ok) {
-        const filteredTrades = data.filter(
-          (trade: any) => new Date(trade.date) > new Date(user.createdAt),
-        );
+        const filteredTrades = data
+          .filter(
+            (trade: any) => new Date(trade.date) > new Date(user.createdAt),
+          )
+          .sort(
+            (a: any, b: any) =>
+              new Date(b.date).getTime() - new Date(a.date).getTime(),
+          ); // Newest first
 
-        setTrades(filteredTrades.slice(-5));
+        setTrades(filteredTrades.slice(0, 4));
 
         // Set last updated timestamp
         const now = new Date();
@@ -137,7 +143,13 @@ const RecentTrades = () => {
                       </h3>
                       <div className="flex items-center text-xs text-gray-500 dark:text-gray-400">
                         <Clock className="h-3 w-3 mr-1" />
-                        {trade.date}
+                        {new Date(trade.date).toLocaleString('en-US', {
+                          year: 'numeric',
+                          month: 'short',
+                          day: 'numeric',
+                          hour: '2-digit',
+                          minute: '2-digit',
+                        })}
                       </div>
                     </div>
                   </div>
@@ -184,10 +196,13 @@ const RecentTrades = () => {
       </div>
 
       <div className="p-3 bg-gray-50 dark:bg-transparent border-t border-gray-200 dark:border-gray-900">
-        <button className="w-full flex items-center justify-center text-xs font-medium text-blue-500 dark:text-blue-400 hover:text-blue-600 dark:hover:text-blue-300">
-          View trade history
-          <ArrowRight className="h-3.5 w-3.5 ml-1" />
-        </button>
+        <Link to="/dashboard/copy-trade-history">
+          {' '}
+          <button className="w-full flex items-center justify-center text-xs font-medium text-blue-500 dark:text-blue-400 hover:text-blue-600 dark:hover:text-blue-300">
+            View trade history
+            <ArrowRight className="h-3.5 w-3.5 ml-1" />
+          </button>
+        </Link>
       </div>
     </div>
   );

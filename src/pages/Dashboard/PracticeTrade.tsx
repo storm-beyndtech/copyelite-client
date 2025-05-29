@@ -1,19 +1,20 @@
-import { useState, useEffect, FC } from 'react';
+import { useState, useEffect, FC, SetStateAction } from 'react';
 import { ArrowUp, ArrowDown, ChevronDown } from 'lucide-react';
 import RecentDemoTrades from '@/components/RecentDemoTrades';
 import { contextData } from '@/context/AuthContext';
 import DemoDropdown from '@/components/ui/DemoDropdown';
+import Alert from '@/components/ui/Alert';
 
 interface DropdownOption {
-  value: string;
+  value: string | number;
   label: string;
 }
 
 interface DropdownProps {
   label: string;
   options: DropdownOption[];
-  value: string;
-  onChange: (value: string) => void;
+  value: string | number;
+  onChange: (value: string | number | SetStateAction<any>) => void;
   placeholder?: string;
   error?: string;
 }
@@ -96,7 +97,7 @@ const Dropdown: FC<DropdownProps> = ({
             : 'border-gray-300 dark:border-gray-600'
         }`}
       >
-        {value || placeholder || 'Select...'}
+        {(label !== 'Time' ? value : `${value}s`) || placeholder || 'Select...'}
         <ChevronDown size={18} className="ml-2" />
       </button>
 
@@ -125,7 +126,7 @@ const Dropdown: FC<DropdownProps> = ({
 };
 
 // Define trade direction type
-type TradeDirection = 'UP' | 'DOWN';
+type TradeDirection = 'buy' | 'sell';
 
 interface ValidationErrors {
   symbol?: string;
@@ -136,7 +137,7 @@ interface ValidationErrors {
 // Main trading interface component
 const PracticeTrade: FC = () => {
   const [symbol, setSymbol] = useState<string>('AAPL');
-  const [timeframe, setTimeframe] = useState<string>('30s');
+  const [timeframe, setTimeframe] = useState<number>(30);
   const [amount, setAmount] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [tradePlaced, setTradePlaced] = useState<boolean>(false);
@@ -157,14 +158,14 @@ const PracticeTrade: FC = () => {
 
   // Timeframe options
   const timeframeOptions: DropdownOption[] = [
-    { value: '5s', label: '5 Seconds' },
-    { value: '10s', label: '10 Seconds' },
-    { value: '15s', label: '15 Seconds' },
-    { value: '20s', label: '20 Seconds' },
-    { value: '30s', label: '30 Seconds' },
-    { value: '40s', label: '40 Seconds' },
-    { value: '50s', label: '50 Seconds' },
-    { value: '60s', label: '60 Seconds' },
+    { value: 5, label: '5s' },
+    { value: 10, label: '10s' },
+    { value: 15, label: '15s' },
+    { value: 20, label: '20s' },
+    { value: 30, label: '30s' },
+    { value: 40, label: '40s' },
+    { value: 50, label: '50s' },
+    { value: 60, label: '60s' },
   ];
 
   // Validation function
@@ -198,7 +199,7 @@ const PracticeTrade: FC = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  // Clear messages after 5 seconds
+  // Clear messages after 5s
   useEffect(() => {
     if (successMessage || errorMessage) {
       const timer = setTimeout(() => {
@@ -255,7 +256,7 @@ const PracticeTrade: FC = () => {
       const tradeData = {
         email: user.email,
         symbol,
-        direction,
+        marketDirection: direction,
         amount: parseFloat(amount),
         profit: calculatePayout(),
         duration: timeframe,
@@ -315,17 +316,9 @@ const PracticeTrade: FC = () => {
                 </div>
               </div>
 
-              {/* Success/Error Messages */}
+              {errorMessage && <Alert type="error" message={errorMessage} />}
               {successMessage && (
-                <div className="mb-4 p-3 bg-green-100 dark:bg-green-900 border border-green-400 text-green-700 dark:text-green-100 rounded">
-                  {successMessage}
-                </div>
-              )}
-
-              {errorMessage && (
-                <div className="mb-4 p-3 bg-red-100 dark:bg-red-900 border border-red-400 text-red-700 dark:text-red-100 rounded">
-                  {errorMessage}
-                </div>
+                <Alert type="success" message={successMessage as any} />
               )}
 
               <div className="space-y-4">
@@ -388,7 +381,7 @@ const PracticeTrade: FC = () => {
                 {/* Trading buttons */}
                 <div className="grid grid-cols-2 gap-4 font-semibold">
                   <button
-                    onClick={() => createDemoTrade('UP')}
+                    onClick={() => createDemoTrade('buy')}
                     disabled={isLoading}
                     className="flex items-center justify-center px-4 py-2 bg-green-600 hover:bg-green-700 disabled:bg-green-400 disabled:cursor-not-allowed text-white rounded-md transition-colors"
                   >
@@ -397,10 +390,10 @@ const PracticeTrade: FC = () => {
                     ) : (
                       <ArrowUp size={18} className="mr-2" />
                     )}
-                    Up
+                    Buy
                   </button>
                   <button
-                    onClick={() => createDemoTrade('DOWN')}
+                    onClick={() => createDemoTrade('sell')}
                     disabled={isLoading}
                     className="flex items-center justify-center px-4 py-2 bg-red-500 hover:bg-red-600 disabled:bg-red-400 disabled:cursor-not-allowed text-white rounded-md transition-colors"
                   >
@@ -409,7 +402,7 @@ const PracticeTrade: FC = () => {
                     ) : (
                       <ArrowDown size={18} className="mr-2" />
                     )}
-                    Down
+                    Sell
                   </button>
                 </div>
               </div>

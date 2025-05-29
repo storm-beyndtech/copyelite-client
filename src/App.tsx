@@ -68,17 +68,84 @@ import Admin from './pages/Admin/Admin';
 import AdminLayout from './components/Layouts/AdminLayout';
 import KycApproval from './pages/Admin/KycApproval';
 import AdminSettings from './pages/Admin/AdminSettings';
+import DemoTradeHistory from './components/DemoTradeHistory';
+import TradersPage from './pages/Dashboard/TradersPage';
+import CopyTraderErrorModal from './components/CopyTraderErrorModal';
+import { useNavigate } from 'react-router-dom';
+import { Trader } from './types/types';
 
 function App() {
+  const url = import.meta.env.VITE_REACT_APP_SERVER_URL;
   const location = useLocation();
+  const navigate = useNavigate();
   const isPrivateRoute =
     location.pathname.includes('/dashboard') ||
     location.pathname.includes('/admin') ||
     location.pathname.includes('/login') ||
     location.pathname.includes('/register') ||
     location.pathname.includes('/password-reset');
-  const { fetching, user } = contextData();
+  const { fetching, user, fetchUser } = contextData();
   const [assetsLoaded, setAssetsLoaded] = useState(false);
+  const [traders, setTraders] = useState([]);
+  const [copiedTraderId, setCopiedTraderId] = useState<string | null>(null);
+  const [showError, setShowError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+
+  const handleCopyError = (message: string) => {
+    setErrorMessage(message);
+    setShowError(true);
+  };
+
+  const fetchTraders = async () => {
+    try {
+      const res = await fetch(`${url}/trader`);
+      if (!res.ok) throw new Error('Failed to fetch traders');
+      const data = await res.json();
+      setTraders(data || []);
+    } catch (error) {
+      console.error('Error fetching traders:', error);
+    }
+  };
+
+  const copyTrader = async (trader: Trader) => {
+    try {
+      const action = trader._id === copiedTraderId ? 'uncopy' : 'copy';
+      
+      // Check minimum copy amount requirement
+      if (trader.minimumCopyAmount > user.deposit && action !== 'uncopy') {
+        handleCopyError(
+          `Insufficient balance. You need at least $${trader.minimumCopyAmount} to copy this trader.`,
+        );
+        return false;
+      }
+
+      const response = await fetch(`${url}/users/update-user-trader`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          traderId: trader._id,
+          action,
+          userId: user._id,
+        }),
+      });
+
+      if (response.ok) {
+        setCopiedTraderId(action === 'copy' ? trader._id : null);
+        fetchUser(user._id);
+        return true;
+      }
+      return false;
+    } catch (error: any) {
+      handleCopyError(`Error copying trader: ${error.message}.`);
+      return false;
+    }
+  };
+
+  useEffect(() => {
+    fetchTraders();
+  }, [user]);
 
   useEffect(() => {
     const handleAssetsLoaded = () => {
@@ -113,6 +180,18 @@ function App() {
             <meta name="viewport" content="width=1280, user-scalable=yes" />
           )}
         </Helmet>
+
+        {/* Global Error Modal for Copy Trader functionality */}
+        <CopyTraderErrorModal
+          isOpen={showError}
+          message={errorMessage}
+          onClose={() => setShowError(false)}
+          onDeposit={() => {
+            navigate('/dashboard/deposit');
+            setShowError(false);
+          }}
+        />
+
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/home" element={<Home />} />
@@ -238,12 +317,18 @@ function App() {
                     />
                     <Route path="/dashboard/copytrading" element={<Trades />} />
                     <Route
+                      path="/dashboard/traders"
+                      element={
+                        <TradersPage traders={traders} onCopy={copyTrader} />
+                      }
+                    />
+                    <Route
                       path="/dashboard/copy-trade-history"
                       element={<TradeHistory />}
                     />
                     <Route
                       path="/dashboard/demo-trade-history"
-                      element={<TradeHistory />}
+                      element={<DemoTradeHistory />}
                     />
                     <Route
                       path="/dashboard/transactions"

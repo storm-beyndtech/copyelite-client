@@ -274,7 +274,7 @@ const TraderForm: React.FC<TraderFormProps> = ({
                 type="number"
                 id="experience"
                 name="experience"
-                value={formData.experience}
+                value={formData.experience === 0 ? '' : formData.experience}
                 onChange={handleChange}
                 required
                 min="1"
@@ -308,6 +308,7 @@ const TraderForm: React.FC<TraderFormProps> = ({
                 <option value="Crypto">Crypto</option>
                 <option value="Stocks">Stocks</option>
                 <option value="Commodities">Commodities</option>
+                <option value="Indices">Indices</option>
                 <option value="Options">Options</option>
                 <option value="Mixed">Mixed</option>
               </select>
@@ -392,7 +393,11 @@ const TraderForm: React.FC<TraderFormProps> = ({
                 type="number"
                 id="monthlyProfit"
                 name="monthlyProfit"
-                value={formData.profitPercentage.monthly}
+                value={
+                  formData.profitPercentage.monthly === 0
+                    ? ''
+                    : formData.profitPercentage.monthly
+                }
                 onChange={handleChange}
                 step="0.1"
                 className="w-full bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 dark:text-white"
@@ -410,7 +415,11 @@ const TraderForm: React.FC<TraderFormProps> = ({
                 type="number"
                 id="yearlyProfit"
                 name="yearlyProfit"
-                value={formData.profitPercentage.yearly}
+                value={
+                  formData.profitPercentage.yearly === 0
+                    ? ''
+                    : formData.profitPercentage.yearly
+                }
                 onChange={handleChange}
                 step="0.1"
                 className="w-full bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 dark:text-white"
@@ -428,7 +437,7 @@ const TraderForm: React.FC<TraderFormProps> = ({
                 type="number"
                 id="winRate"
                 name="winRate"
-                value={formData.winRate}
+                value={formData.winRate === 0 ? '' : formData.winRate}
                 onChange={handleChange}
                 min="0"
                 max="100"
@@ -448,7 +457,7 @@ const TraderForm: React.FC<TraderFormProps> = ({
                 type="number"
                 id="totalCopiers"
                 name="totalCopiers"
-                value={formData.totalCopiers}
+                value={formData.totalCopiers === 0 ? '' : formData.totalCopiers}
                 onChange={handleChange}
                 min="0"
                 className="w-full bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 dark:text-white"
@@ -473,7 +482,11 @@ const TraderForm: React.FC<TraderFormProps> = ({
                 type="number"
                 id="minimumCopyAmount"
                 name="minimumCopyAmount"
-                value={formData.minimumCopyAmount}
+                value={
+                  formData.minimumCopyAmount === 0
+                    ? ''
+                    : formData.minimumCopyAmount
+                }
                 onChange={handleChange}
                 required
                 min="0"
@@ -492,7 +505,7 @@ const TraderForm: React.FC<TraderFormProps> = ({
                 type="number"
                 id="copierFee"
                 name="copierFee"
-                value={formData.copierFee}
+                value={formData.copierFee === 0 ? '' : formData.copierFee}
                 onChange={handleChange}
                 min="0"
                 max="100"
@@ -522,7 +535,7 @@ const TraderForm: React.FC<TraderFormProps> = ({
             </div>
           </div>
         </div>
-        
+
         {error && <Alert type="error" message={error} />}
 
         <div className="mt-8 flex justify-end space-x-4">

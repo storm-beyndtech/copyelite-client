@@ -6,7 +6,7 @@ import { Wallet, Users } from 'lucide-react';
 
 interface TraderCardProps {
   traders: Trader[];
-  onCopy: (traderId: string) => Promise<any>;
+  onCopy: (trader: Trader) => Promise<any>;
 }
 
 const TraderCard: React.FC<TraderCardProps> = ({ traders, onCopy }) => {
@@ -14,11 +14,11 @@ const TraderCard: React.FC<TraderCardProps> = ({ traders, onCopy }) => {
   const [isLoading, setIsLoading] = useState(false);
   const { user } = contextData();
 
-  const handleCopy = async (traderId: string) => {
-    setIsSelected(traderId);
+  const handleCopy = async (trader: Trader) => {
+    setIsSelected(trader._id);
     try {
       setIsLoading(true);
-      await onCopy(traderId);
+      await onCopy(trader);
     } finally {
       setIsLoading(false);
     }
@@ -27,30 +27,30 @@ const TraderCard: React.FC<TraderCardProps> = ({ traders, onCopy }) => {
   const getTagColor = (type: string, value: string) => {
     if (type === 'risk') {
       return value === 'Low'
-        ? 'bg-green-50 text-green-700 ring-1 ring-green-600/20 dark:bg-green-950 dark:text-green-300 dark:ring-green-400/30'
+        ? 'bg-green-50 text-green-700 ring-1 ring-green-600/20 dark:bg-green-950/50 dark:text-green-300 dark:ring-green-400/30'
         : value === 'Medium'
-          ? 'bg-amber-50 text-amber-700 ring-1 ring-amber-600/20 dark:bg-amber-950 dark:text-amber-300 dark:ring-amber-400/30'
+          ? 'bg-amber-50 text-amber-700 ring-1 ring-amber-600/20 dark:bg-amber-950/50 dark:text-amber-300 dark:ring-amber-400/30'
           : value === 'High'
-            ? 'bg-red-50 text-red-700 ring-1 ring-red-600/20 dark:bg-red-950 dark:text-red-300 dark:ring-red-400/30'
-            : 'bg-slate-50 text-slate-700 ring-1 ring-slate-600/20 dark:bg-slate-800 dark:text-slate-300 dark:ring-slate-400/30';
+            ? 'bg-red-50 text-red-700 ring-1 ring-red-600/20 dark:bg-red-950/50 dark:text-red-300 dark:ring-red-400/30'
+            : 'bg-slate-50 text-slate-700 ring-1 ring-slate-600/20 dark:bg-slate-800/50 dark:text-slate-300 dark:ring-slate-400/30';
     }
     if (type === 'status') {
       return value === 'active'
-        ? 'bg-green-50 text-green-700 ring-1 ring-green-600/20 dark:bg-green-950 dark:text-green-300 dark:ring-green-400/30'
+        ? 'bg-green-50 text-green-700 ring-1 ring-green-600/20 dark:bg-green-950/50 dark:text-green-300 dark:ring-green-400/30'
         : value === 'paused'
-          ? 'bg-amber-50 text-amber-700 ring-1 ring-amber-600/20 dark:bg-amber-950 dark:text-amber-300 dark:ring-amber-400/30'
+          ? 'bg-amber-50 text-amber-700 ring-1 ring-amber-600/20 dark:bg-amber-950/50 dark:text-amber-300 dark:ring-amber-400/30'
           : value === 'terminated'
-            ? 'bg-red-50 text-red-700 ring-1 ring-red-600/20 dark:bg-red-950 dark:text-red-300 dark:ring-red-400/30'
-            : 'bg-slate-50 text-slate-700 ring-1 ring-slate-600/20 dark:bg-slate-800 dark:text-slate-300 dark:ring-slate-400/30';
+            ? 'bg-red-50 text-red-700 ring-1 ring-red-600/20 dark:bg-red-950/50 dark:text-red-300 dark:ring-red-400/30'
+            : 'bg-slate-50 text-slate-700 ring-1 ring-slate-600/20 dark:bg-slate-800/50 dark:text-slate-300 dark:ring-slate-400/30';
     }
-    return 'bg-blue-50 text-blue-700 ring-1 ring-blue-600/20 dark:bg-blue-950 dark:text-blue-300 dark:ring-blue-400/30';
+    return 'bg-blue-50 text-blue-700 ring-1 ring-blue-600/20 dark:bg-blue-950/50 dark:text-blue-300 dark:ring-blue-400/30';
   };
 
   return (
-    <div className="max-ctn flex overflow-x-auto no-scrollbar">
+    <div className="max-ctn flex gap-2 overflow-x-auto no-scrollbar">
       {traders.map((trader) => {
         return (
-          <div key={trader._id} className="w-100 h-fit px-2 flex-shrink-0">
+          <div key={trader._id} className="min-w-90 h-fit flex-shrink-0">
             <div
               className={`relative rounded-xl shadow-sm transition-all duration-200 overflow-hidden h-full border
                   ${
@@ -59,12 +59,12 @@ const TraderCard: React.FC<TraderCardProps> = ({ traders, onCopy }) => {
                       : isSelected === trader._id
                         ? 'transform scale-[1.01] shadow-md border-slate-300 dark:border-slate-600'
                         : 'border-slate-200 dark:border-slate-700'
-                  } bg-white dark:bg-slate-900/50`}
+                  } bg-white bgRadialDark`}
             >
               {/* Status Badge */}
               <div className="absolute top-3 right-3">
                 <span
-                  className={`px-2.5 py-1 text-xs font-semibold rounded-lg uppercase tracking-wide ${getTagColor(
+                  className={`px-2.5 py-0.5 text-[10px] font-ibold rounded-lg ${getTagColor(
                     'status',
                     trader.status,
                   )}`}
@@ -90,10 +90,10 @@ const TraderCard: React.FC<TraderCardProps> = ({ traders, onCopy }) => {
                     )}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <h2 className="text-base font-bold text-slate-900 dark:text-white truncate">
+                    <h2 className="text-sm font-semibold text-slate-900 dark:text-white truncate">
                       {trader.name}
                     </h2>
-                    <div className="flex flex-wrap gap-1 mt-1.5">
+                    <div className="flex flex-wrap gap-2 mt-1.5">
                       <span
                         className={`px-1.5 py-0.5 text-xs font-semibold rounded ${getTagColor(
                           'risk',
@@ -102,7 +102,7 @@ const TraderCard: React.FC<TraderCardProps> = ({ traders, onCopy }) => {
                       >
                         {trader.riskLevel}
                       </span>
-                      <span className="px-1.5 py-0.5 text-xs font-semibold rounded bg-blue-50 text-blue-700 ring-1 ring-blue-600/20 dark:bg-blue-950 dark:text-blue-300 dark:ring-blue-400/30">
+                      <span className="px-1.5 py-0.5 text-xs font-semibold rounded bg-blue-50 text-blue-700 ring-1 ring-blue-600/20 dark:bg-blue-950/50 dark:text-blue-300 dark:ring-blue-400/30">
                         {trader.specialization}
                       </span>
                     </div>
@@ -115,7 +115,7 @@ const TraderCard: React.FC<TraderCardProps> = ({ traders, onCopy }) => {
                     <span className="text-slate-500 dark:text-slate-400">
                       Monthly
                     </span>
-                    <span className="font-bold text-green-400">
+                    <span className="font-semibold text-green-400">
                       {trader.profitPercentage.monthly > 0 ? '+' : ''}
                       {trader.profitPercentage.monthly}%
                     </span>
@@ -124,7 +124,7 @@ const TraderCard: React.FC<TraderCardProps> = ({ traders, onCopy }) => {
                     <span className="text-slate-500 dark:text-slate-400">
                       Yearly
                     </span>
-                    <span className="font-bold text-green-400">
+                    <span className="font-semibold text-green-400">
                       {trader.profitPercentage.yearly > 0 ? '+' : ''}
                       {trader.profitPercentage.yearly}%
                     </span>
@@ -133,7 +133,7 @@ const TraderCard: React.FC<TraderCardProps> = ({ traders, onCopy }) => {
                     <span className="text-slate-500 dark:text-slate-400">
                       Win Rate
                     </span>
-                    <span className="font-bold text-green-400">
+                    <span className="font-semibold text-green-400">
                       {trader.winRate}%
                     </span>
                   </div>
@@ -141,7 +141,7 @@ const TraderCard: React.FC<TraderCardProps> = ({ traders, onCopy }) => {
                     <span className="text-slate-500 dark:text-slate-400">
                       Experience
                     </span>
-                    <span className="font-bold text-green-400">
+                    <span className="font-semibold text-green-400">
                       {trader.experience}{' '}
                       {trader.experience === 1 ? 'Yr' : 'Yrs'}
                     </span>
@@ -174,7 +174,7 @@ const TraderCard: React.FC<TraderCardProps> = ({ traders, onCopy }) => {
                         }`}
                       />
                       Min:
-                      <span className="font-bold text-slate-900 dark:text-white">
+                      <span className="font-semibold text-slate-900 dark:text-white">
                         ${trader.minimumCopyAmount}
                       </span>
                     </div>
@@ -186,7 +186,7 @@ const TraderCard: React.FC<TraderCardProps> = ({ traders, onCopy }) => {
                             : 'text-blue-500'
                         }`}
                       />
-                      <span className="font-bold text-slate-900 dark:text-white">
+                      <span className="font-semibold text-slate-900 dark:text-white">
                         {trader.totalCopiers > 999
                           ? `${(trader.totalCopiers / 1000).toFixed(1)}k`
                           : trader.totalCopiers}
@@ -197,7 +197,7 @@ const TraderCard: React.FC<TraderCardProps> = ({ traders, onCopy }) => {
                   {/* Right side - Copy Button */}
                   <div className="flex-shrink-0">
                     <button
-                      onClick={() => handleCopy(trader._id)}
+                      onClick={() => handleCopy(trader)}
                       disabled={
                         (isLoading && trader._id === isSelected) ||
                         trader.status !== 'active'

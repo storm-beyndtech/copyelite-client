@@ -14,6 +14,7 @@ import {
   Layers,
   Combine,
   Award,
+  Users,
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -113,6 +114,18 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen }: SidebarProps) {
                   className="text-xl text-blue-400"
                 />
                 Copytrading
+              </NavLink>
+            </li>
+
+            <li>
+              <NavLink
+                to="/dashboard/traders"
+                className={`text-xs group relative flex items-center gap-2.5 rounded-sm py-2.5 px-7.5 text-gray-300 font-montserrat duration-300 ease-in-out hover:bg-black dark:hover:bg-black ${
+                  pathname === '/dashboard/traders' && 'bg-blue-500/5'
+                }`}
+              >
+                <Users strokeWidth={1.5} className="text-xl text-blue-400" />
+                Traders
               </NavLink>
             </li>
 
