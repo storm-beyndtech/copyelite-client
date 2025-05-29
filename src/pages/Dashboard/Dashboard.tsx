@@ -19,7 +19,9 @@ export default function Dashboard() {
   const { user, fetchUser } = contextData();
   const [traders, setTraders] = useState([]);
   const [trades, setTrades] = useState([]);
-  const [copiedTraderId, setCopiedTraderId] = useState<string | null>(null);
+  const [copiedTraderId, setCopiedTraderId] = useState<string | null>(
+    user.traderId,
+  );
   const [showError, setShowError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const navigate = useNavigate();
@@ -57,11 +59,13 @@ export default function Dashboard() {
   const copyTrader = async (trader: Trader) => {
     try {
       const action = trader._id === copiedTraderId ? 'uncopy' : 'copy';
-      if (trader.minimumCopyAmount > user.deposit && action !== 'uncopy') {
-        handleCopyError(
-          `Insufficient balance. You need at least $${trader.minimumCopyAmount} to copy this trader.`,
-        );
-        return false;
+      if (action === 'copy') {
+        if (trader.minimumCopyAmount > user.deposit) {
+          handleCopyError(
+            `Insufficient balance. You need at least $${trader.minimumCopyAmount} to copy this trader.`,
+          );
+          return false;
+        }
       }
 
       const response = await fetch(`${url}/users/update-user-trader`, {
