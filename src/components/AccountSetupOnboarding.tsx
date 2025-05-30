@@ -55,14 +55,14 @@ const AccountSetupOnboarding = () => {
           label: 'First Name',
           type: 'text',
           required: true,
-          value: 'Victor',
+          value: '',
         },
         {
           id: 'surname',
           label: 'Surname/Lastname',
           type: 'text',
           required: true,
-          value: 'Nwachukwu',
+          value: '',
         },
         {
           id: 'dob',

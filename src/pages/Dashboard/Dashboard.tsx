@@ -36,10 +36,17 @@ export default function Dashboard() {
 
   const fetchTrades = async () => {
     try {
-      const res = await fetch(`${url}/trades`);
-      if (!res.ok) throw new Error('Failed to fetch traders');
+      const res = await fetch(
+        `${url}/trades/user/${user._id}/trader/${user.traderId}`,
+      );
       const data = await res.json();
-      setTrades(data || []);
+
+      if (res.ok) {
+        const filteredTrades = data.filter(
+          (trade: any) => new Date(trade.date) > new Date(user.createdAt),
+        );
+        setTrades(filteredTrades || []);
+      }
     } catch (error) {
       console.error('Error fetching traders:', error);
     }
