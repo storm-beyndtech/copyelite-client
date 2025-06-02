@@ -1,5 +1,5 @@
 import { useState, useRef, ChangeEvent, FormEvent } from 'react';
-import { Calendar, Camera, Upload } from 'lucide-react';
+import { Camera, Upload } from 'lucide-react';
 import Alert from './ui/Alert';
 import { contextData } from '@/context/AuthContext';
 
@@ -44,7 +44,6 @@ export default function ProofOfIdentificationForm(): JSX.Element {
 
   const frontImageRef = useRef<HTMLInputElement | null>(null);
   const backImageRef = useRef<HTMLInputElement | null>(null);
-  const dateInputRef = useRef<HTMLInputElement>(null);
   const { user } = contextData();
 
   const handleDocumentTypeChange = (type: DocumentType): void => {
@@ -344,40 +343,26 @@ export default function ProofOfIdentificationForm(): JSX.Element {
           </div>
 
           {/* Expiry Date */}
-          <div className="relative">
+          <div>
             <label
               htmlFor="expiry-date"
               className="block mb-2 dark:text-gray-300 text-gray-700"
             >
               Expiry Date
             </label>
-
-            <div className="relative">
-              {/* The visible mimic */}
-              <div
-                onClick={() => dateInputRef.current?.showPicker()}
-                className={`w-full border rounded-md py-3 px-4 pr-10 flex items-center justify-between cursor-pointer ${
-                  errors.expiryDate
-                    ? 'border-red-500'
-                    : 'dark:bg-gray-900 dark:border-gray-700 dark:text-white bg-white border-gray-300 text-gray-900'
-                }`}
-              >
-                <span>{formData.expiryDate || 'DD/MM/YYYY'}</span>
-                <Calendar className="w-5 h-5 text-gray-400 dark:text-gray-300" />
-              </div>
-
-              {/* The real, hidden input */}
-              <input
-                type="date"
-                id="expiry-date"
-                name="expiryDate"
-                ref={dateInputRef}
-                value={formData.expiryDate}
-                onChange={handleInputChange}
-                className="absolute inset-0 w-full h-full opacity-0 z-10 cursor-pointer"
-              />
-            </div>
-
+            <input
+              type="date"
+              id="expiry-date"
+              name="expiryDate"
+              value={formData.expiryDate}
+              onChange={handleInputChange}
+              className={`w-full border rounded-md py-3 px-4 ${
+                errors.expiryDate
+                  ? 'border-red-500'
+                  : 'dark:bg-gray-900 dark:border-gray-700 dark:text-white bg-white border-gray-300 text-gray-900'
+              }`}
+              placeholder="DD/MM/YYYY"
+            />
             {errors.expiryDate && (
               <p className="mt-1 text-red-500 text-sm">{errors.expiryDate}</p>
             )}
