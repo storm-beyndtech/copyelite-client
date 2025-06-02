@@ -341,6 +341,7 @@ export default function ProofOfIdentificationForm(): JSX.Element {
               </p>
             )}
           </div>
+
           {/* Expiry Date */}
           <div className="relative">
             <label
@@ -349,26 +350,46 @@ export default function ProofOfIdentificationForm(): JSX.Element {
             >
               Expiry Date
             </label>
-            <input
-              type="date"
-              id="expiry-date"
-              name="expiryDate"
-              value={formData.expiryDate}
-              onChange={handleInputChange}
-              className={`w-full border rounded-md py-3 px-4 appearance-none pr-10 ${
-                errors.expiryDate
-                  ? 'border-red-500'
-                  : 'dark:bg-gray-900 dark:border-gray-700 dark:text-white bg-white border-gray-300 text-gray-900'
-              }`}
-              placeholder="DD/MM/YYYY"
-            />
-            {/* Lucide calendar icon */}
-            <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-              <Calendar className="w-5 h-5 text-gray-400 dark:text-gray-300" />
+
+            <div className="relative">
+              <input
+                type="date"
+                id="expiry-date"
+                name="expiryDate"
+                value={formData.expiryDate}
+                onChange={handleInputChange}
+                className={`w-full border rounded-md py-3 px-4 pr-10 dark:bg-gray-900 dark:border-gray-700 dark:text-white bg-white border-gray-300 text-gray-900 appearance-none ${
+                  errors.expiryDate ? 'border-red-500' : ''
+                }`}
+                placeholder="DD/MM/YYYY"
+              />
+
+              {/* Lucide calendar icon, centered vertically */}
+              <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                <Calendar className="w-5 h-5 text-gray-400 dark:text-gray-300" />
+              </div>
             </div>
+
             {errors.expiryDate && (
               <p className="mt-1 text-red-500 text-sm">{errors.expiryDate}</p>
             )}
+
+            {/* Hide default calendar icon */}
+            {
+              // @ts-ignore
+            } <style jsx>{`
+              input[type='date']::-webkit-calendar-picker-indicator {
+                opacity: 0;
+                cursor: pointer;
+              }
+              input[type='date']::-webkit-inner-spin-button,
+              input[type='date']::-webkit-clear-button {
+                display: none;
+              }
+              input[type='date']::-ms-clear {
+                display: none;
+              }
+            `}</style>
           </div>
         </div>
 
