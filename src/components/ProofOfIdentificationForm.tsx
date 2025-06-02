@@ -1,5 +1,5 @@
 import { useState, useRef, ChangeEvent, FormEvent } from 'react';
-import { Camera, Upload } from 'lucide-react';
+import { Calendar, Camera, Upload } from 'lucide-react';
 import Alert from './ui/Alert';
 import { contextData } from '@/context/AuthContext';
 
@@ -341,9 +341,8 @@ export default function ProofOfIdentificationForm(): JSX.Element {
               </p>
             )}
           </div>
-
           {/* Expiry Date */}
-          <div>
+          <div className="relative">
             <label
               htmlFor="expiry-date"
               className="block mb-2 dark:text-gray-300 text-gray-700"
@@ -356,13 +355,17 @@ export default function ProofOfIdentificationForm(): JSX.Element {
               name="expiryDate"
               value={formData.expiryDate}
               onChange={handleInputChange}
-              className={`w-full border rounded-md py-3 px-4 ${
+              className={`w-full border rounded-md py-3 px-4 appearance-none pr-10 ${
                 errors.expiryDate
                   ? 'border-red-500'
                   : 'dark:bg-gray-900 dark:border-gray-700 dark:text-white bg-white border-gray-300 text-gray-900'
               }`}
               placeholder="DD/MM/YYYY"
             />
+            {/* Lucide calendar icon */}
+            <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+              <Calendar className="w-5 h-5 text-gray-400 dark:text-gray-300" />
+            </div>
             {errors.expiryDate && (
               <p className="mt-1 text-red-500 text-sm">{errors.expiryDate}</p>
             )}
