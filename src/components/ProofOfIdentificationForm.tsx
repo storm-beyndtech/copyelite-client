@@ -44,6 +44,7 @@ export default function ProofOfIdentificationForm(): JSX.Element {
 
   const frontImageRef = useRef<HTMLInputElement | null>(null);
   const backImageRef = useRef<HTMLInputElement | null>(null);
+  const dateInputRef = useRef<HTMLInputElement>(null);
   const { user } = contextData();
 
   const handleDocumentTypeChange = (type: DocumentType): void => {
@@ -352,44 +353,34 @@ export default function ProofOfIdentificationForm(): JSX.Element {
             </label>
 
             <div className="relative">
+              {/* The visible mimic */}
+              <div
+                onClick={() => dateInputRef.current?.showPicker()}
+                className={`w-full border rounded-md py-3 px-4 pr-10 flex items-center justify-between cursor-pointer ${
+                  errors.expiryDate
+                    ? 'border-red-500'
+                    : 'dark:bg-gray-900 dark:border-gray-700 dark:text-white bg-white border-gray-300 text-gray-900'
+                }`}
+              >
+                <span>{formData.expiryDate || 'DD/MM/YYYY'}</span>
+                <Calendar className="w-5 h-5 text-gray-400 dark:text-gray-300" />
+              </div>
+
+              {/* The real, hidden input */}
               <input
                 type="date"
                 id="expiry-date"
                 name="expiryDate"
+                ref={dateInputRef}
                 value={formData.expiryDate}
                 onChange={handleInputChange}
-                className={`w-full border rounded-md py-3 px-4 pr-10 dark:bg-gray-900 dark:border-gray-700 dark:text-white bg-white border-gray-300 text-gray-900 appearance-none ${
-                  errors.expiryDate ? 'border-red-500' : ''
-                }`}
-                placeholder="DD/MM/YYYY"
+                className="absolute inset-0 w-full h-full opacity-0 z-10 cursor-pointer"
               />
-
-              {/* Lucide calendar icon, centered vertically */}
-              <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-                <Calendar className="w-5 h-5 text-gray-400 dark:text-gray-300" />
-              </div>
             </div>
 
             {errors.expiryDate && (
               <p className="mt-1 text-red-500 text-sm">{errors.expiryDate}</p>
             )}
-
-            {/* Hide default calendar icon */}
-            {
-              // @ts-ignore
-            } <style jsx>{`
-              input[type='date']::-webkit-calendar-picker-indicator {
-                opacity: 0;
-                cursor: pointer;
-              }
-              input[type='date']::-webkit-inner-spin-button,
-              input[type='date']::-webkit-clear-button {
-                display: none;
-              }
-              input[type='date']::-ms-clear {
-                display: none;
-              }
-            `}</style>
           </div>
         </div>
 
