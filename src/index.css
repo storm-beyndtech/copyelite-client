@@ -35,15 +35,6 @@ section {
   );
 }
 
-input[type='date'] {
-  filter: invert(1) hue-rotate(180deg);
-}
-
-/* For dark mode */
-.dark input[type='date'] {
-  filter: invert(0.8) sepia(1) hue-rotate(200deg);
-}
-
 .dark .bgRadialDark {
   background: radial-gradient(
     circle,

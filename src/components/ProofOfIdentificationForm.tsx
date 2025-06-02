@@ -1,5 +1,5 @@
 import { useState, useRef, ChangeEvent, FormEvent } from 'react';
-import { Camera, Upload } from 'lucide-react';
+import { Calendar, Camera, Upload } from 'lucide-react';
 import Alert from './ui/Alert';
 import { contextData } from '@/context/AuthContext';
 
@@ -343,26 +343,35 @@ export default function ProofOfIdentificationForm(): JSX.Element {
           </div>
 
           {/* Expiry Date */}
-          <div>
+          <div className="relative">
             <label
               htmlFor="expiry-date"
               className="block mb-2 dark:text-gray-300 text-gray-700"
             >
               Expiry Date
             </label>
-            <input
-              type="date"
-              id="expiry-date"
-              name="expiryDate"
-              value={formData.expiryDate}
-              onChange={handleInputChange}
-              className={`w-full border rounded-md py-3 px-4 ${
+            <div className="relative">
+              <input
+                type="date"
+                id="expiry-date"
+                name="expiryDate"
+                value={formData.expiryDate}
+                onChange={handleInputChange}
+                className={`w-full border rounded-md py-3 px-4 pr-10
+              [&::-webkit-calendar-picker-indicator]:opacity-0 
+              [&::-webkit-calendar-picker-indicator]:absolute 
+              [&::-webkit-calendar-picker-indicator]:right-0 
+              [&::-webkit-calendar-picker-indicator]:w-10 
+              [&::-webkit-calendar-picker-indicator]:h-full 
+              [&::-webkit-calendar-picker-indicator]:cursor-pointer
+              ${
                 errors.expiryDate
                   ? 'border-red-500'
                   : 'dark:bg-gray-900 dark:border-gray-700 dark:text-white bg-white border-gray-300 text-gray-900'
               }`}
-              placeholder="DD/MM/YYYY"
-            />
+              />
+              <Calendar className="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400 dark:text-gray-300 pointer-events-none" />
+            </div>
             {errors.expiryDate && (
               <p className="mt-1 text-red-500 text-sm">{errors.expiryDate}</p>
             )}
