@@ -13,13 +13,6 @@ export default function DefaultLayout() {
   useEffect(() => {
     if (!user) return navigate('/login');
     if (user && user.fullName === '') return navigate('/account-setup');
-
-    const chatCtn = document.getElementById('smartsupp-widget-container');
-    if (chatCtn) chatCtn.style.display = 'none';
-
-    return () => {
-      if (chatCtn) chatCtn.style.display = 'block';
-    };
   }, [fetching, user, navigate]);
 
   if (fetching || !user) return <PageLoader />;

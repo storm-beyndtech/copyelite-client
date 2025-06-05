@@ -8,6 +8,7 @@ interface FormData {
   firstName: string;
   lastName: string;
   province: string;
+  phone: string;
   city: string;
   zipCode: string;
   streetAddress: string;
@@ -63,6 +64,7 @@ export default function ProfileInfo() {
     firstName: '',
     lastName: '',
     province: '',
+    phone: '',
     city: '',
     zipCode: '',
     profileImage: null,
@@ -88,32 +90,25 @@ export default function ProfileInfo() {
   const validateForm = (): boolean => {
     const newErrors: ValidationErrors = {};
 
-    if (!formData.firstName?.trim()) {
-      newErrors.firstName = 'First name is required';
+    // Only validate if phone is provided and not empty
+    if (formData.phone && formData.phone.trim()) {
+      const phoneRegex = /^[\+]?[\d\s\-\(\)]{10,}$/;
+      if (!phoneRegex.test(formData.phone.trim())) {
+        newErrors.phone = 'Please enter a valid phone number';
+      }
     }
 
-    if (!formData.lastName?.trim()) {
-      newErrors.lastName = 'Last name is required';
+    // Only validate zipCode format if it's provided
+    if (
+      formData.zipCode &&
+      formData.zipCode.trim() &&
+      formData.zipCode.length < 4
+    ) {
+      newErrors.zipCode =
+        'Please enter a valid zip code (at least 4 characters)';
     }
 
-    if (!formData.province?.trim()) {
-      newErrors.province = 'Province is required';
-    }
-
-    if (!formData.city?.trim()) {
-      newErrors.city = 'City is required';
-    }
-
-    if (!formData.zipCode?.trim()) {
-      newErrors.zipCode = 'Zip code is required';
-    } else if (formData.zipCode.length < 4) {
-      newErrors.zipCode = 'Please enter a valid zip code';
-    }
-
-    if (!formData.streetAddress?.trim()) {
-      newErrors.streetAddress = 'Address is required';
-    }
-
+    // Only validate image size if an image is selected
     if (formData.profileImage && formData.profileImage.size > 5 * 1024 * 1024) {
       newErrors.profileImage = 'Image size must be less than 5MB';
     }
@@ -170,12 +165,12 @@ export default function ProfileInfo() {
       }
     }
   };
+
   const handleSubmit = async () => {
     setSuccessMessage('');
     setErrors({});
 
     if (!validateForm()) {
-      setErrors({ general: 'Please fill in all required fields correctly.' });
       return;
     }
 
@@ -183,13 +178,14 @@ export default function ProfileInfo() {
       setSubmitting(true);
       const formPayload = new FormData();
 
-      // Append only the scalar fields
-      formPayload.append('firstName', formData.firstName);
-      formPayload.append('lastName', formData.lastName);
-      formPayload.append('province', formData.province);
-      formPayload.append('city', formData.city);
-      formPayload.append('zipCode', formData.zipCode);
-      formPayload.append('streetAddress', formData.streetAddress);
+      // Append all fields (including empty ones - let backend handle)
+      formPayload.append('firstName', formData.firstName || '');
+      formPayload.append('lastName', formData.lastName || '');
+      formPayload.append('province', formData.province || '');
+      formPayload.append('phone', formData.phone || '');
+      formPayload.append('city', formData.city || '');
+      formPayload.append('zipCode', formData.zipCode || '');
+      formPayload.append('streetAddress', formData.streetAddress || '');
       formPayload.append('email', user.email);
 
       console.log(formData.profileImage);
@@ -275,7 +271,9 @@ export default function ProfileInfo() {
                 <p className="text-xs">Email</p>
               </div>
               <div className="text-gray-600 dark:text-gray-400">
-                <p className="font-medium">{user.phone}</p>
+                <p className="font-medium">
+                  {formData.phone || user.phone || 'Not provided'}
+                </p>
                 <p className="text-xs">Mobile</p>
               </div>
               <div className="text-gray-600 dark:text-gray-400">
@@ -283,7 +281,11 @@ export default function ProfileInfo() {
                 <p className="text-xs">Country</p>
               </div>
               <div className="text-gray-600 dark:text-gray-400">
-                <p className="font-medium">{user.streetAddress}</p>
+                <p className="font-medium">
+                  {formData.streetAddress ||
+                    user.streetAddress ||
+                    'Not provided'}
+                </p>
                 <p className="text-xs">Address</p>
               </div>
             </div>
@@ -295,7 +297,7 @@ export default function ProfileInfo() {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-1">
-                First Name *
+                First Name
               </label>
               <input
                 type="text"
@@ -316,7 +318,7 @@ export default function ProfileInfo() {
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-1">
-                Last Name *
+                Last Name
               </label>
               <input
                 type="text"
@@ -340,7 +342,29 @@ export default function ProfileInfo() {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-1">
-                Province *
+                Phone Number
+              </label>
+              <input
+                type="tel"
+                name="phone"
+                value={formData.phone}
+                onChange={handleInputChange}
+                placeholder="e.g., +1234567890"
+                className={`w-full p-3 bg-gray-50 dark:bg-gray-800 border rounded-md text-gray-900 dark:text-white ${
+                  errors.phone
+                    ? 'border-red-400 dark:border-red-500'
+                    : 'border-gray-300 dark:border-gray-700'
+                }`}
+              />
+              {errors.phone && (
+                <p className="text-red-600 dark:text-red-400 text-xs mt-1">
+                  {errors.phone}
+                </p>
+              )}
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-1">
+                Province
               </label>
               <input
                 type="text"
@@ -359,9 +383,12 @@ export default function ProfileInfo() {
                 </p>
               )}
             </div>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-1">
-                City *
+                City
               </label>
               <input
                 type="text"
@@ -380,12 +407,9 @@ export default function ProfileInfo() {
                 </p>
               )}
             </div>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-1">
-                Zip Code *
+                Zip Code
               </label>
               <input
                 type="text"
@@ -405,27 +429,28 @@ export default function ProfileInfo() {
                 </p>
               )}
             </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-1">
-                Address *
-              </label>
-              <input
-                type="text"
-                name="streetAddress"
-                value={formData.streetAddress}
-                onChange={handleInputChange}
-                className={`w-full p-3 bg-gray-50 dark:bg-gray-800 border rounded-md text-gray-900 dark:text-white ${
-                  errors.streetAddress
-                    ? 'border-red-400 dark:border-red-500'
-                    : 'border-gray-300 dark:border-gray-700'
-                }`}
-              />
-              {errors.streetAddress && (
-                <p className="text-red-600 dark:text-red-400 text-xs mt-1">
-                  {errors.streetAddress}
-                </p>
-              )}
-            </div>
+          </div>
+
+          <div className="mb-6">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-1">
+              Street Address
+            </label>
+            <input
+              type="text"
+              name="streetAddress"
+              value={formData.streetAddress}
+              onChange={handleInputChange}
+              className={`w-full p-3 bg-gray-50 dark:bg-gray-800 border rounded-md text-gray-900 dark:text-white ${
+                errors.streetAddress
+                  ? 'border-red-400 dark:border-red-500'
+                  : 'border-gray-300 dark:border-gray-700'
+              }`}
+            />
+            {errors.streetAddress && (
+              <p className="text-red-600 dark:text-red-400 text-xs mt-1">
+                {errors.streetAddress}
+              </p>
+            )}
           </div>
 
           {/* Image Upload */}
