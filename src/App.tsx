@@ -73,6 +73,9 @@ import TradersPage from './pages/Dashboard/TradersPage';
 import CopyTraderErrorModal from './components/CopyTraderErrorModal';
 import { useNavigate } from 'react-router-dom';
 import { Trader } from './types/types';
+import TermsAndConditions from './pages/TermsAndConditions';
+import PrivacyPolicy from './pages/PrivacyPolicy';
+import AMLPolicy from './pages/AMLPolicy';
 
 function App() {
   const url = import.meta.env.VITE_REACT_APP_SERVER_URL;
@@ -110,7 +113,7 @@ function App() {
   const copyTrader = async (trader: Trader) => {
     try {
       const action = trader._id === copiedTraderId ? 'uncopy' : 'copy';
-      
+
       // Check minimum copy amount requirement
       if (trader.minimumCopyAmount > user.deposit && action !== 'uncopy') {
         handleCopyError(
@@ -237,6 +240,14 @@ function App() {
           <Route path="/technical-views" element={<TechnicalViews />} />
           <Route path="/trade-signals" element={<TradeSignals />} />
           <Route path="/trade-vps" element={<TradeVps />} />
+
+          {/* Terms & Policy */}
+          <Route
+            path="/terms-and-conditions"
+            element={<TermsAndConditions />}
+          />
+          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+          <Route path="/aml-policy" element={<AMLPolicy />} />
 
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />

@@ -4,6 +4,15 @@ import { useNavigate } from 'react-router-dom';
 import { contextData } from '@/context/AuthContext';
 import Alert from './ui/Alert';
 
+const rankOptions = [
+  'welcome',
+  'silver',
+  'silverPro',
+  'gold',
+  'goldPro',
+  'ambassador',
+];
+
 export default function EditUserModal({ userData, handleUserData }: any) {
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
@@ -17,6 +26,10 @@ export default function EditUserModal({ userData, handleUserData }: any) {
   const [interest, setInterest] = useState(0);
   const [trade, setTrade] = useState(0);
   const [bonus, setBonus] = useState(0);
+  const [withdrawalLimit, setWithdrawalLimit] = useState(0);
+  const [minWithdrawal, setMinWithdrawal] = useState(1);
+  const [withdrawalStatus, setWithdrawalStatus] = useState(false);
+  const [rank, setRank] = useState('welcome');
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState<string | null>(null);
@@ -37,26 +50,15 @@ export default function EditUserModal({ userData, handleUserData }: any) {
     setInterest(userData.interest);
     setTrade(userData.trade);
     setBonus(userData.bonus);
-  }, []);
+    setWithdrawalLimit(userData.withdrawalLimit || 0);
+    setMinWithdrawal(userData.minWithdrawal || 1);
+    setWithdrawalStatus(userData.withdrawalStatus || false);
+    setRank(userData.rank || 'welcome');
+  }, [userData]);
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     setError(null);
-
-    if (fullName.length < 3)
-      return setError('Full name must be at least 3 characters');
-    if (email.length < 7)
-      return setError('Email must be at least 7 characters');
-    if (selectedCountry === 'none' || selectedCountry === '')
-      return setError('No country was selected');
-    if (phoneNumber.length < 3) return setError('Invalid phone number');
-    if (address.length < 3)
-      return setError('Address must be at least 3 characters');
-    if (state.length < 3)
-      return setError('State must be at least 3 characters');
-    if (city.length < 3) return setError('City must be at least 3 characters');
-    if (zipCode.length < 3)
-      return setError('Zip Code must be at least 3 characters');
 
     const [firstName, ...rest] = fullName.trim().split(' ');
     const lastName = rest.join(' ') || '';
@@ -75,6 +77,10 @@ export default function EditUserModal({ userData, handleUserData }: any) {
       interest,
       trade,
       bonus,
+      withdrawalLimit,
+      minWithdrawal,
+      withdrawalStatus,
+      rank,
     };
 
     try {
@@ -152,7 +158,6 @@ export default function EditUserModal({ userData, handleUserData }: any) {
                   id="full-name"
                   className="editUserInput"
                   placeholder={userData.fullName}
-                  required
                 />
               </div>
 
@@ -167,7 +172,6 @@ export default function EditUserModal({ userData, handleUserData }: any) {
                   id="email"
                   className="editUserInput"
                   placeholder={userData.email}
-                  required
                 />
               </div>
 
@@ -203,7 +207,6 @@ export default function EditUserModal({ userData, handleUserData }: any) {
                   id="phone-number"
                   className="editUserInput"
                   placeholder={userData.phone}
-                  required
                 />
               </div>
 
@@ -219,7 +222,6 @@ export default function EditUserModal({ userData, handleUserData }: any) {
                   id="address"
                   className="editUserInput"
                   placeholder={userData.address}
-                  required
                 />
               </div>
 
@@ -234,7 +236,6 @@ export default function EditUserModal({ userData, handleUserData }: any) {
                   id="state"
                   className="editUserInput"
                   placeholder={userData.state}
-                  required
                 />
               </div>
 
@@ -249,7 +250,6 @@ export default function EditUserModal({ userData, handleUserData }: any) {
                   id="city"
                   className="editUserInput"
                   placeholder={userData.city}
-                  required
                 />
               </div>
 
@@ -264,7 +264,6 @@ export default function EditUserModal({ userData, handleUserData }: any) {
                   id="zipCode"
                   className="editUserInput"
                   placeholder={userData.zipCode}
-                  required
                 />
               </div>
 
@@ -279,7 +278,6 @@ export default function EditUserModal({ userData, handleUserData }: any) {
                   id="deposit"
                   className="editUserInput"
                   placeholder={userData.deposit}
-                  required
                   min={0}
                 />
               </div>
@@ -295,7 +293,6 @@ export default function EditUserModal({ userData, handleUserData }: any) {
                   id="interest"
                   className="editUserInput"
                   placeholder={userData.interest}
-                  required
                   min={0}
                 />
               </div>
@@ -311,7 +308,6 @@ export default function EditUserModal({ userData, handleUserData }: any) {
                   id="trade"
                   className="editUserInput"
                   placeholder={userData.trade}
-                  required
                   min={0}
                 />
               </div>
@@ -327,9 +323,74 @@ export default function EditUserModal({ userData, handleUserData }: any) {
                   id="bonus"
                   className="editUserInput"
                   placeholder={userData.bonus}
-                  required
                   min={0}
                 />
+              </div>
+
+              <div className="col-span-6 sm:col-span-3">
+                <label htmlFor="withdrawalLimit" className="editUserLabel">
+                  Withdrawal Limit
+                </label>
+                <input
+                  value={withdrawalLimit}
+                  onChange={(e) => setWithdrawalLimit(Number(e.target.value))}
+                  type="number"
+                  id="withdrawalLimit"
+                  className="editUserInput"
+                  placeholder={userData.withdrawalLimit || '0'}
+                  min={0}
+                />
+              </div>
+
+              <div className="col-span-6 sm:col-span-3">
+                <label htmlFor="minWithdrawal" className="editUserLabel">
+                  Minimum Withdrawal
+                </label>
+                <input
+                  value={minWithdrawal}
+                  onChange={(e) => setMinWithdrawal(Number(e.target.value))}
+                  type="number"
+                  id="minWithdrawal"
+                  className="editUserInput"
+                  placeholder={userData.minWithdrawal || '1'}
+                  min={0}
+                />
+              </div>
+
+              <div className="col-span-6 sm:col-span-3">
+                <label htmlFor="rank" className="editUserLabel">
+                  Rank
+                </label>
+                <select
+                  id="rank"
+                  value={rank}
+                  onChange={(e) => setRank(e.target.value)}
+                  className="editUserInput"
+                >
+                  {rankOptions.map((option) => (
+                    <option key={option} value={option}>
+                      {option.charAt(0).toUpperCase() + option.slice(1)}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="col-span-6">
+                <div className="flex items-center">
+                  <input
+                    id="withdrawalStatus"
+                    type="checkbox"
+                    checked={withdrawalStatus}
+                    onChange={(e) => setWithdrawalStatus(e.target.checked)}
+                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                  />
+                  <label
+                    htmlFor="withdrawalStatus"
+                    className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                  >
+                    Enable withdrawals for this user
+                  </label>
+                </div>
               </div>
             </div>
             {error && <Alert type="error" message={error} />}

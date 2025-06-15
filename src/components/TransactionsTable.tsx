@@ -101,7 +101,7 @@ const TransactionsTable = () => {
             {filteredTransactions.map((transaction, i) => (
               <li
                 key={i}
-                className="px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-750 transition duration-150 ease-in-out"
+                className="px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-800 transition duration-150 ease-in-out"
               >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-3">
@@ -147,7 +147,7 @@ const TransactionsTable = () => {
                     <p className="text-xs mt-0.5">
                       <span
                         className={`inline-block px-1.5 py-0.5 rounded-sm text-xs ${
-                          transaction.status === 'completed'
+                          transaction.status === 'success'
                             ? 'bg-green-50 text-green-700 dark:bg-green-900/30 dark:text-green-300'
                             : transaction.status === 'pending'
                               ? 'bg-yellow-50 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-300'

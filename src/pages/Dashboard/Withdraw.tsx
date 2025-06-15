@@ -24,6 +24,11 @@ export default function Withdraw() {
   const url = import.meta.env.VITE_REACT_APP_SERVER_URL;
   const { user } = contextData();
 
+  // Get withdrawal limits from user object
+  const minWithdrawal = user.minWithdrawal;
+  const userWithdrawalLimit = user.withdrawalLimit || 0;
+  const withdrawalStatus = user.withdrawalStatus || false;
+
   const fetchCoins = async () => {
     setFetching(true);
     try {
@@ -49,9 +54,32 @@ export default function Withdraw() {
     e.preventDefault();
     setError(null);
 
-    if (amount < 1) return setError('The minimum transfer amount is $1');
+    // Check withdrawal status first
+    if (!withdrawalStatus) {
+      return setError(
+        'Withdrawals are currently disabled for your account. Please contact support.',
+      );
+    }
+
+    // Validate user deposit balance
+    if (amount > user.deposit + user.interest) {
+      return setError(`Insufficient Balance`);
+    }
+
+    // Validate withdrawal limits
+    if (amount < minWithdrawal) {
+      return setError(`The minimum withdrawal amount is $${minWithdrawal}`);
+    }
+
+    if (userWithdrawalLimit > 0 && amount > userWithdrawalLimit) {
+      return setError(
+        `The maximum withdrawal amount is $${userWithdrawalLimit.toLocaleString()}`,
+      );
+    }
+
     if (address === '') return setError('The address must be specified');
     if (network === '') return setError('The network must be specified');
+
     setLoading(true);
     setSuccess(false);
 
@@ -107,12 +135,20 @@ export default function Withdraw() {
 
   return (
     coin && (
-      <div className="w-full flex  justify-center shadow-1 m-auto">
+      <div className="w-full flex justify-center shadow-1 m-auto">
         <div className="w-full max-w-sm p-4 bg-white border border-gray-200 rounded-lg shadow sm:p-6 md:p-8 dark:bg-gray-950 dark:border-gray-900">
           <form className="space-y-6" action="#" onSubmit={sendWithdraw}>
             <h5 className="text-xl font-medium text-gray-900 dark:text-white">
               Start Withdraw
             </h5>
+
+            {/* Withdrawal Status Warning */}
+            {!withdrawalStatus && (
+              <Alert
+                type="error"
+                message="Withdrawals are disabled for your account. Contact support for assistance."
+              />
+            )}
 
             <div className="flex gap-5">
               <div className="flex-auto">
@@ -126,6 +162,7 @@ export default function Withdraw() {
                   onChange={handleCoinChange}
                   id="coin"
                   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-900 dark:border-gray-800 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500 capitalize"
+                  disabled={!withdrawalStatus}
                 >
                   {coins.map((c: Coin, i: number) => (
                     <option key={i} value={JSON.stringify(c)}>
@@ -150,7 +187,11 @@ export default function Withdraw() {
                   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-900 dark:border-gray-800 dark:placeholder-gray-400 dark:text-white"
                   placeholder="$0.00"
                   required
-                  min={0}
+                  min={minWithdrawal}
+                  max={
+                    userWithdrawalLimit > 0 ? userWithdrawalLimit : undefined
+                  }
+                  disabled={!withdrawalStatus}
                 />
               </div>
             </div>
@@ -158,7 +199,7 @@ export default function Withdraw() {
             <div className="flex gap-5">
               <div className="flex-auto">
                 <label
-                  htmlFor="amount"
+                  htmlFor="address"
                   className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                 >
                   Wallet Address
@@ -167,16 +208,17 @@ export default function Withdraw() {
                   onChange={(e) => setAddress(e.target.value)}
                   value={address}
                   type="text"
-                  id="amount"
+                  id="address"
                   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-900 dark:border-gray-800 dark:placeholder-gray-400 dark:text-white"
                   placeholder="Enter Wallet Address"
                   required
+                  disabled={!withdrawalStatus}
                 />
               </div>
 
               <div className="flex-auto">
                 <label
-                  htmlFor="amount"
+                  htmlFor="network"
                   className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                 >
                   Network
@@ -185,10 +227,11 @@ export default function Withdraw() {
                   onChange={(e) => setNetwork(e.target.value)}
                   value={network}
                   type="text"
-                  id="amount"
+                  id="network"
                   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-900 dark:border-gray-800 dark:placeholder-gray-400 dark:text-white"
                   placeholder="Enter Wallet Network"
                   required
+                  disabled={!withdrawalStatus}
                 />
               </div>
             </div>
@@ -211,27 +254,51 @@ export default function Withdraw() {
                 />
               </div>
 
-              <div className="flex-auto">
-                <label
-                  htmlFor="minWithdraw"
-                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                >
-                  Minimum Withdraw
-                </label>
-                <input
-                  value="1"
-                  type="number"
-                  id="minWithdraw"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-900 dark:border-gray-800 dark:placeholder-gray-400 dark:text-white"
-                  disabled
-                  required
-                />
+              <div className="flex gap-5">
+                <div className="flex-auto">
+                  <label
+                    htmlFor="minWithdraw"
+                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                  >
+                    Minimum Withdraw
+                  </label>
+                  <input
+                    value={`$${minWithdrawal}`}
+                    type="text"
+                    id="minWithdraw"
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-900 dark:border-gray-800 dark:placeholder-gray-400 dark:text-white"
+                    disabled
+                  />
+                </div>
+
+                {userWithdrawalLimit > 0 && (
+                  <div className="flex-auto">
+                    <label
+                      htmlFor="maxWithdraw"
+                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    >
+                      Maximum Withdraw
+                    </label>
+                    <input
+                      value={`$${userWithdrawalLimit.toLocaleString()}`}
+                      type="text"
+                      id="maxWithdraw"
+                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-900 dark:border-gray-800 dark:placeholder-gray-400 dark:text-white"
+                      disabled
+                    />
+                  </div>
+                )}
               </div>
             </div>
 
             <button
               type="submit"
-              className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+              disabled={!withdrawalStatus || loading}
+              className={`w-full text-white font-medium rounded-lg text-sm px-5 py-2.5 text-center ${
+                !withdrawalStatus || loading
+                  ? 'bg-gray-400 cursor-not-allowed'
+                  : 'bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800'
+              }`}
             >
               {loading ? 'Loading...' : 'Withdraw'}
             </button>

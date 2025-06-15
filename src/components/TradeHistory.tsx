@@ -79,6 +79,18 @@ const TradeHistory = () => {
     return matchesSearch;
   });
 
+  // Calculate trade amount and shares based on user deposit and trade interest
+  const calculateTradeMetrics = (trade: Trade) => {
+    const userDeposit = user.deposit || 0;
+    const tradeAmount = userDeposit * trade.tradeData.interest;
+    const shares = Math.floor(userDeposit / 100);
+
+    return {
+      amount: tradeAmount,
+      shares: shares,
+    };
+  };
+
   return (
     <div className="w-full bg-white dark:bg-gray-950 rounded-lg shadow-sm overflow-hidden">
       <div className="p-4 border-b border-gray-200 dark:border-gray-900">
@@ -86,22 +98,20 @@ const TradeHistory = () => {
           <h2 className="text-base font-semibold text-gray-800 dark:text-white">
             Trades History
           </h2>
-          {lastUpdated && (
-            <div className="flex items-center text-xs text-gray-500 dark:text-gray-400">
-              <span>Updated {lastUpdated}</span>
-              <button
-                onClick={fetchTrades}
-                disabled={loading}
-                className="ml-2 p-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none"
-              >
-                <RefreshCw
-                  className={`h-3.5 w-3.5 text-gray-400 ${
-                    loading ? 'animate-spin' : ''
-                  }`}
-                />
-              </button>
-            </div>
-          )}
+          <div className="flex items-center text-xs text-gray-500 dark:text-gray-400">
+            {lastUpdated && <span>Updated {lastUpdated}</span>}
+            <button
+              onClick={fetchTrades}
+              disabled={loading}
+              className="ml-2 p-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none"
+            >
+              <RefreshCw
+                className={`h-3.5 w-3.5 text-gray-400 ${
+                  loading ? 'animate-spin' : ''
+                }`}
+              />
+            </button>
+          </div>
         </div>
 
         <div className="mt-2 relative">
@@ -123,66 +133,70 @@ const TradeHistory = () => {
           </div>
         ) : filteredTrades.length > 0 ? (
           <ul className="divide-y divide-gray-100 dark:divide-gray-700">
-            {filteredTrades.map((trade, i) => (
-              <li
-                key={i}
-                className="px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-750 transition duration-150 ease-in-out"
-              >
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-3">
-                    <div
-                      className={`h-8 w-8 flex items-center justify-center rounded-md bg-blue-600/10 `}
-                    >
-                      <span className="font-bold text-xs text-brandblue">
-                        {trade.tradeData.package.slice(0, 2)}
-                      </span>
+            {filteredTrades.map((trade, i) => {
+              const { amount, shares } = calculateTradeMetrics(trade);
+
+              return (
+                <li
+                  key={i}
+                  className="px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-800 transition duration-150 ease-in-out"
+                >
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-3">
+                      <div
+                        className={`h-8 w-8 flex items-center justify-center rounded-md bg-blue-600/10 `}
+                      >
+                        <span className="font-bold text-xs text-brandblue">
+                          {trade.tradeData.package.slice(0, 2)}
+                        </span>
+                      </div>
+                      <div>
+                        <h3 className="text-sm font-medium text-gray-800 dark:text-white">
+                          {trade.tradeData.package}
+                        </h3>
+                        <div className="flex items-center text-xs text-gray-500 dark:text-gray-400">
+                          <Clock className="h-3 w-3 mr-1" />
+                          {new Date(trade.date).toLocaleString('en-US', {
+                            year: 'numeric',
+                            month: 'short',
+                            day: 'numeric',
+                            hour: '2-digit',
+                            minute: '2-digit',
+                          })}
+                        </div>
+                      </div>
                     </div>
-                    <div>
-                      <h3 className="text-sm font-medium text-gray-800 dark:text-white">
-                        {trade.tradeData.package}
-                      </h3>
-                      <div className="flex items-center text-xs text-gray-500 dark:text-gray-400">
-                        <Clock className="h-3 w-3 mr-1" />
-                        {new Date(trade.date).toLocaleString('en-US', {
-                          year: 'numeric',
-                          month: 'short',
-                          day: 'numeric',
-                          hour: '2-digit',
-                          minute: '2-digit',
-                        })}
+                    <div className="text-right">
+                      <div className="flex items-center justify-end">
+                        <span className="text-sm font-medium text-gray-800 dark:text-white">
+                          ${amount.toFixed(2)}
+                        </span>
+                        <span
+                          className={`ml-2 flex items-center text-xs font-medium ${
+                            trade.tradeData.interest >= 0
+                              ? 'text-green-500 dark:text-green-400'
+                              : 'text-red-500 dark:text-red-400'
+                          }`}
+                        >
+                          {trade.tradeData.interest >= 0 ? (
+                            <TrendingUp className="h-3 w-3 mr-0.5" />
+                          ) : (
+                            <TrendingDown className="h-3 w-3 mr-0.5" />
+                          )}
+                          {trade.tradeData.interest >= 0 ? '+' : ''}
+                          {trade.tradeData.interest}%
+                        </span>
+                      </div>
+                      <div className="mt-1">
+                        <span className="text-xs text-gray-500 dark:text-gray-400">
+                          {shares} shares
+                        </span>
                       </div>
                     </div>
                   </div>
-                  <div className="text-right">
-                    <div className="flex items-center justify-end">
-                      <span className="text-sm font-medium text-gray-800 dark:text-white">
-                        ${trade.amount.toFixed(2)}
-                      </span>
-                      <span
-                        className={`ml-2 flex items-center text-xs font-medium ${
-                          trade.tradeData.interest >= 0
-                            ? 'text-green-500 dark:text-green-400'
-                            : 'text-red-500 dark:text-red-400'
-                        }`}
-                      >
-                        {trade.tradeData.interest >= 0 ? (
-                          <TrendingUp className="h-3 w-3 mr-0.5" />
-                        ) : (
-                          <TrendingDown className="h-3 w-3 mr-0.5" />
-                        )}
-                        {trade.tradeData.interest >= 0 ? '+' : ''}
-                        {trade.tradeData.interest}%
-                      </span>
-                    </div>
-                    <div className="mt-1">
-                      <span className="text-xs text-gray-500 dark:text-gray-400">
-                        {trade.amount} shares
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </li>
-            ))}
+                </li>
+              );
+            })}
           </ul>
         ) : (
           <div className="py-12 flex flex-col items-center justify-center text-gray-500 dark:text-gray-400">

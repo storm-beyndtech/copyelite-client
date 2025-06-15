@@ -149,14 +149,14 @@ export default function Footer() {
             &copy; {new Date().getFullYear()} TradingProAI. All rights reserved.
           </p>
           <div className="flex space-x-6">
-            <Link to="#" className="text-trading-gray hover:text-white text-sm">
+            <Link to="/privacy-policy" className="text-trading-gray hover:text-white text-sm">
               Privacy Policy
             </Link>
-            <Link to="#" className="text-trading-gray hover:text-white text-sm">
+            <Link to="/terms-and-conditions" className="text-trading-gray hover:text-white text-sm">
               Terms of Service
             </Link>
-            <Link to="#" className="text-trading-gray hover:text-white text-sm">
-              Cookie Policy
+            <Link to="/aml-policy" className="text-trading-gray hover:text-white text-sm">
+              Aml Policy
             </Link>
           </div>
         </div>

@@ -1,18 +1,19 @@
-import EditUserModal from "@/components/EditUserModal";
-import PageLoader from "@/components/PageLoader";
-import { contextData } from "@/context/AuthContext";
-import { useEffect, useState } from "react";
-import { TfiSearch } from "react-icons/tfi";
-
-const tableTitles = ["User", "Phone", "Country", "Balance", "Action"]
+import EditUserModal from '@/components/EditUserModal';
+import PageLoader from '@/components/PageLoader';
+import { contextData } from '@/context/AuthContext';
+import { useEffect, useState } from 'react';
+import { Search, Users, RefreshCw } from 'lucide-react';
 
 export default function ActiveUsers() {
-  const { user:admin } = contextData()
-  const [users, setUsers] = useState<any>(null)
-  const [filteredUsers, setFilteredUsers] = useState<any>(null)
-  const [userData, setUserData] = useState(null)
-  const [fetching, setFetching] = useState(true)
-  const [reFetch, setReFetch] = useState(true)
+  const { user: admin } = contextData();
+  const [users, setUsers] = useState<any>(null);
+  const [filteredUsers, setFilteredUsers] = useState<any>(null);
+  const [userData, setUserData] = useState(null);
+  const [fetching, setFetching] = useState(true);
+  const [reFetch, setReFetch] = useState(true);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const usersPerPage = 10;
   const url = import.meta.env.VITE_REACT_APP_SERVER_URL;
 
   const fetchUsers = async () => {
@@ -21,104 +22,215 @@ export default function ActiveUsers() {
       const data = await res.json();
 
       if (res.ok) {
-        setUsers(data.filter((user:any) => user._id !== admin._id))
-        setFilteredUsers(data.filter((user:any) => user._id !== admin._id))
-      }
-      else throw new Error(data.message);
+        const filteredData = data.filter((user: any) => user._id !== admin._id);
+        setUsers(filteredData);
+        setFilteredUsers(filteredData);
+      } else throw new Error(data.message);
     } catch (error) {
       console.log(error);
     } finally {
-      setFetching(false)
+      setFetching(false);
     }
   };
 
   useEffect(() => {
-    fetchUsers()
-  }, [reFetch])
+    fetchUsers();
+  }, [reFetch]);
 
-  const handleUserData = (userObj:any) => {
-    setUserData(userObj)
-    setReFetch(!reFetch)
-  }
+  const handleUserData = (userObj: any) => {
+    setUserData(userObj);
+    setReFetch(!reFetch);
+  };
 
   const handleSearch = (search: string) => {
-    console.log(users)
-    let filtered = users.filter((user:any) =>
-      user.email.toLowerCase().includes(search) ||
-      user.fullName.toLowerCase().includes(search)
-    )
-    setFilteredUsers(filtered)
-  }
+    setSearchQuery(search);
+    let filtered = users.filter(
+      (user: any) =>
+        user.email.toLowerCase().includes(search.toLowerCase()) ||
+        user.fullName.toLowerCase().includes(search.toLowerCase()) ||
+        user.phone.toLowerCase().includes(search.toLowerCase()) ||
+        user.country.toLowerCase().includes(search.toLowerCase()),
+    );
+    setFilteredUsers(filtered);
+    setCurrentPage(1);
+  };
 
+  // Get user avatar
+  const getUserAvatar = (user: any) => {
+    if (user.profileImage) {
+      return user.profileImage;
+    }
+    return `https://ui-avatars.com/api/?name=${encodeURIComponent(
+      user.fullName || user.email,
+    )}&background=E5E7EB&color=374151&size=40`;
+  };
 
+  // Pagination
+  const totalPages = Math.ceil((filteredUsers?.length || 0) / usersPerPage);
+  const startIndex = (currentPage - 1) * usersPerPage;
+  const endIndex = startIndex + usersPerPage;
+  const currentUsers = filteredUsers
+    ? filteredUsers.slice(startIndex, endIndex)
+    : [];
 
-  if(fetching) return <PageLoader />
+  if (fetching) return <PageLoader />;
 
   return (
     <>
-    <div className="relative overflow-x-auto">
-
-      <div className="py-3 bg-white dark:bg-transparent mb-5 flex justify-center">
-        <label htmlFor="table-search" className="sr-only">Search</label>
-        <div className="relative">
-            <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-                <TfiSearch className="w53 h-3 text-gray-500 dark:text-gray-400"/>
+      <div className="bg-white dark:bg-gray-950 rounded-lg shadow-sm overflow-hidden">
+        {/* Header */}
+        <div className="p-6 border-b border-gray-200 dark:border-gray-800">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <Users className="h-5 w-5 text-gray-600 dark:text-gray-400" />
+              <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
+                Users ({filteredUsers?.length || 0})
+              </h2>
             </div>
-            <input onChange={(e) => handleSearch(e.target.value)} type="text" className="block p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search for users" />
+
+            <div className="flex items-center gap-3">
+              {/* Search */}
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+                <input
+                  onChange={(e) => handleSearch(e.target.value)}
+                  type="text"
+                  value={searchQuery}
+                  className="pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 w-64"
+                  placeholder="Search users..."
+                />
+              </div>
+
+              <button
+                onClick={() => setReFetch(!reFetch)}
+                className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
+              >
+                <RefreshCw className="h-4 w-4 text-gray-500" />
+              </button>
+            </div>
+          </div>
         </div>
+
+        {/* Table */}
+        <div className="overflow-x-auto">
+          <table className="w-full">
+            <thead className="bg-gray-50 dark:bg-gray-800">
+              <tr>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">
+                  User
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">
+                  Phone
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">
+                  Country
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">
+                  Balance
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">
+                  Action
+                </th>
+              </tr>
+            </thead>
+
+            <tbody className="bg-white dark:bg-gray-950 divide-y divide-gray-200 dark:divide-gray-800">
+              {currentUsers.length > 0 ? (
+                currentUsers.map((user: any) => (
+                  <tr
+                    key={user._id}
+                    className="hover:bg-gray-50 dark:hover:bg-gray-800/50"
+                  >
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="flex items-center">
+                        <img
+                          className="h-10 w-10 rounded-full object-cover"
+                          src={getUserAvatar(user)}
+                          alt={user.fullName}
+                        />
+                        <div className="ml-4">
+                          <div className="text-sm font-medium text-gray-900 dark:text-white">
+                            {user.fullName}
+                          </div>
+                          <div className="text-sm text-gray-500 dark:text-gray-400">
+                            {user.email}
+                          </div>
+                        </div>
+                      </div>
+                    </td>
+
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
+                      {user.phone || 'N/A'}
+                    </td>
+
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
+                      {user.country}
+                    </td>
+
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="text-sm text-gray-900 dark:text-white">
+                        Deposit: ${(user.deposit || 0).toLocaleString()}
+                      </div>
+                      <div className="text-sm text-gray-500 dark:text-gray-400">
+                        Interest: ${(user.interest || 0).toLocaleString()}
+                      </div>
+                    </td>
+
+                    <td className="px-6 py-4 whitespace-nowrap text-sm">
+                      <button
+                        onClick={() => handleUserData(user)}
+                        className="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300 font-medium"
+                      >
+                        Edit user
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td
+                    colSpan={5}
+                    className="px-6 py-12 text-center text-gray-500 dark:text-gray-400"
+                  >
+                    No users found
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+
+        {/* Simple Pagination */}
+        {totalPages > 1 && (
+          <div className="px-6 py-3 border-t border-gray-200 dark:border-gray-800">
+            <div className="flex items-center justify-between">
+              <div className="text-sm text-gray-500 dark:text-gray-400">
+                Page {currentPage} of {totalPages}
+              </div>
+              <div className="flex space-x-2">
+                <button
+                  onClick={() => setCurrentPage(currentPage - 1)}
+                  disabled={currentPage === 1}
+                  className="px-3 py-1 text-sm border rounded hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-50"
+                >
+                  Previous
+                </button>
+                <button
+                  onClick={() => setCurrentPage(currentPage + 1)}
+                  disabled={currentPage === totalPages}
+                  className="px-3 py-1 text-sm border rounded hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-50"
+                >
+                  Next
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
 
-    
-    <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-        <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-            <tr>
-              {tableTitles.map(title => <th key={title} scope="col" className="px-6 py-3">{title}</th>)}
-            </tr>
-        </thead>
-
-        <tbody>
-            {filteredUsers && filteredUsers.map((user:any) => 
-            <tr key={user._id} className="min-w-[150px] bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                <th scope="row" className="flex items-center px-5 py-3 text-gray-900 whitespace-nowrap dark:text-white">
-                  <img className="w-10 h-10 rounded-full bg-[#E2FFD7]/10" src={`https://robohash.org/${user?._id}`} alt="Avatar" />
-                    <div className="ps-3">
-                        <div className="text-xs font-semibold">
-                          {user.fullName.length > 17 && user.fullName.slice(0, 15) + "..."} 
-                          {user.fullName.length < 17 && user.fullName}
-                        </div>
-                        <div className="text-xs font-medium text-gray-500">
-                          {user.email.length > 17 && user.email.slice(0, 15) + "..."} 
-                          {user.email.length < 17 && user.email} 
-                        </div>
-                    </div>  
-                </th>
-
-                <td className="min-w-[150px] px-5 py-3 text-xs">
-                    {user.phone}
-                </td>
-
-                <td className="min-w-[150px] px-5 py-3 text-xs">
-                    {user.country.length > 14 && user.country.slice(0, 11) + "..."} 
-                    {user.country.length < 14 && user.country}
-                </td>
-
-                <td>
-                  <div className="min-w-[150px] ps-4 text-xs font-semibold">
-                    <div>deposit: ${user.deposit}</div>
-                    <div>Interest: ${user.interest}</div>
-                  </div>
-                </td>
-
-                <td className="min-w-[150px] px-5 py-3">
-                    <button onClick={() => handleUserData(user)} className="font-medium text-blue-600 dark:text-blue-500">Edit user</button>
-                </td>
-            </tr>
-              )}
-        </tbody>
-    </table>
-
-      {userData && <EditUserModal userData={userData} handleUserData={handleUserData}/>}
-  </div>
+      {userData && (
+        <EditUserModal userData={userData} handleUserData={handleUserData} />
+      )}
     </>
-  )
+  );
 }

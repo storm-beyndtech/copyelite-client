@@ -318,11 +318,11 @@ const Register: React.FC = () => {
                 className="text-xs tracking-tight font-medium text-gray-500 dark:text-gray-300"
               >
                 I've read and accept the{' '}
-                <Link to="#" className="text-brandblue">
+                <Link to="/terms-and-conditions" className="text-brandblue">
                   Terms & Conditions
                 </Link>{' '}
                 with{' '}
-                <Link to="#" className="text-brandblue">
+                <Link to="/privacy-policy" className="text-brandblue">
                   Privacy Policy
                 </Link>
               </label>
