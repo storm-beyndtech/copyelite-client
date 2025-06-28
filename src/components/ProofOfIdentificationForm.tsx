@@ -129,7 +129,7 @@ export default function ProofOfIdentificationForm(): JSX.Element {
       submitData.append('documentNumber', formData.documentNumber);
       submitData.append('documentExpDate', formData.expiryDate);
       submitData.append('email', user.email);
-      submitData.append('name', user.username);
+      submitData.append('name', user.firstName + ' ' + user.lastName);
 
       if (formData.frontImage) {
         submitData.append('documentFront', formData.frontImage);

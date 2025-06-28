@@ -26,6 +26,25 @@ export const AnimatedSection = ({
   );
 };
 
+export const AnimatedInputSection = ({
+  children,
+  className,
+  delay = 0,
+  distance = 30,
+}: AnimatedSectionProps) => {
+  return (
+    <motion.div
+      initial={{ y: distance, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ duration: 0.4, delay }}
+      className={className}
+    >
+      {children}
+    </motion.div>
+  );
+};
+
+
 export const AnimatedFade = ({
   children,
   className,

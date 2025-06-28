@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { ChevronLeft, Info, Check, Loader } from 'lucide-react';
-import { AnimatedSection } from './ui/animated-section';
+import { AnimatedInputSection, AnimatedSection } from './ui/animated-section';
 import Logo from '../assets/copyelite-logo.svg';
 import { Link, useNavigate } from 'react-router-dom';
 import Alert from './ui/Alert';
@@ -124,7 +124,7 @@ const AccountSetupOnboarding = () => {
           options: countries.map((country) => country.name),
         },
         {
-          id: 'phoneNo',
+          id: 'phone',
           label: 'Phone No.',
           type: 'text',
           required: true,
@@ -437,7 +437,7 @@ const AccountSetupOnboarding = () => {
 
     return currentSection.fields
       .map((field, index) => (
-        <AnimatedSection key={field.id} delay={index * 0.3}>
+        <AnimatedInputSection key={field.id} delay={index * 0.3}>
           <div className="mb-4 md:flex md:flex-row md:gap-4">
             {index % 2 === 0 && index < currentSection.fields.length - 1 ? (
               <>
@@ -585,7 +585,7 @@ const AccountSetupOnboarding = () => {
               )
             )}
           </div>
-        </AnimatedSection>
+        </AnimatedInputSection>
       ))
       .filter((_, index) => index % 2 === 0);
   };
