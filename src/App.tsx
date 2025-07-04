@@ -253,6 +253,7 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/register/:ref" element={<Register />} />
           <Route path="/reset-password" element={<ResetPassword />} />
+          <Route path="/forgot-password" element={<ResetPassword />} />
           <Route path="/verify-otp" element={<OtpPage />} />
 
           {user ? (
