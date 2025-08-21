@@ -76,6 +76,7 @@ import { Trader } from './types/types';
 import TermsAndConditions from './pages/TermsAndConditions';
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import AMLPolicy from './pages/AMLPolicy';
+import TwoFactorLogin from './pages/Auth/TwoFactorLogin';
 
 function App() {
   const url = import.meta.env.VITE_REACT_APP_SERVER_URL;
@@ -255,6 +256,7 @@ function App() {
           <Route path="/reset-password" element={<ResetPassword />} />
           <Route path="/forgot-password" element={<ResetPassword />} />
           <Route path="/verify-otp" element={<OtpPage />} />
+          <Route path="/verify-2fa" element={<TwoFactorLogin />} />
 
           {user ? (
             <>

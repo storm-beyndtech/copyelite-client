@@ -1,6 +1,7 @@
 import React from 'react';
 import logo from '../assets/copyelite-logo.png';
 import { SiSpinrilla } from 'react-icons/si';
+import map from "../assets/moneta-loading-map.webp"
 
 const PageLoader: React.FC = () => {
   return (
@@ -22,9 +23,7 @@ const PageLoader: React.FC = () => {
       </div>
       <div className="absolute left-0 top-1/2 transform -translate-y-1/2 w-full h-auto">
         <img
-          loading="lazy"
-          src="https://protradercopy.com/wp-content/themes/ProTrader-Copy/images/moneta-loading-map.webp"
-          alt="Copyelite logo icon"
+          src={map}
           width={1920}
           height={736}
         />

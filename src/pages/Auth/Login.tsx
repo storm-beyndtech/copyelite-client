@@ -92,11 +92,15 @@ const Login: React.FC = () => {
 
       // Handle successful login
       setSubmitStatus('success');
-      login(resData.user);
+
       // Redirect or handle successful login
-      setTimeout(() => {
+      login(resData.user, resData.token);
+
+      if (resData.requires2FA) {
+        navigate('/verify-2fa', { state: { email: resData.user.email } });
+      } else {
         navigate('/dashboard');
-      }, 2000);
+      }
     } catch (error: any) {
       // Handle login error
       setError(error.message);
@@ -141,8 +145,14 @@ const Login: React.FC = () => {
 
     const data = await res.json();
     if (res.ok) {
-      login(data.user);
-      navigate('/dashboard');
+      // Redirect or handle successful login
+      login(data.user, data.token);
+
+      if (data.requires2FA) {
+        navigate('/verify-2fa', { state: { email: data.user.email } });
+      } else {
+        navigate('/dashboard');
+      }
     } else {
       setError(data.error);
     }
