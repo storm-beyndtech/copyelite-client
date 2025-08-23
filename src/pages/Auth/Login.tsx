@@ -97,7 +97,7 @@ const Login: React.FC = () => {
       login(resData.user, resData.token);
 
       if (resData.requires2FA) {
-        navigate('/verify-2fa', { state: { email: resData.user.email } });
+        navigate('/dashboard');
       } else {
         navigate('/dashboard');
       }
@@ -149,7 +149,7 @@ const Login: React.FC = () => {
       login(data.user, data.token);
 
       if (data.requires2FA) {
-        navigate('/verify-2fa', { state: { email: data.user.email } });
+        navigate('/dashboard');
       } else {
         navigate('/dashboard');
       }
