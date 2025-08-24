@@ -1,12 +1,11 @@
 import { useEffect, useState } from 'react';
-import authImg from '../assets/authMFA.png';
 import { contextData } from '@/context/AuthContext';
 import Alert from './ui/Alert';
 import LoadingSpinner from './ui/LoadingSpinner';
 
 export default function TwoFactorSetup() {
   const [qrCodeSrc, setQrCodeSrc] = useState<null | string>(null);
-  const [token, setToken] = useState('');
+  const [otp, setOtp] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
@@ -57,19 +56,18 @@ export default function TwoFactorSetup() {
 
   const sendToken = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError('');
-    setSuccess(false);
-
-    if (token.length !== 6 || !/^\d{6}$/.test(token)) {
-      setError('Please enter a valid 6-digit code');
-      return;
-    }
     if (!authToken) {
       setError('Authentication token missing');
       return;
     }
-
+    if (!otp) {
+      setError('Please enter a 6-digit code');
+      return;
+    }
     setLoading(true);
+    setError('');
+    setSuccess(false);
+
     try {
       const res = await fetch(`${url}/mfa/verifyToken`, {
         method: 'POST',
@@ -77,20 +75,21 @@ export default function TwoFactorSetup() {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${authToken}`,
         },
-        body: JSON.stringify({ token }),
+        body: JSON.stringify({ token: otp }),
       });
       const data = await res.json();
       if (res.ok) {
-        setUserToken(data.token); // Update JWT in context
+        setUserToken(data.token);
         setSuccess(true);
+        setOtp('');
       } else {
         throw new Error(data.message);
       }
     } catch (error: any) {
-      setError(error.message || 'Invalid token');
+      setError(error.message || 'Invalid code');
+      setOtp('');
     } finally {
       setLoading(false);
-      setToken('');
     }
   };
 
@@ -98,9 +97,9 @@ export default function TwoFactorSetup() {
     if (!canResend || !authToken) return;
     setCanResend(false);
     setCountdown(60);
+    setLoading(true);
     setError('');
     setSuccess(false);
-    setLoading(true);
 
     try {
       const res = await fetch(`${url}/mfa/getQrCode`, {
@@ -120,7 +119,46 @@ export default function TwoFactorSetup() {
         throw new Error(data.message);
       }
     } catch (error: any) {
-      setError(error.message || 'Failed to resend');
+      setError(error.message || 'Failed to resend QR code');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const disable2FA = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!authToken) {
+      setError('Authentication token missing');
+      return;
+    }
+    if (!otp) {
+      setError('Please enter a 6-digit code');
+      return;
+    }
+    setLoading(true);
+    setError('');
+    setSuccess(false);
+
+    try {
+      const res = await fetch(`${url}/mfa/disable`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${authToken}`,
+        },
+        body: JSON.stringify({ token: otp }),
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setUserToken(data.token);
+        setSuccess(true);
+        setOtp('');
+      } else {
+        throw new Error(data.message);
+      }
+    } catch (error: any) {
+      setError(error.message || 'Invalid code');
+      setOtp('');
     } finally {
       setLoading(false);
     }
@@ -131,11 +169,11 @@ export default function TwoFactorSetup() {
       {!user.mfa ? (
         <>
           <div className="flex-none">
-            {loading && !qrCodeSrc ? (
+            {loading || !qrCodeSrc ? (
               <LoadingSpinner />
             ) : (
               <img
-                src={qrCodeSrc as string}
+                src={qrCodeSrc}
                 alt="QR code"
                 className="rounded-xl"
                 width={250}
@@ -157,9 +195,9 @@ export default function TwoFactorSetup() {
                   </label>
                   <input
                     onChange={(e) =>
-                      setToken(e.target.value.replace(/[^0-9]/g, ''))
+                      setOtp(e.target.value.replace(/[^0-9]/g, ''))
                     }
-                    value={token}
+                    value={otp}
                     type="text"
                     id="otp"
                     maxLength={6}
@@ -203,7 +241,42 @@ export default function TwoFactorSetup() {
           </div>
         </>
       ) : (
-        <img src={authImg} alt="2FA Enabled" className="w-full max-w-100" />
+        <div className="w-full max-w-sm p-4 bg-white border border-gray-200 rounded-lg shadow sm:p-6 md:p-8 dark:bg-gray-800 dark:border-gray-700">
+          <form className="space-y-6" onSubmit={disable2FA}>
+            <h5 className="text-xl font-medium text-gray-900 dark:text-white">
+              Disable Two-Factor Authentication
+            </h5>
+            <div>
+              <label
+                htmlFor="otp-disable"
+                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              >
+                6-Digit Code
+              </label>
+              <input
+                onChange={(e) => setOtp(e.target.value.replace(/[^0-9]/g, ''))}
+                value={otp}
+                type="text"
+                id="otp-disable"
+                maxLength={6}
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                placeholder="******"
+                required
+              />
+            </div>
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800"
+            >
+              {loading ? 'Loading...' : 'Disable 2FA'}
+            </button>
+            {error && <Alert type="error" message={error} />}
+            {success && (
+              <Alert type="success" message="2FA disabled successfully" />
+            )}
+          </form>
+        </div>
       )}
     </div>
   );
