@@ -1,6 +1,6 @@
 import { contextData } from '@/context/AuthContext';
 import { RefreshCw, Eye, EyeOff } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 const url = import.meta.env.VITE_REACT_APP_SERVER_URL;
 
@@ -24,9 +24,33 @@ export default function ChangePassword() {
   });
 
   const [loading, setLoading] = useState(false);
+  const [checkingPassword, setCheckingPassword] = useState(true);
+  const [hasPassword, setHasPassword] = useState(true);
   const [successMessage, setSuccessMessage] = useState('');
   const [serverError, setServerError] = useState('');
   const { user } = contextData();
+
+  // Check if user has a password on component mount
+  useEffect(() => {
+    const checkUserPassword = async () => {
+      try {
+        const response = await fetch(`${url}/users/check-password/${user._id}`);
+        const data = await response.json();
+
+        if (response.ok) {
+          setHasPassword(data.hasPassword);
+        }
+      } catch (error) {
+        console.error('Error checking password status:', error);
+      } finally {
+        setCheckingPassword(false);
+      }
+    };
+
+    if (user?._id) {
+      checkUserPassword();
+    }
+  }, [user?._id]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -55,7 +79,8 @@ export default function ChangePassword() {
       confirmPassword: '',
     };
 
-    if (!formData.currentPassword) {
+    // Only validate current password if user already has a password
+    if (hasPassword && !formData.currentPassword) {
       newErrors.currentPassword = 'Current password is required';
       valid = false;
     }
@@ -85,16 +110,22 @@ export default function ChangePassword() {
     setServerError('');
 
     try {
-      const response = await fetch(`${url}/change-password`, {
+      const payload: any = {
+        newPassword: formData.newPassword,
+        id: user._id,
+      };
+
+      // Only include current password if user already has a password
+      if (hasPassword) {
+        payload.currentPassword = formData.currentPassword;
+      }
+
+      const response = await fetch(`${url}/users/change-password`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          currentPassword: formData.currentPassword,
-          newPassword: formData.newPassword,
-          id: user._id,
-        }),
+        body: JSON.stringify(payload),
       });
 
       const result = await response.json();
@@ -102,12 +133,17 @@ export default function ChangePassword() {
       if (!response.ok)
         throw new Error(result.message || 'Something went wrong');
 
-      setSuccessMessage('Password updated successfully!');
+      setSuccessMessage(result.message || 'Password updated successfully!');
       setFormData({
         currentPassword: '',
         newPassword: '',
         confirmPassword: '',
       });
+
+      // Update hasPassword state if it was a password creation
+      if (!hasPassword) {
+        setHasPassword(true);
+      }
     } catch (error: any) {
       setServerError(error.message);
     } finally {
@@ -115,11 +151,28 @@ export default function ChangePassword() {
     }
   };
 
+  if (checkingPassword) {
+    return (
+      <div className="min-w-100 w-fit mx-auto bg-white border border-gray-200 rounded-lg shadow sm:p-6 md:p-8 dark:bg-gray-800 dark:border-gray-700 p-4">
+        <div className="flex items-center justify-center py-8">
+          <RefreshCw size={24} className="animate-spin text-blue-500" />
+          <span className="ml-2 text-gray-600 dark:text-gray-400">Loading...</span>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-w-100 w-fit mx-auto bg-white border border-gray-200 rounded-lg shadow sm:p-6 md:p-8 dark:bg-gray-800 dark:border-gray-700 p-4">
       <h2 className="text-xl font-semibold dark:text-white text-gray-800 mb-6">
-        Change Password
+        {hasPassword ? 'Change Password' : 'Create New Password'}
       </h2>
+
+      {!hasPassword && (
+        <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
+          You signed up via Google. Create a password to enable password login.
+        </p>
+      )}
 
       <div className="max-w-md">
         {serverError && (
@@ -129,16 +182,18 @@ export default function ChangePassword() {
           <p className="text-green-500 text-sm mb-4">{successMessage}</p>
         )}
 
-        <InputField
-          label="Current Password"
-          name="currentPassword"
-          value={formData.currentPassword}
-          error={errors.currentPassword}
-          onChange={handleChange}
-          type={passwordVisibility.currentPassword ? 'text' : 'password'}
-          onToggleVisibility={() => togglePasswordVisibility('currentPassword')}
-          showPassword={passwordVisibility.currentPassword}
-        />
+        {hasPassword && (
+          <InputField
+            label="Current Password"
+            name="currentPassword"
+            value={formData.currentPassword}
+            error={errors.currentPassword}
+            onChange={handleChange}
+            type={passwordVisibility.currentPassword ? 'text' : 'password'}
+            onToggleVisibility={() => togglePasswordVisibility('currentPassword')}
+            showPassword={passwordVisibility.currentPassword}
+          />
+        )}
         <InputField
           label="New Password"
           name="newPassword"
@@ -169,10 +224,10 @@ export default function ChangePassword() {
             {loading ? (
               <>
                 <RefreshCw size={18} className="mr-2 animate-spin" />{' '}
-                Updating...
+                {hasPassword ? 'Updating...' : 'Creating...'}
               </>
             ) : (
-              'Update Password'
+              hasPassword ? 'Update Password' : 'Create Password'
             )}
           </button>
         </div>
