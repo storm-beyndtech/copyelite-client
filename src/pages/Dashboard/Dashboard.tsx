@@ -59,7 +59,11 @@ export default function Dashboard() {
 
   const fetchTraders = async () => {
     try {
-      const res = await fetch(`${url}/trader`);
+      const res = await fetch(`${url}/trader`, {
+        headers: {
+          Authorization: token ? `Bearer ${token}` : '',
+        },
+      });
       if (!res.ok) throw new Error('Failed to fetch traders');
       const data = await res.json();
       setTraders(data || []);

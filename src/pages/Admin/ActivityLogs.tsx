@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useState } from 'react';
-import { RefreshCw, Search, Shield, Target, Clock } from 'lucide-react';
+import { RefreshCcw, Search, Filter } from 'lucide-react';
 import { contextData } from '@/context/AuthContext';
 
-type ActivityLog = {
+interface ActivityLog {
   _id: string;
   actorEmail?: string;
   actorRole?: string;
@@ -19,49 +19,53 @@ type ActivityLog = {
     lat?: number;
     lng?: number;
   };
-  createdAt?: string;
-};
+  createdAt: string;
+}
 
-export default function ActivityLogs() {
-  const { token } = contextData();
+const ActivityLogs = () => {
+  const { user, token } = contextData();
   const [logs, setLogs] = useState<ActivityLog[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [search, setSearch] = useState('');
   const [actionFilter, setActionFilter] = useState('');
   const [limit, setLimit] = useState(50);
-  const url = import.meta.env.VITE_REACT_APP_SERVER_URL;
+  const serverUrl = import.meta.env.VITE_REACT_APP_SERVER_URL;
 
   const fetchLogs = async () => {
+    if (!user?.isAdmin) return;
     if (!token) {
-      setError('Authentication required');
+      setError('Authentication token is missing');
       return;
     }
     setLoading(true);
     setError(null);
     try {
-      const query = new URLSearchParams();
-      query.set('limit', String(limit));
-      if (actionFilter) query.set('action', actionFilter);
-
-      const res = await fetch(`${url}/activity-logs?${query.toString()}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
+      const params = new URLSearchParams({ limit: String(limit) });
+      if (actionFilter) params.append('action', actionFilter);
+      const res = await fetch(
+        `${serverUrl}/activity-logs?${params.toString()}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
         },
-      });
-
+      );
       const data = await res.json();
-      if (!res.ok) throw new Error(data.message || 'Failed to fetch activity logs');
-
+      if (!res.ok)
+        throw new Error(data.message || 'Failed to fetch activity logs');
       setLogs(data.logs || []);
     } catch (err: any) {
-      setError(err.message || 'Unable to load activity logs');
+      setError(err.message || 'Unable to load logs');
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
+    if (!token) {
+      setError('Authentication token is missing');
+      setLoading(false);
+      return;
+    }
     fetchLogs();
   }, [actionFilter, limit, token]);
 
@@ -69,171 +73,184 @@ export default function ActivityLogs() {
     if (!search) return logs;
     const term = search.toLowerCase();
     return logs.filter((log) => {
-      const metadataText = JSON.stringify(log.metadata || {});
       return (
-        log.action?.toLowerCase().includes(term) ||
-        log.actorEmail?.toLowerCase().includes(term) ||
-        log.targetCollection?.toLowerCase().includes(term) ||
-        String(log.targetId || '').toLowerCase().includes(term) ||
-        log.ipAddress?.toLowerCase().includes(term) ||
-        metadataText.toLowerCase().includes(term)
+        log.action.toLowerCase().includes(term) ||
+        (log.actorEmail || '').toLowerCase().includes(term) ||
+        (log.targetCollection || '').toLowerCase().includes(term) ||
+        (log.targetId || '').toLowerCase().includes(term)
       );
     });
   }, [logs, search]);
 
-  const uniqueActions = useMemo(() => {
+  const actionOptions = useMemo(() => {
     return Array.from(new Set(logs.map((log) => log.action))).sort();
   }, [logs]);
 
-  const formatDate = (value?: string) => {
-    if (!value) return 'Unknown time';
-    return new Date(value).toLocaleString();
-  };
-
-  const buildLocationLabel = (log: ActivityLog) => {
-    if (!log.location) return 'Location: unknown';
-    const { city, region, country, lat, lng } = log.location;
-    const place = [city, region, country].filter(Boolean).join(', ');
-    const coords = lat && lng ? ` (${lat}, ${lng})` : '';
-    return place ? `${place}${coords}` : 'Location: unknown';
+  const renderLocation = (log: ActivityLog) => {
+    if (!log.location) return 'Unknown location';
+    const parts = [
+      log.location.city,
+      log.location.region,
+      log.location.country,
+    ].filter(Boolean);
+    return parts.join(', ') || 'Unknown location';
   };
 
   return (
-    <div className="min-h-screen">
-      <div className="max-w-7xl mx-auto space-y-6">
-        <div className="flex items-center gap-3 flex-wrap">
-          <div className="flex items-center gap-3">
-            <Shield className="text-emerald-400" />
-            <div>
-              <h1 className="text-2xl font-semibold">Activity Logs</h1>
-              <p className="text-sm text-slate-400">
-                Trace critical actions with IP, device, and geo context.
-              </p>
-            </div>
+    <div className="text-slate-900 dark:text-gray-300">
+      <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between mb-6">
+        <div>
+          <h1 className="text-xl font-semibold dark:text-white">
+            Activity Logs
+          </h1>
+          <p className="text-sm text-slate-600 dark:text-slate-400">
+            Recent actions with IP and device context.
+          </p>
+        </div>
+
+        <div className="flex flex-wrap gap-3 w-full md:w-auto">
+          <div className="flex flex-1 min-w-[180px] items-center gap-2 rounded-md bg-white px-3 py-2 border border-slate-200 shadow-sm dark:bg-slate-800 dark:border-slate-700">
+            <Search className="w-4 h-4 text-slate-400" />
+            <input
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Search..."
+              className="w-full bg-transparent text-sm outline-none placeholder:text-slate-400"
+            />
+          </div>
+          <div className="dark:text-white flex items-center gap-2 rounded-md bg-white px-3 py-2 border border-slate-200 shadow-sm dark:bg-slate-800 dark:border-slate-700">
+            <Filter className="w-4 h-4 text-slate-400" />
+            <select
+              value={actionFilter}
+              onChange={(e) => setActionFilter(e.target.value)}
+              className="bg-transparent text-sm outline-none"
+            >
+              <option value="">All</option>
+              {actionOptions.map((action) => (
+                <option
+                  key={action}
+                  value={action}
+                  className="bg-white text-slate-900 dark:bg-slate-800 dark:text-slate-100"
+                >
+                  {action}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="flex items-center gap-2 rounded-md bg-white px-3 py-2 border border-slate-200 shadow-sm dark:bg-slate-800 dark:border-slate-700">
+            <span className="text-xs text-slate-500 dark:text-slate-300">
+              Limit
+            </span>
+            <select
+              value={limit}
+              onChange={(e) => setLimit(Number(e.target.value))}
+              className="bg-transparent text-sm outline-none"
+            >
+              {[25, 50, 100, 150, 200].map((value) => (
+                <option
+                  key={value}
+                  value={value}
+                  className="bg-white text-slate-900 dark:bg-slate-800 dark:text-slate-100"
+                >
+                  {value}
+                </option>
+              ))}
+            </select>
           </div>
           <button
             onClick={fetchLogs}
-            className="ml-auto inline-flex items-center gap-2 rounded-lg bg-emerald-500/10 border border-emerald-400/40 px-3 py-2 text-sm text-emerald-100 hover:bg-emerald-500/20 transition w-full sm:w-auto"
+            className="inline-flex items-center justify-center gap-2 rounded-md bg-slate-900 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-slate-800 transition dark:bg-emerald-500 dark:hover:bg-emerald-400 dark:text-slate-900"
           >
-            <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
+            <RefreshCcw
+              className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`}
+            />
             Refresh
           </button>
         </div>
+      </div>
 
-        <div className="bg-white/5 border border-white/10 rounded-xl p-4 shadow-lg shadow-black/30 space-y-3">
-          <div className="flex flex-col md:flex-row md:flex-wrap gap-3">
-            <div className="flex-1 min-w-[240px]">
-              <label className="text-xs text-slate-400 flex items-center gap-2 mb-1">
-                <Search className="h-4 w-4" /> Search
-              </label>
-              <input
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                placeholder="Filter by action, user, target, IP, metadata"
-                className="w-full rounded-lg bg-white/5 border border-white/10 px-3 py-2 text-sm placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/60"
-              />
-            </div>
-
-            <div className="min-w-[200px] md:w-60">
-              <label className="text-xs text-slate-400 mb-1 block">Action</label>
-              <select
-                value={actionFilter}
-                onChange={(e) => setActionFilter(e.target.value)}
-                className="w-full rounded-lg bg-white/5 border border-white/10 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/60"
-              >
-                <option value="">All actions</option>
-                {uniqueActions.map((action) => (
-                  <option value={action} key={action}>
-                    {action}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <div className="min-w-[160px] md:w-40">
-              <label className="text-xs text-slate-400 mb-1 block">Limit</label>
-              <select
-                value={limit}
-                onChange={(e) => setLimit(Number(e.target.value))}
-                className="w-full rounded-lg bg-white/5 border border-white/10 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/60"
-              >
-                {[20, 50, 100, 150, 200].map((option) => (
-                  <option key={option} value={option}>
-                    Last {option}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
-          {error && <p className="text-sm text-red-300">{error}</p>}
+      {error && (
+        <div className="mb-4 rounded-lg border border-red-500 bg-red-50 px-4 py-3 text-sm text-red-700 dark:bg-transparent">
+          {error}
         </div>
+      )}
 
-        {loading ? (
-          <div className="bg-white/5 border border-white/10 rounded-xl p-6 text-center text-slate-300">
+      <div className="grid gap-4 sm:grid-cols-1 md:grid-cols-2 xl:grid-cols-3">
+        {loading && (
+          <div className="col-span-full text-center opacity-60">
             Loading activity logs...
           </div>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-            {filteredLogs.map((log) => (
-              <div
-                key={log._id}
-                className="bg-white/5 border border-white/10 rounded-xl p-4 space-y-3 shadow-lg shadow-black/30 backdrop-blur-sm"
-              >
-                <div className="flex items-start justify-between gap-2">
-                  <div className="flex flex-col gap-1">
-                    <div className="inline-flex items-center gap-2 text-xs uppercase tracking-wide text-emerald-200">
-                      <Target className="h-4 w-4" />
-                      {log.action}
-                    </div>
-                    <div className="text-xs text-slate-400 flex items-center gap-1">
-                      <Clock className="h-4 w-4" />
-                      {formatDate(log.createdAt)}
-                    </div>
-                  </div>
-                  <span className="text-[11px] px-2 py-1 rounded-full bg-emerald-500/10 border border-emerald-400/30 text-emerald-100 capitalize">
-                    {log.actorRole || 'unknown'}
-                  </span>
-                </div>
-
-                <div className="space-y-1 text-sm">
-                  <p className="break-words">
-                    <span className="text-slate-400">Actor:</span>{' '}
-                    {log.actorEmail || 'Unknown'}
-                  </p>
-                  <p className="break-words">
-                    <span className="text-slate-400">Target:</span>{' '}
-                    {[log.targetCollection || 'n/a', log.targetId || '']
-                      .filter(Boolean)
-                      .join(' · ')}
-                  </p>
-                  <p className="break-words">
-                    <span className="text-slate-400">IP:</span> {log.ipAddress || 'unknown'}
-                  </p>
-                  <p className="break-words text-slate-300">
-                    <span className="text-slate-400">Location:</span> {buildLocationLabel(log)}
-                  </p>
-                  <p className="break-words text-xs text-slate-400">
-                    UA: {log.userAgent || 'unknown'}
-                  </p>
-                </div>
-
-                <div>
-                  <p className="text-xs text-slate-400 mb-1">Metadata</p>
-                  <pre className="bg-black/40 border border-white/10 rounded-lg p-3 text-xs text-emerald-100 overflow-auto max-h-32 whitespace-pre-wrap break-words">
-                    {JSON.stringify(log.metadata || {}, null, 2)}
-                  </pre>
-                </div>
-              </div>
-            ))}
-
-            {!filteredLogs.length && (
-              <div className="col-span-full bg-white/5 border border-white/10 rounded-xl p-6 text-center text-slate-300">
-                No activity logs found with current filters.
-              </div>
-            )}
+        )}
+        {!loading && filteredLogs.length === 0 && (
+          <div className="col-span-full text-center opacity-60">
+            No activity found for the selected filters.
           </div>
         )}
+
+        {filteredLogs.map((log) => (
+          <div
+            key={log._id}
+            className="rounded-xl bg-white border border-slate-200 p-4 shadow-md flex flex-col gap-3 break-words dark:bg-slate-900/50 dark:border-slate-800 dark:shadow-[0_10px_40px_rgba(0,0,0,0.35)]"
+          >
+            <div className="flex items-start justify-between gap-3">
+              <div>
+                <p className="text-[11px] uppercase tracking-[0.14em] text-amber-500 dark:text-amber-400">
+                  {log.action}
+                </p>
+                <p className="text-sm font-semibold break-words">
+                  {log.actorEmail || 'Unknown actor'}{' '}
+                  <span className="text-slate-500 dark:text-slate-400">
+                    ({log.actorRole || 'user'})
+                  </span>
+                </p>
+              </div>
+              <span className="text-xs text-slate-500 dark:text-slate-400">
+                {new Date(log.createdAt).toLocaleString()}
+              </span>
+            </div>
+
+            <div className="space-y-2 text-sm">
+              <p className="truncate">
+                <span className="text-slate-500 dark:text-slate-400">
+                  Target:
+                </span>{' '}
+                <span className="font-medium break-words">
+                  {log.targetCollection || '-'} {log.targetId || ''}
+                </span>
+              </p>
+              <p className="flex flex-wrap gap-1">
+                <span className="text-slate-500 dark:text-slate-400">IP:</span>
+                <span className="font-mono text-xs bg-slate-100 px-2 py-1 rounded-md dark:bg-slate-800 dark:text-slate-200">
+                  {log.ipAddress || 'n/a'}
+                </span>
+              </p>
+              <p className="text-xs">
+                <span className="text-slate-500 dark:text-slate-400">
+                  Location:
+                </span>{' '}
+                {renderLocation(log)}
+              </p>
+              <p className="text-xs break-words">
+                <span className="text-slate-500 dark:text-slate-400">UA:</span>{' '}
+                <span className="whitespace-pre-wrap">
+                  {log.userAgent || 'n/a'}
+                </span>
+              </p>
+            </div>
+
+            <div>
+              <p className="text-xs text-slate-500 dark:text-slate-400 mb-1">
+                Metadata
+              </p>
+              <div className="rounded-lg bg-slate-100 border border-slate-200 p-3 text-xs max-h-32 overflow-y-auto whitespace-pre-wrap break-words dark:bg-slate-800 dark:border-slate-700">
+                {log.metadata ? JSON.stringify(log.metadata, null, 2) : '-'}
+              </div>
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   );
-}
+};
+
+export default ActivityLogs;

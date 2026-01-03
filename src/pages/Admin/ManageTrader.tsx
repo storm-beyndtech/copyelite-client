@@ -20,9 +20,18 @@ const ManageTrader: React.FC = () => {
   }, []);
 
   const fetchTraders = async () => {
+    if (!token) {
+      setError('Authentication token is missing');
+      setLoading(false);
+      return;
+    }
     setLoading(true);
     try {
-      const response = await fetch(`${url}/trader`);
+      const response = await fetch(`${url}/trader`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
       if (!response.ok) {
         throw new Error('Failed to fetch traders');
