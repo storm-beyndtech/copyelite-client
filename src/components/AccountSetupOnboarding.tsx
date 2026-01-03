@@ -33,7 +33,7 @@ const AccountSetupOnboarding = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
-  const { login, user } = contextData();
+  const { login, user, token } = contextData();
   const url = import.meta.env.VITE_REACT_APP_SERVER_URL;
 
   // Form data for all sections

@@ -4,6 +4,7 @@ import RecentDemoTrades from '@/components/RecentDemoTrades';
 import { contextData } from '@/context/AuthContext';
 import DemoDropdown from '@/components/ui/DemoDropdown';
 import Alert from '@/components/ui/Alert';
+import { apiPost } from '@/utils/api';
 
 interface DropdownOption {
   value: string | number;
@@ -144,7 +145,7 @@ const PracticeTrade: FC = () => {
   const [errors, setErrors] = useState<ValidationErrors>({});
   const [successMessage, setSuccessMessage] = useState<string>('');
   const [errorMessage, setErrorMessage] = useState<string>('');
-  const { user, theme, token } = contextData();
+  const { user, theme } = contextData();
   const url = import.meta.env.VITE_REACT_APP_SERVER_URL;
 
   // Stock options
@@ -262,14 +263,7 @@ const PracticeTrade: FC = () => {
         duration: timeframe,
       };
 
-      const res = await fetch(`${url}/trades/create-demo-trade`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: token ? `Bearer ${token}` : '',
-        },
-        body: JSON.stringify(tradeData),
-      });
+      const res = await apiPost(`${url}/trades/create-demo-trade`, tradeData);
 
       const data = await res.json();
 

@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { RefreshCcw, Search, Filter } from 'lucide-react';
 import { contextData } from '@/context/AuthContext';
+import { apiGet } from '@/utils/api';
 
 interface ActivityLog {
   _id: string;
@@ -23,7 +24,7 @@ interface ActivityLog {
 }
 
 const ActivityLogs = () => {
-  const { user, token } = contextData();
+  const { user } = contextData();
   const [logs, setLogs] = useState<ActivityLog[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -34,20 +35,13 @@ const ActivityLogs = () => {
 
   const fetchLogs = async () => {
     if (!user?.isAdmin) return;
-    if (!token) {
-      setError('Authentication token is missing');
-      return;
-    }
     setLoading(true);
     setError(null);
     try {
       const params = new URLSearchParams({ limit: String(limit) });
       if (actionFilter) params.append('action', actionFilter);
-      const res = await fetch(
+      const res = await apiGet(
         `${serverUrl}/activity-logs?${params.toString()}`,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        },
       );
       const data = await res.json();
       if (!res.ok)
@@ -61,13 +55,8 @@ const ActivityLogs = () => {
   };
 
   useEffect(() => {
-    if (!token) {
-      setError('Authentication token is missing');
-      setLoading(false);
-      return;
-    }
     fetchLogs();
-  }, [actionFilter, limit, token]);
+  }, [actionFilter, limit]);
 
   const filteredLogs = useMemo(() => {
     if (!search) return logs;

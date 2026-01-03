@@ -17,7 +17,7 @@ const Sec8 = () => {
       {/* Spinning Copyelite logo in top-left */}
       <div className="absolute top-10 left-[50%] z-2 overflow-hidden w-150 h-150 -translate-x-1/2 opacity-10">
         <motion.img
-          src="https://protradercopy.com/wp-content/themes/ProTrader-Copy/images/market-transaction-animation.webp"
+          src="https://res.cloudinary.com/ddb1vjioq/image/upload/v1747727915/Adobe_Express_-_file_6_aore83.png"
           alt="Copyelite Logo"
           className="w-full h-full"
           animate={logoAnimation}
@@ -61,21 +61,21 @@ const Sec8 = () => {
           <div className="flex flex-wrap justify-center items-center gap-8 md:gap-16">
             <div className="h-8 w-24">
               <img
-                src="https://protradercopy.com/wp-content/themes/ProTrader-Copy/images/home-row4-img1.webp"
+                src="https://res.cloudinary.com/ddb1vjioq/image/upload/v1747727915/Adobe_Express_-_file_6_aore83.png"
                 alt="Trading Central"
                 className="h-full w-full object-contain"
               />
             </div>
             <div className="h-8 w-24">
               <img
-                src="https://protradercopy.com/wp-content/themes/ProTrader-Copy/images/home-row4-img3.webp"
+                src="https://res.cloudinary.com/ddb1vjioq/image/upload/v1747727915/Adobe_Express_-_file_6_aore83.png"
                 alt="oneZero"
                 className="h-full w-full object-contain"
               />
             </div>
             <div className="h-8 w-24">
               <img
-                src="https://protradercopy.com/wp-content/themes/ProTrader-Copy/images/home-row4-img4.webp"
+                src="https://res.cloudinary.com/ddb1vjioq/image/upload/v1747727915/Adobe_Express_-_file_6_aore83.png"
                 alt="ID3global"
                 className="h-full w-full object-contain"
               />

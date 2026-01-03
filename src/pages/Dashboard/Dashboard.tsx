@@ -12,11 +12,12 @@ import MiniBals from '@/components/MiniBals';
 import CopyTraderErrorModal from '@/components/CopyTraderErrorModal';
 import { useNavigate } from 'react-router-dom';
 import { Trader } from '@/types/types';
+import { apiGet, apiPut } from '@/utils/api';
 
 const url = import.meta.env.VITE_REACT_APP_SERVER_URL;
 
 export default function Dashboard() {
-  const { user, fetchUser, token } = contextData();
+  const { user, fetchUser } = contextData();
   const [traders, setTraders] = useState([]);
   const [trades, setTrades] = useState([]);
   const [copiedTraderId, setCopiedTraderId] = useState<string | null>(
@@ -36,14 +37,7 @@ export default function Dashboard() {
 
   const fetchTrades = async () => {
     try {
-      const res = await fetch(
-        `${url}/trades/user/${user._id}/trader/${user.traderId}`,
-        {
-          headers: {
-            Authorization: token ? `Bearer ${token}` : '',
-          },
-        },
-      );
+      const res = await apiGet(`${url}/trades/user/${user._id}/trader/${user.traderId}`);
       const data = await res.json();
 
       if (res.ok) {
@@ -59,11 +53,7 @@ export default function Dashboard() {
 
   const fetchTraders = async () => {
     try {
-      const res = await fetch(`${url}/trader`, {
-        headers: {
-          Authorization: token ? `Bearer ${token}` : '',
-        },
-      });
+      const res = await apiGet(`${url}/trader`);
       if (!res.ok) throw new Error('Failed to fetch traders');
       const data = await res.json();
       setTraders(data || []);
@@ -84,17 +74,10 @@ export default function Dashboard() {
         }
       }
 
-      const response = await fetch(`${url}/users/update-user-trader`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: token ? `Bearer ${token}` : '',
-        },
-        body: JSON.stringify({
-          traderId: trader._id,
-          action,
-          userId: user._id,
-        }),
+      const response = await apiPut(`${url}/users/update-user-trader`, {
+        traderId: trader._id,
+        action,
+        userId: user._id,
       });
 
       if (response.ok) {

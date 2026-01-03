@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import PageLoader from '@/components/PageLoader';
-import { contextData } from '@/context/AuthContext';
+import { apiGet } from '@/utils/api';
 import SendMailModal from '@/components/SendMailModal';
+import { contextData } from '@/context/AuthContext';
 
 type User = {
   _id: string;
@@ -12,12 +13,8 @@ type User = {
   withdraw: number;
 };
 
-type Admin = {
-  _id: string;
-};
-
 export default function SendMail() {
-  const { user: admin, token } = contextData() as { user: Admin; token: string };
+  const { user: admin } = contextData();
   const [users, setUsers] = useState<User[] | null>(null);
   const [filteredUsers, setFilteredUsers] = useState<User[] | null>(null);
   const [selectedUsers, setSelectedUsers] = useState<string[]>([]); // Using email instead of _id
@@ -28,17 +25,12 @@ export default function SendMail() {
 
   const fetchUsers = async () => {
     try {
-      const res = await fetch(`${url}/users`, {
-        headers: {
-          Authorization: token ? `Bearer ${token}` : '',
-        },
-      });
+      const res = await apiGet(`${url}/users`);
       const data = await res.json();
 
       if (res.ok) {
-        const filteredData = data.filter(
-          (user: User) => user._id !== admin._id,
-        );
+        // Filter out admin user from the list
+        const filteredData = data.filter((user: User) => user._id !== admin._id);
         setUsers(filteredData);
         setFilteredUsers(filteredData);
       } else {

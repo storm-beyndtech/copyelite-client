@@ -2,7 +2,7 @@ import { Route, Routes, Navigate, useLocation } from 'react-router-dom';
 
 //importing pages
 import Home from './pages/Home';
-import { Helmet } from 'react-helmet';
+import { Helmet } from 'react-helmet-async';
 import PageLoader from './components/PageLoader';
 import { contextData } from './context/AuthContext';
 import Register from './pages/Auth/Register';
@@ -88,7 +88,8 @@ function App() {
     location.pathname.includes('/admin') ||
     location.pathname.includes('/login') ||
     location.pathname.includes('/register') ||
-    location.pathname.includes('/password-reset');
+    location.pathname.includes('/password-reset') ||
+    location.pathname.includes('/account-setup');
   const { fetching, user, fetchUser, token } = contextData();
   const [assetsLoaded, setAssetsLoaded] = useState(false);
   const [traders, setTraders] = useState([]);

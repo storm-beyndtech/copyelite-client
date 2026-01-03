@@ -9,7 +9,7 @@ import {
   RefreshCw,
   Shield,
 } from 'lucide-react';
-import { contextData } from '@/context/AuthContext';
+import { apiGet, apiPut } from '@/utils/api';
 
 type KycSubmission = {
   _id: string;
@@ -24,7 +24,6 @@ type KycSubmission = {
 };
 
 export default function KycApproval() {
-  const { token } = contextData();
   const url = import.meta.env.VITE_REACT_APP_SERVER_URL;
   const [kycSubmissions, setKycSubmissions] = useState<KycSubmission[] | null>(
     null,
@@ -47,11 +46,7 @@ export default function KycApproval() {
     const fetchKycSubmissions = async () => {
       try {
         setFetching(true);
-        const res = await fetch(`${url}/kycs`, {
-          headers: {
-            Authorization: token ? `Bearer ${token}` : '',
-          },
-        });
+        const res = await apiGet(`${url}/kycs`);
         const data = await res.json();
         setKycSubmissions(data || []);
         setFilteredSubmissions(data || []);
@@ -140,14 +135,7 @@ export default function KycApproval() {
     email: string,
   ) => {
     try {
-      const res = await fetch(`${url}/kycs`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: token ? `Bearer ${token}` : '',
-        },
-        body: JSON.stringify({ email, kyc: submissionId }),
-      });
+      const res = await apiPut(`${url}/kycs`, { email, kyc: submissionId });
 
       if (!res.ok) {
         const errorData = await res.json();
@@ -188,16 +176,9 @@ export default function KycApproval() {
           );
           if (!submission) return;
 
-          const res = await fetch(`${url}/kycs`, {
-            method: 'PUT',
-            headers: {
-              'Content-Type': 'application/json',
-              Authorization: token ? `Bearer ${token}` : '',
-            },
-            body: JSON.stringify({
-              email: submission.email,
-              kyc: submissionId,
-            }),
+          const res = await apiPut(`${url}/kycs`, {
+            email: submission.email,
+            kyc: submissionId,
           });
 
           if (!res.ok) {

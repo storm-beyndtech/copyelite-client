@@ -37,6 +37,8 @@ const Login: React.FC = () => {
     'idle' | 'success' | 'error'
   >('idle');
   const [showPassword, setShowPassword] = useState(false);
+  const isLocalhost =
+    typeof window !== 'undefined' && window.location.hostname === 'localhost';
   const url = import.meta.env.VITE_REACT_APP_SERVER_URL;
   const navigate = useNavigate();
 
@@ -203,12 +205,18 @@ const Login: React.FC = () => {
             Access your CopyElite account
           </p>
 
-          <GoogleLogin
-            onSuccess={onSuccessHandler}
-            onError={() => {
-              setError('Google login failed');
-            }}
-          />
+          {!isLocalhost ? (
+            <GoogleLogin
+              onSuccess={onSuccessHandler}
+              onError={() => {
+                setError('Google login failed');
+              }}
+            />
+          ) : (
+            <div className="text-xs text-gray-500">
+              Google login disabled on localhost
+            </div>
+          )}
 
           <div className="flex items-center my-5">
             <hr className="flex-grow border-t border-gray-300 dark:border-gray-700" />

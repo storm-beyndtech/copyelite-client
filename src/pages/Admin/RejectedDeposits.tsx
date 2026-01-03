@@ -1,9 +1,8 @@
 import ManageDepositModal from "@/components/ManageDepositModal";
 import { useEffect, useState } from "react";
-import { contextData } from "@/context/AuthContext";
+import { apiGet } from '@/utils/api';
 
 export default function RejectedDeposits() {
-  const { token } = contextData();
   const [deposits, setDeposits] = useState<ITransaction[]>([])
   const [singleDeposit, setSingleDeposit] = useState<null|ITransaction>(null)
   const [toggle, setToggle] = useState(false);
@@ -23,11 +22,7 @@ export default function RejectedDeposits() {
   
   const fetchDeposits = async () => {
     try {
-      const res = await fetch(`${url}/deposits`, {
-        headers: {
-          Authorization: token ? `Bearer ${token}` : '',
-        },
-      });
+      const res = await apiGet(`${url}/deposits`);
       const data = await res.json();
 
       if (res.ok) setDeposits(data.filter((dep:any) => dep.status === "failed"))

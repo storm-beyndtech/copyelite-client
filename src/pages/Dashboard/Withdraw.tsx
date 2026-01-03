@@ -2,6 +2,7 @@ import { contextData } from '@/context/AuthContext';
 import { useEffect, useState } from 'react';
 import PageLoader from '@/components/PageLoader';
 import Alert from '@/components/ui/Alert';
+import { apiPost, apiGet } from '@/utils/api';
 
 interface Coin {
   name: string;
@@ -22,7 +23,7 @@ export default function Withdraw() {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState<any>(false);
   const url = import.meta.env.VITE_REACT_APP_SERVER_URL;
-  const { user, token } = contextData();
+  const { user } = contextData();
 
   // Get withdrawal limits from user object
   const minWithdrawal = user.minWithdrawal;
@@ -32,7 +33,7 @@ export default function Withdraw() {
   const fetchCoins = async () => {
     setFetching(true);
     try {
-      const res = await fetch(`${url}/utils`);
+      const res = await apiGet(`${url}/utils`);
       const data = await res.json();
 
       if (res.ok) {
@@ -84,20 +85,13 @@ export default function Withdraw() {
     setSuccess(false);
 
     try {
-      const res = await fetch(`${url}/withdrawals`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: token ? `Bearer ${token}` : '',
-        },
-        body: JSON.stringify({
-          id: user._id,
-          amount,
-          convertedAmount,
-          coinName: coin?.name,
-          address,
-          network,
-        }),
+      const res = await apiPost(`${url}/withdrawals`, {
+        id: user._id,
+        amount,
+        convertedAmount,
+        coinName: coin?.name,
+        address,
+        network,
       });
 
       const data = await res.json();

@@ -3,9 +3,10 @@ import PageLoader from '@/components/PageLoader';
 import { contextData } from '@/context/AuthContext';
 import { useEffect, useState } from 'react';
 import { Search, Users, RefreshCw } from 'lucide-react';
+import { apiGet } from '@/utils/api';
 
 export default function ActiveUsers() {
-  const { user: admin, token } = contextData();
+  const { user: admin } = contextData();
   const [users, setUsers] = useState<any>(null);
   const [filteredUsers, setFilteredUsers] = useState<any>(null);
   const [userData, setUserData] = useState(null);
@@ -18,11 +19,7 @@ export default function ActiveUsers() {
 
   const fetchUsers = async () => {
     try {
-      const res = await fetch(`${url}/users`, {
-        headers: {
-          Authorization: token ? `Bearer ${token}` : '',
-        },
-      });
+      const res = await apiGet(`${url}/users`);
       const data = await res.json();
 
       if (res.ok) {

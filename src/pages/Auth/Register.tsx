@@ -42,6 +42,8 @@ const Register: React.FC = () => {
     'idle' | 'success' | 'error'
   >('idle');
   const [showPassword, setShowPassword] = useState(false);
+  const isLocalhost =
+    typeof window !== 'undefined' && window.location.hostname === 'localhost';
   const url = import.meta.env.VITE_REACT_APP_SERVER_URL;
   const navigate = useNavigate();
 
@@ -80,6 +82,10 @@ const Register: React.FC = () => {
     if (!validateForm()) return;
 
     setIsSubmitting(true);
+    const signupData = {
+      email: formData.email,
+      username: formData.username,
+    };
     const bodyData = {
       email: formData.email,
       username: formData.username,
@@ -93,7 +99,7 @@ const Register: React.FC = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(bodyData),
+        body: JSON.stringify(signupData),
       });
 
       if (!response.ok) {
@@ -206,12 +212,18 @@ const Register: React.FC = () => {
             Join the community and unleash endless possibilities
           </p>
 
-          <GoogleLogin
-            onSuccess={onSuccessHandler}
-            onError={() => {
-              setSubmitStatus('error');
-            }}
-          />
+          {!isLocalhost ? (
+            <GoogleLogin
+              onSuccess={onSuccessHandler}
+              onError={() => {
+                setSubmitStatus('error');
+              }}
+            />
+          ) : (
+            <div className="text-xs text-gray-500">
+              Google login disabled on localhost
+            </div>
+          )}
 
           <div className="flex items-center my-5">
             <hr className="flex-grow border-t border-gray-300 dark:border-gray-700" />

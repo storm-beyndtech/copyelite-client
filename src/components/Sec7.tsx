@@ -25,7 +25,7 @@ const Sec7 = () => {
               </div>
 
               <img
-                src="https://protradercopy.com/local/templates/weltrade.main/components/wt/static.content/home/wt/content.detail/default/img/security.webp"
+                src="https://res.cloudinary.com/ddb1vjioq/image/upload/v1747727915/Adobe_Express_-_file_6_aore83.png"
                 alt="Safety and Security"
                 className="w-auto h-full object-contain"
               />
@@ -49,7 +49,7 @@ const Sec7 = () => {
               </div>
 
               <img
-                src="https://protradercopy.com/local/templates/weltrade.main/components/wt/static.content/home/wt/content.detail/default/img/withdrawal.webp"
+                src="https://res.cloudinary.com/ddb1vjioq/image/upload/v1747727915/Adobe_Express_-_file_6_aore83.png"
                 alt="Fast Withdrawal"
                 className="w-full object-contain"
               />
@@ -63,7 +63,7 @@ const Sec7 = () => {
           >
             <div className="flex flex-col gap-5 h-full p-6">
               <img
-                src="https://protradercopy.com/local/templates/weltrade.main/components/wt/static.content/home/wt/content.detail/default/img/partner.webp"
+                src="https://res.cloudinary.com/ddb1vjioq/image/upload/v1747727915/Adobe_Express_-_file_6_aore83.png"
                 alt="Multi-Level Partner Program"
                 className="w-full object-contain"
               />
@@ -97,7 +97,7 @@ const Sec7 = () => {
               </div>
 
               <img
-                src="https://protradercopy.com/local/templates/weltrade.main/components/wt/static.content/home/wt/content.detail/default/img/verification.webp"
+                src="https://res.cloudinary.com/ddb1vjioq/image/upload/v1747727915/Adobe_Express_-_file_6_aore83.png"
                 alt="Fast Verification"
                 className="w-auto h-full object-contain mr-[-50px]"
               />
@@ -128,7 +128,7 @@ const Sec7 = () => {
               </div>
 
               <img
-                src="https://protradercopy.com/local/templates/weltrade.main/components/wt/static.content/home/wt/content.detail/default/img/promotions.webp"
+                src="https://res.cloudinary.com/ddb1vjioq/image/upload/v1747727915/Adobe_Express_-_file_6_aore83.png"
                 alt="Promotions"
                 className="w-1/2 h-full object-contain"
               />

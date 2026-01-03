@@ -145,28 +145,28 @@ export const bonds = {
       name: 'Euro-Bund Futures',
       exchange: 'Euro-Bund Futures',
       image:
-        'https://protradercopy.com/wp-content/themes/ProTrader-Copy/images/popular-bonds-img01.webp',
+        'https://res.cloudinary.com/ddb1vjioq/image/upload/v1747727915/Adobe_Express_-_file_6_aore83.png',
     },
     {
       symbol: 'FLG',
       name: 'Euronext',
       exchange: 'Euronext',
       image:
-        'https://protradercopy.com/wp-content/themes/ProTrader-Copy/images/popular-bonds-img2.webp',
+        'https://res.cloudinary.com/ddb1vjioq/image/upload/v1747727915/Adobe_Express_-_file_6_aore83.png',
     },
     {
       symbol: 'TY',
       name: 'CBOT',
       exchange: 'CBOT',
       image:
-        'https://protradercopy.com/wp-content/themes/ProTrader-Copy/images/popular-bonds-img3.webp',
+        'https://res.cloudinary.com/ddb1vjioq/image/upload/v1747727915/Adobe_Express_-_file_6_aore83.png',
     },
     {
       symbol: 'FEI',
       name: 'ICE',
       exchange: 'ICE',
       image:
-        'https://protradercopy.com/wp-content/themes/ProTrader-Copy/images/popular-bonds-img4.webp',
+        'https://res.cloudinary.com/ddb1vjioq/image/upload/v1747727915/Adobe_Express_-_file_6_aore83.png',
     },
   ],
 };
@@ -180,28 +180,28 @@ export const shareCFDs = {
       name: 'Apple',
       exchange: 'Apple',
       image:
-        'https://protradercopy.com/wp-content/themes/ProTrader-Copy/images/popular-shares-icon1.webp',
+        'https://res.cloudinary.com/ddb1vjioq/image/upload/v1747727915/Adobe_Express_-_file_6_aore83.png',
     },
     {
       symbol: 'GOOGL',
       name: 'Google',
       exchange: 'Google',
       image:
-        'https://protradercopy.com/wp-content/themes/ProTrader-Copy/images/popular-shares-icon2.webp',
+        'https://res.cloudinary.com/ddb1vjioq/image/upload/v1747727915/Adobe_Express_-_file_6_aore83.png',
     },
     {
       symbol: 'META',
       name: 'Meta',
       exchange: 'Meta',
       image:
-        'https://protradercopy.com/wp-content/themes/ProTrader-Copy/images/popular-shares-icon3.webp',
+        'https://res.cloudinary.com/ddb1vjioq/image/upload/v1747727915/Adobe_Express_-_file_6_aore83.png',
     },
     {
       symbol: 'NFLX',
       name: 'Netflix',
       exchange: 'Netflix',
       image:
-        'https://protradercopy.com/wp-content/themes/ProTrader-Copy/images/popular-shares-icon4.webp',
+        'https://res.cloudinary.com/ddb1vjioq/image/upload/v1747727915/Adobe_Express_-_file_6_aore83.png',
     },
   ],
 };
@@ -215,28 +215,28 @@ export const forex = {
       name: 'EUR/USD',
       exchange: 'EUR / USD',
       image:
-        'https://protradercopy.com/wp-content/themes/ProTrader-Copy/images/popular-forex-icon1.webp',
+        'https://res.cloudinary.com/ddb1vjioq/image/upload/v1747727915/Adobe_Express_-_file_6_aore83.png',
     },
     {
       symbol: 'AUDUSD',
       name: 'AUD/USD',
       exchange: 'AUD / USD',
       image:
-        'https://protradercopy.com/wp-content/themes/ProTrader-Copy/images/popular-forex-icon2.webp',
+        'https://res.cloudinary.com/ddb1vjioq/image/upload/v1747727915/Adobe_Express_-_file_6_aore83.png',
     },
     {
       symbol: 'GBPUSD',
       name: 'GBP/USD',
       exchange: 'GBP / USD',
       image:
-        'https://protradercopy.com/wp-content/themes/ProTrader-Copy/images/popular-forex-icon3.webp',
+        'https://res.cloudinary.com/ddb1vjioq/image/upload/v1747727915/Adobe_Express_-_file_6_aore83.png',
     },
     {
       symbol: 'USDJPY',
       name: 'USD/JPY',
       exchange: 'USD / JPY',
       image:
-        'https://protradercopy.com/wp-content/themes/ProTrader-Copy/images/popular-forex-icon4.webp',
+        'https://res.cloudinary.com/ddb1vjioq/image/upload/v1747727915/Adobe_Express_-_file_6_aore83.png',
     },
   ],
 };
@@ -250,28 +250,28 @@ export const commodity = {
       name: 'Gold',
       exchange: 'Gold',
       image:
-        'https://protradercopy.com/wp-content/themes/ProTrader-Copy/images/popular-commodities-icon1%EF%B9%96v=1.webp',
+        'https://res.cloudinary.com/ddb1vjioq/image/upload/v1747727915/Adobe_Express_-_file_6_aore83.png',
     },
     {
       symbol: 'CL-OIL',
       name: 'Oil',
       exchange: 'Oil',
       image:
-        'https://protradercopy.com/wp-content/themes/ProTrader-Copy/images/popular-commodities-icon2%EF%B9%96v=1.webp',
+        'https://res.cloudinary.com/ddb1vjioq/image/upload/v1747727915/Adobe_Express_-_file_6_aore83.png',
     },
     {
       symbol: 'XAGUSD',
       name: 'Silver',
       exchange: 'Silver',
       image:
-        'https://protradercopy.com/wp-content/themes/ProTrader-Copy/images/popular-commodities-icon3%EF%B9%96v=1.webp',
+        'https://res.cloudinary.com/ddb1vjioq/image/upload/v1747727915/Adobe_Express_-_file_6_aore83.png',
     },
     {
       symbol: 'NATGAS',
       name: 'Natural Gas',
       exchange: 'Natural Gas',
       image:
-        'https://protradercopy.com/wp-content/themes/ProTrader-Copy/images/popular-commodities-icon4%EF%B9%96v=1.webp',
+        'https://res.cloudinary.com/ddb1vjioq/image/upload/v1747727915/Adobe_Express_-_file_6_aore83.png',
     },
   ],
 };
@@ -316,28 +316,28 @@ export const indices = {
       name: 'S&P 500',
       exchange: 'S&P 500',
       image:
-        'https://protradercopy.com/wp-content/themes/ProTrader-Copy/images/popular-indices-icon1.webp',
+        'https://res.cloudinary.com/ddb1vjioq/image/upload/v1747727915/Adobe_Express_-_file_6_aore83.png',
     },
     {
       symbol: 'NASDAQ',
       name: 'NASDAQ',
       exchange: 'NASDAQ',
       image:
-        'https://protradercopy.com/wp-content/themes/ProTrader-Copy/images/popular-indices-icon1.webp',
+        'https://res.cloudinary.com/ddb1vjioq/image/upload/v1747727915/Adobe_Express_-_file_6_aore83.png',
     },
     {
       symbol: 'UK100',
       name: 'FTSE 100',
       exchange: 'FTSE 100',
       image:
-        'https://protradercopy.com/wp-content/themes/ProTrader-Copy/images/popular-indices-icon3.webp',
+        'https://res.cloudinary.com/ddb1vjioq/image/upload/v1747727915/Adobe_Express_-_file_6_aore83.png',
     },
     {
       symbol: 'GER40',
       name: 'DAX',
       exchange: 'DAX',
       image:
-        'https://protradercopy.com/wp-content/themes/ProTrader-Copy/images/popular-indices-icon2.webp',
+        'https://res.cloudinary.com/ddb1vjioq/image/upload/v1747727915/Adobe_Express_-_file_6_aore83.png',
     },
   ],
 };
@@ -351,28 +351,28 @@ export const etfs = {
       name: 'SPDR S&P 500',
       exchange: 'SPDR S&P 500',
       image:
-        'https://protradercopy.com/wp-content/themes/ProTrader-Copy/images/popular-etfs-icon1.webp',
+        'https://res.cloudinary.com/ddb1vjioq/image/upload/v1747727915/Adobe_Express_-_file_6_aore83.png',
     },
     {
       symbol: 'QQQ',
       name: 'Invesco QQQ',
       exchange: 'Invesco QQQ',
       image:
-        'https://protradercopy.com/wp-content/themes/ProTrader-Copy/images/popular-etfs-icon2.webp',
+        'https://res.cloudinary.com/ddb1vjioq/image/upload/v1747727915/Adobe_Express_-_file_6_aore83.png',
     },
     {
       symbol: 'GLD',
       name: 'SPDR Gold',
       exchange: 'SPDR Gold',
       image:
-        'https://protradercopy.com/wp-content/themes/ProTrader-Copy/images/popular-etfs-icon3.webp',
+        'https://res.cloudinary.com/ddb1vjioq/image/upload/v1747727915/Adobe_Express_-_file_6_aore83.png',
     },
     {
       symbol: 'VTI',
       name: 'Vanguard Total',
       exchange: 'Vanguard Total',
       image:
-        'https://protradercopy.com/wp-content/themes/ProTrader-Copy/images/popular-etfs-icon4.webp',
+        'https://res.cloudinary.com/ddb1vjioq/image/upload/v1747727915/Adobe_Express_-_file_6_aore83.png',
     },
   ],
 };

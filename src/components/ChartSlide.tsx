@@ -2,8 +2,11 @@ import { useEffect, useRef, memo } from 'react';
 
 function ChartSlide() {
   const container = useRef<HTMLDivElement>(null);
+  const initialized = useRef(false);
 
   useEffect(() => {
+    if (initialized.current || !container.current) return;
+
     const script = document.createElement("script");
     script.src = "https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js";
     script.type = "text/javascript";
@@ -58,10 +61,9 @@ function ChartSlide() {
       "locale": "en"
     }`;
   
-    if (container.current) {
-      container.current.innerHTML = "";
-      container.current.appendChild(script);
-    }
+    // Append the TradingView script after the widget placeholder is in the DOM
+    container.current.appendChild(script);
+    initialized.current = true;
   }, []);  
 
   return (

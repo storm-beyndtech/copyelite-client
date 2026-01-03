@@ -4,10 +4,10 @@ import 'slick-carousel/slick/slick-theme.css';
 import phoneBg from '../assets/phone-mockup-bg.png';
 
 const sliderImages = [
-  'https://protradercopy.com/wp-content/themes/ProTrader-Copy/images/copytrader-row2-img01.webp',
-  'https://protradercopy.com/wp-content/themes/ProTrader-Copy/images/copytrader-row2-img02.webp',
-  'https://protradercopy.com/wp-content/themes/ProTrader-Copy/images/copytrader-row2-img03.webp',
-  'https://protradercopy.com/wp-content/themes/ProTrader-Copy/images/copytrader-row2-img04.webp',
+  'https://res.cloudinary.com/ddb1vjioq/image/upload/v1747727915/Adobe_Express_-_file_6_aore83.png',
+  'https://res.cloudinary.com/ddb1vjioq/image/upload/v1747727915/Adobe_Express_-_file_6_aore83.png',
+  'https://res.cloudinary.com/ddb1vjioq/image/upload/v1747727915/Adobe_Express_-_file_6_aore83.png',
+  'https://res.cloudinary.com/ddb1vjioq/image/upload/v1747727915/Adobe_Express_-_file_6_aore83.png',
 ];
 
 const Sec3 = () => {

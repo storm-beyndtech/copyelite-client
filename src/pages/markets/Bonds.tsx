@@ -12,7 +12,7 @@ export default function Bonds() {
       <Hero2
         title="Bonds"
         subtitle="Start trading futures of bond markets"
-        backgroundUrl="https://protradercopy.com/wp-content/themes/ProTrader-Copy/images/bonds-banner-bg1.webp"
+        backgroundUrl="https://res.cloudinary.com/ddb1vjioq/image/upload/v1747727915/Adobe_Express_-_file_6_aore83.png"
       />
       <Sec7 />
       <PopularMarkets type="bonds" />

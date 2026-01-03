@@ -27,8 +27,8 @@ interface FeatureItem {
 
 // Slider images from the reference component
 const sliderImages = [
-  'https://protradercopy.com/wp-content/themes/ProTrader-Copy/images/home-row9-phone1%EF%B9%96v=6.webp',
-  'https://protradercopy.com/wp-content/themes/ProTrader-Copy/images/home-row9-phone3%EF%B9%96v=5.webp',
+  'https://res.cloudinary.com/ddb1vjioq/image/upload/v1747727915/Adobe_Express_-_file_6_aore83.png',
+  'https://res.cloudinary.com/ddb1vjioq/image/upload/v1747727915/Adobe_Express_-_file_6_aore83.png',
 ];
 
 const Sec9 = () => {

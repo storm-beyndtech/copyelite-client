@@ -1,10 +1,9 @@
 import ManageWithdrawalModal from '@/components/ManageWithdrawalModal';
 import { useEffect, useState } from 'react';
 import { Search, CheckCircle2, RefreshCw, Wallet } from 'lucide-react';
-import { contextData } from '@/context/AuthContext';
+import { apiGet } from '@/utils/api';
 
 export default function ApprovedWithdrawals() {
-  const { token } = contextData();
   const [withdrawals, setWithdrawals] = useState<ITransaction[]>([]);
   const [filteredWithdrawals, setFilteredWithdrawals] = useState<
     ITransaction[]
@@ -31,11 +30,7 @@ export default function ApprovedWithdrawals() {
   const fetchWithdrawals = async () => {
     try {
       setLoading(true);
-      const res = await fetch(`${url}/withdrawals`, {
-        headers: {
-          Authorization: token ? `Bearer ${token}` : '',
-        },
-      });
+      const res = await apiGet(`${url}/withdrawals`);
       const data = await res.json();
 
       if (res.ok) {
