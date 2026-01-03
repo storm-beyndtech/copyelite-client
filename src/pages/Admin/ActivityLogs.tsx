@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { RefreshCw, Search, Shield, Target, MapPin, Clock } from 'lucide-react';
+import { RefreshCw, Search, Shield, Target, Clock } from 'lucide-react';
 import { contextData } from '@/context/AuthContext';
 
 type ActivityLog = {
