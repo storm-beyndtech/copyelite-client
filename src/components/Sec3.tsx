@@ -2,13 +2,12 @@ import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import phoneBg from '../assets/phone-mockup-bg.png';
+import phoneScreen1 from '../assets/PhoneSlides/copytrader-row2-img01.webp';
+import phoneScreen2 from '../assets/PhoneSlides/copytrader-row2-img02.webp';
+import phoneScreen3 from '../assets/PhoneSlides/copytrader-row2-img03.webp';
+import phoneScreen4 from '../assets/PhoneSlides/copytrader-row2-img04.webp';
 
-const sliderImages = [
-  'https://res.cloudinary.com/ddb1vjioq/image/upload/v1747727915/Adobe_Express_-_file_6_aore83.png',
-  'https://res.cloudinary.com/ddb1vjioq/image/upload/v1747727915/Adobe_Express_-_file_6_aore83.png',
-  'https://res.cloudinary.com/ddb1vjioq/image/upload/v1747727915/Adobe_Express_-_file_6_aore83.png',
-  'https://res.cloudinary.com/ddb1vjioq/image/upload/v1747727915/Adobe_Express_-_file_6_aore83.png',
-];
+const sliderImages = [phoneScreen1, phoneScreen2, phoneScreen3, phoneScreen4];
 
 const Sec3 = () => {
   const settings = {
@@ -23,9 +22,14 @@ const Sec3 = () => {
 
   return (
     <>
-      <section className="relative text-white py-40 px-4 sm:px-8 lg:px-20 overflow-hidden">
+      <section
+        className="relative text-white py-40 px-4 sm:px-8 lg:px-20 overflow-hidden"
+        // style={{
+        //   backgroundImage: 'radial-gradient(circle, #01a7d3 0%)',
+        // }}
+      >
         <div className="absolute inset-0 flex justify-center items-center z-0">
-          <div className="w-[200px] h-[200px] bg-brandblue rounded-full blur-[100px]"></div>
+          <div className="w-[440px] h-[440px] bg-[#01a7d3] rounded-full blur-[100px]"></div>
         </div>
         <div className="max-ctn relative flex flex-col lg:flex-row justify-between items-center text-center lg:text-left gap-y-16">
           {/* LEFT TEXT */}

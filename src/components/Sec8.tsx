@@ -1,5 +1,8 @@
 import { motion } from 'framer-motion';
 import { AnimatedSection } from './ui/animated-section';
+import partnerLogo1 from '../assets/Partners/home-row4-img1.webp';
+import partnerLogo2 from '../assets/Partners/home-row4-img3.webp';
+import partnerLogo3 from '../assets/Partners/home-row4-img4.webp';
 
 // Main component
 const Sec8 = () => {
@@ -54,28 +57,28 @@ const Sec8 = () => {
         </AnimatedSection>
 
         {/* Partners Section */}
-        <AnimatedSection>
+        <AnimatedSection className="mb-16">
           <div className="text-center mb-8">
             <h3 className="text-lg font-medium text-cyan-400">OUR PARTNERS</h3>
           </div>
           <div className="flex flex-wrap justify-center items-center gap-8 md:gap-16">
             <div className="h-8 w-24">
               <img
-                src="https://res.cloudinary.com/ddb1vjioq/image/upload/v1747727915/Adobe_Express_-_file_6_aore83.png"
+                src={partnerLogo1}
                 alt="Trading Central"
                 className="h-full w-full object-contain"
               />
             </div>
             <div className="h-8 w-24">
               <img
-                src="https://res.cloudinary.com/ddb1vjioq/image/upload/v1747727915/Adobe_Express_-_file_6_aore83.png"
+                src={partnerLogo2}
                 alt="oneZero"
                 className="h-full w-full object-contain"
               />
             </div>
             <div className="h-8 w-24">
               <img
-                src="https://res.cloudinary.com/ddb1vjioq/image/upload/v1747727915/Adobe_Express_-_file_6_aore83.png"
+                src={partnerLogo3}
                 alt="ID3global"
                 className="h-full w-full object-contain"
               />

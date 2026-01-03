@@ -1,11 +1,22 @@
 import { Link } from 'react-router-dom';
 import { AnimatedSection } from './ui/animated-section';
+import security from '../assets/Bento/security.webp';
+import partner from '../assets/Bento/partner.webp';
+import promotions from '../assets/Bento/promotions.webp';
+import verification from '../assets/Bento/verification.webp';
+import withdrawal from '../assets/Bento/withdrawal.webp';
 
 // Main Features Component
 const Sec7 = () => {
   return (
     <div className="bg-bodydark py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-5xl mx-auto">
+        <AnimatedSection>
+          <h2 className="text-4xl font-bold text-center mb-12 text-cyan-400">
+            Other features at your service
+          </h2>
+        </AnimatedSection>
+
         <div className="grid grid-cols-8 gap-6">
           {/* Safety and Security */}
           <AnimatedSection
@@ -25,7 +36,7 @@ const Sec7 = () => {
               </div>
 
               <img
-                src="https://res.cloudinary.com/ddb1vjioq/image/upload/v1747727915/Adobe_Express_-_file_6_aore83.png"
+                src={security}
                 alt="Safety and Security"
                 className="w-auto h-full object-contain"
               />
@@ -49,7 +60,7 @@ const Sec7 = () => {
               </div>
 
               <img
-                src="https://res.cloudinary.com/ddb1vjioq/image/upload/v1747727915/Adobe_Express_-_file_6_aore83.png"
+                src={withdrawal}
                 alt="Fast Withdrawal"
                 className="w-full object-contain"
               />
@@ -63,7 +74,7 @@ const Sec7 = () => {
           >
             <div className="flex flex-col gap-5 h-full p-6">
               <img
-                src="https://res.cloudinary.com/ddb1vjioq/image/upload/v1747727915/Adobe_Express_-_file_6_aore83.png"
+                src={partner}
                 alt="Multi-Level Partner Program"
                 className="w-full object-contain"
               />
@@ -97,7 +108,7 @@ const Sec7 = () => {
               </div>
 
               <img
-                src="https://res.cloudinary.com/ddb1vjioq/image/upload/v1747727915/Adobe_Express_-_file_6_aore83.png"
+                src={verification}
                 alt="Fast Verification"
                 className="w-auto h-full object-contain mr-[-50px]"
               />
@@ -119,7 +130,6 @@ const Sec7 = () => {
                   designed to give you the best value and enhance your trading
                   experience.
                 </p>
-
                 <Link to="/register" className="block">
                   <button className="bg-white text-gray-900 text-sm font-bold py-2 px-7 hover:bg-gray-100 transition-colors">
                     Open Account
@@ -128,7 +138,7 @@ const Sec7 = () => {
               </div>
 
               <img
-                src="https://res.cloudinary.com/ddb1vjioq/image/upload/v1747727915/Adobe_Express_-_file_6_aore83.png"
+                src={promotions}
                 alt="Promotions"
                 className="w-1/2 h-full object-contain"
               />
