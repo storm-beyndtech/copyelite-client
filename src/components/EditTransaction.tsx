@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import Alert from './ui/Alert';
+import { contextData } from '@/context/AuthContext';
 
 interface ITransactionData {
   amountInUSD: number;
@@ -18,6 +19,7 @@ export default function EditTransaction({
   ToggleModal,
   refetch,
 }: ITransactionData) {
+  const { token } = contextData();
   const [amount, setAmount] = useState(0);
   const [amountInCrypto, setAmountInCrypto] = useState(0);
   const [error, setError] = useState<string | null>(null);
@@ -39,7 +41,10 @@ export default function EditTransaction({
       setLoading(true);
       const res = await fetch(`${url}/transactions/${id}`, {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: token ? `Bearer ${token}` : '',
+        },
         body: JSON.stringify({ amount, convertedAmount: amountInCrypto }),
       });
 

@@ -7,7 +7,7 @@ export async function sendRequest(
 	const url = `${import.meta.env.VITE_REACT_APP_SERVER_URL}${endpoint}`;
 
 	// Retrieve the token from localStorage
-	const token = localStorage.getItem("authToken");
+	const token = localStorage.getItem("token");
 
 	let options: RequestInit = {
 		method,

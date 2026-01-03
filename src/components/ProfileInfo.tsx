@@ -21,10 +21,14 @@ interface ValidationErrors {
 const url = import.meta.env.VITE_REACT_APP_SERVER_URL;
 
 // Mock API functions - replace with your actual API calls
-const fetchProfile = async (user: any) => {
+const fetchProfile = async (user: any, token?: string) => {
   // let profileData: FormData;
   try {
-    const res = await fetch(`${url}/users/${user._id}`);
+    const res = await fetch(`${url}/users/${user._id}`, {
+      headers: {
+        Authorization: token ? `Bearer ${token}` : '',
+      },
+    });
     const resData = await res.json();
 
     if (!res.ok) {
@@ -37,10 +41,13 @@ const fetchProfile = async (user: any) => {
   }
 };
 
-const updateProfile = async (data: FormData): Promise<void> => {
+const updateProfile = async (data: FormData, token?: string): Promise<void> => {
   try {
     const response = await fetch(`${url}/users/update-profile`, {
       method: 'PUT',
+      headers: {
+        Authorization: token ? `Bearer ${token}` : '',
+      },
       body: data as any,
     });
 
@@ -54,7 +61,7 @@ const updateProfile = async (data: FormData): Promise<void> => {
 };
 
 export default function ProfileInfo() {
-  const { user } = contextData();
+  const { user, token } = contextData();
   const [loading, setLoading] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [errors, setErrors] = useState<ValidationErrors>({});
@@ -75,7 +82,7 @@ export default function ProfileInfo() {
     const loadProfile = async () => {
       setLoading(true);
       try {
-        const data = await fetchProfile(user);
+        const data = await fetchProfile(user, token);
         setFormData(data);
       } catch (error) {
         setErrors({ general: 'Failed to load profile data' });
@@ -195,7 +202,7 @@ export default function ProfileInfo() {
       }
 
       // Call your API
-      await updateProfile(formPayload as any);
+      await updateProfile(formPayload as any, token);
 
       setSuccessMessage('Profile updated successfully');
     } catch (error: any) {

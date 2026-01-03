@@ -9,6 +9,7 @@ import {
   RefreshCw,
   Shield,
 } from 'lucide-react';
+import { contextData } from '@/context/AuthContext';
 
 type KycSubmission = {
   _id: string;
@@ -23,6 +24,7 @@ type KycSubmission = {
 };
 
 export default function KycApproval() {
+  const { token } = contextData();
   const url = import.meta.env.VITE_REACT_APP_SERVER_URL;
   const [kycSubmissions, setKycSubmissions] = useState<KycSubmission[] | null>(
     null,
@@ -45,7 +47,11 @@ export default function KycApproval() {
     const fetchKycSubmissions = async () => {
       try {
         setFetching(true);
-        const res = await fetch(`${url}/kycs`);
+        const res = await fetch(`${url}/kycs`, {
+          headers: {
+            Authorization: token ? `Bearer ${token}` : '',
+          },
+        });
         const data = await res.json();
         setKycSubmissions(data || []);
         setFilteredSubmissions(data || []);
@@ -136,7 +142,10 @@ export default function KycApproval() {
     try {
       const res = await fetch(`${url}/kycs`, {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: token ? `Bearer ${token}` : '',
+        },
         body: JSON.stringify({ email, kyc: submissionId }),
       });
 
@@ -181,7 +190,10 @@ export default function KycApproval() {
 
           const res = await fetch(`${url}/kycs`, {
             method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: token ? `Bearer ${token}` : '',
+            },
             body: JSON.stringify({
               email: submission.email,
               kyc: submissionId,

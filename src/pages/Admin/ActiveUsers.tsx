@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import { Search, Users, RefreshCw } from 'lucide-react';
 
 export default function ActiveUsers() {
-  const { user: admin } = contextData();
+  const { user: admin, token } = contextData();
   const [users, setUsers] = useState<any>(null);
   const [filteredUsers, setFilteredUsers] = useState<any>(null);
   const [userData, setUserData] = useState(null);
@@ -18,7 +18,11 @@ export default function ActiveUsers() {
 
   const fetchUsers = async () => {
     try {
-      const res = await fetch(`${url}/users`);
+      const res = await fetch(`${url}/users`, {
+        headers: {
+          Authorization: token ? `Bearer ${token}` : '',
+        },
+      });
       const data = await res.json();
 
       if (res.ok) {

@@ -1,7 +1,9 @@
 import { FormEvent, useState } from 'react';
 import Alert from './ui/Alert';
+import { contextData } from '@/context/AuthContext';
 
 export default function SendMailModal({ emails, onClose }: any) {
+  const { token } = contextData();
   const [message, setMessage] = useState('');
   const [subject, setSubject] = useState('');
   const [sending, setSending] = useState(false);
@@ -20,6 +22,7 @@ export default function SendMailModal({ emails, onClose }: any) {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          Authorization: token ? `Bearer ${token}` : '',
         },
         body: JSON.stringify({
           emails,

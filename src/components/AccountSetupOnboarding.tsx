@@ -376,6 +376,7 @@ const AccountSetupOnboarding = () => {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
+          Authorization: token ? `Bearer ${token}` : '',
         },
         body: JSON.stringify({ ...formData, email: user.email }),
       });

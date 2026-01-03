@@ -4,14 +4,18 @@ import { useEffect, useState } from 'react';
 
 export default function MiniBals() {
   const [trades, setTrades] = useState([]);
-  const { user } = contextData();
+  const { user, token } = contextData();
 
   const url = import.meta.env.VITE_REACT_APP_SERVER_URL;
 
   // Function to fetch trades
   const fetchTrades = async () => {
     try {
-      const res = await fetch(`${url}/trades`);
+      const res = await fetch(`${url}/trades`, {
+        headers: {
+          Authorization: token ? `Bearer ${token}` : '',
+        },
+      });
       const data = await res.json();
 
       if (res.ok) {

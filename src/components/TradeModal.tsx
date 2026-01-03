@@ -8,7 +8,7 @@ export default function TradeModal({ tradeType, toggleModal }: any) {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const url = import.meta.env.VITE_REACT_APP_SERVER_URL;
-  const { user } = contextData();
+  const { user, token } = contextData();
 
   const startTrade = async (e: any) => {
     e.preventDefault();
@@ -36,7 +36,10 @@ export default function TradeModal({ tradeType, toggleModal }: any) {
     try {
       const res = await fetch(`${url}/trades`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: token ? `Bearer ${token}` : '',
+        },
         body: JSON.stringify({ id: user._id, amount, package: tradeType }),
       });
       const data = await res.json();

@@ -1,14 +1,20 @@
 import { useEffect, useState } from 'react';
+import { contextData } from '@/context/AuthContext';
 import { PiUsersThreeThin } from 'react-icons/pi';
 
 export default function AdminUserCards() {
+  const { token } = contextData();
   const [users, setUsers] = useState<any>(0);
   const [activeUsers, setActiveUsers] = useState(0);
   const url = import.meta.env.VITE_REACT_APP_SERVER_URL;
 
   const fetchUsers = async () => {
     try {
-      const res = await fetch(`${url}/users`);
+      const res = await fetch(`${url}/users`, {
+        headers: {
+          Authorization: token ? `Bearer ${token}` : '',
+        },
+      });
       const data = await res.json();
 
       if (res.ok) {

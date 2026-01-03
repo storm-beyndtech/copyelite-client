@@ -1,8 +1,10 @@
 import CreateTradeModal from '@/components/CreateTradeModal';
 import Alert from '@/components/ui/Alert';
 import { useEffect, useState } from 'react';
+import { contextData } from '@/context/AuthContext';
 
 export default function ManageTrades() {
+  const { token } = contextData();
   const [trades, setTrades] = useState<ITransaction[]>([]);
   const [toggle, setToggle] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -18,7 +20,11 @@ export default function ManageTrades() {
 
   const fetchTrades = async () => {
     try {
-      const res = await fetch(`${url}/trades`);
+      const res = await fetch(`${url}/trades`, {
+        headers: {
+          Authorization: token ? `Bearer ${token}` : '',
+        },
+      });
       const data = await res.json();
 
       if (res.ok) setTrades(data);
@@ -40,7 +46,10 @@ export default function ManageTrades() {
       setLoading(true);
       const res = await fetch(`${url}/trades/${e._id}`, {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: token ? `Bearer ${token}` : '',
+        },
       });
 
       const data = await res.json();

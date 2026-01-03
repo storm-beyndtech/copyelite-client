@@ -1,7 +1,9 @@
 import Alert from '@/components/ui/Alert';
 import { useEffect, useState } from 'react';
+import { contextData } from '@/context/AuthContext';
 
 export default function AdminSettings() {
+  const { token } = contextData();
   const [coins, setCoins] = useState([
     { name: '', address: '', network: '', price: 0 },
   ]);
@@ -13,7 +15,11 @@ export default function AdminSettings() {
 
   const fetchUtils = async () => {
     try {
-      const res = await fetch(`${url}/utils`);
+      const res = await fetch(`${url}/utils`, {
+        headers: {
+          Authorization: token ? `Bearer ${token}` : '',
+        },
+      });
       const data = await res.json();
 
       if (res.ok) {
@@ -41,7 +47,10 @@ export default function AdminSettings() {
       setLoading(true);
       const res = await fetch(`${url}/utils/update/${utilId}`, {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: token ? `Bearer ${token}` : '',
+        },
         body: JSON.stringify({ coins }),
       });
       const data = await res.json();

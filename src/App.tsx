@@ -77,6 +77,7 @@ import TermsAndConditions from './pages/TermsAndConditions';
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import AMLPolicy from './pages/AMLPolicy';
 import TwoFactorLogin from './pages/Auth/TwoFactorLogin';
+import ActivityLogs from './pages/Admin/ActivityLogs';
 
 function App() {
   const url = import.meta.env.VITE_REACT_APP_SERVER_URL;
@@ -88,7 +89,7 @@ function App() {
     location.pathname.includes('/login') ||
     location.pathname.includes('/register') ||
     location.pathname.includes('/password-reset');
-  const { fetching, user, fetchUser } = contextData();
+  const { fetching, user, fetchUser, token } = contextData();
   const [assetsLoaded, setAssetsLoaded] = useState(false);
   const [traders, setTraders] = useState([]);
   const [copiedTraderId, setCopiedTraderId] = useState<string | null>(null);
@@ -101,8 +102,14 @@ function App() {
   };
 
   const fetchTraders = async () => {
+    if (!token) return;
+
     try {
-      const res = await fetch(`${url}/trader`);
+      const res = await fetch(`${url}/trader`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       if (!res.ok) throw new Error('Failed to fetch traders');
       const data = await res.json();
       setTraders(data || []);
@@ -127,6 +134,7 @@ function App() {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
+          Authorization: token ? `Bearer ${token}` : '',
         },
         body: JSON.stringify({
           traderId: trader._id,
@@ -148,8 +156,10 @@ function App() {
   };
 
   useEffect(() => {
-    fetchTraders();
-  }, [user]);
+    if (user && token) {
+      fetchTraders();
+    }
+  }, [user, token]);
 
   useEffect(() => {
     const handleAssetsLoaded = () => {
@@ -302,6 +312,10 @@ function App() {
                     <Route path="/admin/mails" element={<SendMail />} />
                     <Route path="/admin/settings" element={<AdminSettings />} />
                     <Route path="/admin/kyc" element={<KycApproval />} />
+                    <Route
+                      path="/admin/activity-logs"
+                      element={<ActivityLogs />}
+                    />
                   </Route>
 
                   <Route path="/login" element={<Navigate to="/admin/" />} />

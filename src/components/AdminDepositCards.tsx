@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
 import { CiSaveDown2 } from 'react-icons/ci';
+import { contextData } from '@/context/AuthContext';
 
 export default function AdminDepositCards() {
+  const { token } = contextData();
   const [transactions, setTransactions] = useState<any[]>([]);
   const [totalDeposit, setTotalDeposit] = useState(0);
   const [pendingDeposits, setPendingDeposits] = useState(0);
@@ -10,7 +12,11 @@ export default function AdminDepositCards() {
 
   const fetchUserTransactions = async () => {
     try {
-      const res = await fetch(`${url}/transactions`);
+      const res = await fetch(`${url}/transactions`, {
+        headers: {
+          Authorization: token ? `Bearer ${token}` : '',
+        },
+      });
       const data = await res.json();
 
       if (res.ok) setTransactions(data);

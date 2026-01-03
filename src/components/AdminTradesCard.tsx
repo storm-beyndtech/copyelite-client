@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
 import { PiChartBarHorizontalThin } from 'react-icons/pi';
+import { contextData } from '@/context/AuthContext';
 
 export default function AdminTradeCards() {
+  const { token } = contextData();
   const [transactions, setTransactions] = useState<any[]>([]);
   const [totalTrades, setTotalTrades] = useState(0);
   const [totalInterest, setTotalInterest] = useState(0);
@@ -10,7 +12,11 @@ export default function AdminTradeCards() {
 
   const fetchTradeTransactions = async () => {
     try {
-      const res = await fetch(`${url}/transactions`);
+      const res = await fetch(`${url}/transactions`, {
+        headers: {
+          Authorization: token ? `Bearer ${token}` : '',
+        },
+      });
       const data = await res.json();
 
       if (res.ok) setTransactions(data);

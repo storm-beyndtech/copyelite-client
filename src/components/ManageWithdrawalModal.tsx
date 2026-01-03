@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { GrClose } from 'react-icons/gr';
 import Alert from './ui/Alert';
+import { contextData } from '@/context/AuthContext';
 
 export default function ManageWithdrawalModal({
   toggleModal,
@@ -9,6 +10,7 @@ export default function ManageWithdrawalModal({
   toggleModal: (e: boolean) => void;
   withdrawal: null | ITransaction;
 }) {
+  const { token } = contextData();
   const [error, setError] = useState<null | string>(null);
   const [successLoading, setSuccessLoading] = useState(false);
   const [failedLoading, setFailedLoading] = useState(false);
@@ -29,7 +31,10 @@ export default function ManageWithdrawalModal({
     try {
       const res = await fetch(`${url}/withdrawals/${withdrawal?._id}`, {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: token ? `Bearer ${token}` : '',
+        },
         body: JSON.stringify({
           status,
           email: withdrawal?.user.email,

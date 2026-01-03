@@ -28,13 +28,17 @@ export default function ChangePassword() {
   const [hasPassword, setHasPassword] = useState(true);
   const [successMessage, setSuccessMessage] = useState('');
   const [serverError, setServerError] = useState('');
-  const { user } = contextData();
+  const { user, token } = contextData();
 
   // Check if user has a password on component mount
   useEffect(() => {
     const checkUserPassword = async () => {
       try {
-        const response = await fetch(`${url}/users/check-password/${user._id}`);
+        const response = await fetch(`${url}/users/check-password/${user._id}`, {
+          headers: {
+            Authorization: token ? `Bearer ${token}` : '',
+          },
+        });
         const data = await response.json();
 
         if (response.ok) {
@@ -124,6 +128,7 @@ export default function ChangePassword() {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
+          Authorization: token ? `Bearer ${token}` : '',
         },
         body: JSON.stringify(payload),
       });

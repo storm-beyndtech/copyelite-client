@@ -16,7 +16,7 @@ import { Trader } from '@/types/types';
 const url = import.meta.env.VITE_REACT_APP_SERVER_URL;
 
 export default function Dashboard() {
-  const { user, fetchUser } = contextData();
+  const { user, fetchUser, token } = contextData();
   const [traders, setTraders] = useState([]);
   const [trades, setTrades] = useState([]);
   const [copiedTraderId, setCopiedTraderId] = useState<string | null>(
@@ -38,6 +38,11 @@ export default function Dashboard() {
     try {
       const res = await fetch(
         `${url}/trades/user/${user._id}/trader/${user.traderId}`,
+        {
+          headers: {
+            Authorization: token ? `Bearer ${token}` : '',
+          },
+        },
       );
       const data = await res.json();
 
@@ -79,6 +84,7 @@ export default function Dashboard() {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
+          Authorization: token ? `Bearer ${token}` : '',
         },
         body: JSON.stringify({
           traderId: trader._id,

@@ -23,7 +23,7 @@ export default function Deposit() {
   const [success, setSuccess] = useState(false);
   const [copySuccess, setCopySuccess] = useState(false);
   const url = import.meta.env.VITE_REACT_APP_SERVER_URL;
-  const { user } = contextData();
+  const { user, token } = contextData();
 
   const fetchCoins = async () => {
     setFetching(true);
@@ -57,7 +57,10 @@ export default function Deposit() {
     try {
       const res = await fetch(`${url}/deposits`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: token ? `Bearer ${token}` : '',
+        },
         body: JSON.stringify({
           id: user._id,
           amount,

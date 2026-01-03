@@ -3,8 +3,10 @@ import TraderForm from '@/components/TraderForm';
 import TraderList from '@/components/TraderList';
 import { Trader } from '@/types/types';
 import React, { useState, useEffect } from 'react';
+import { contextData } from '@/context/AuthContext';
 
 const ManageTrader: React.FC = () => {
+  const { token } = contextData();
   const [traders, setTraders] = useState<Trader[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -53,6 +55,9 @@ const ManageTrader: React.FC = () => {
     try {
       const response = await fetch(`${url}/trader/${id}`, {
         method: 'DELETE',
+        headers: {
+          Authorization: token ? `Bearer ${token}` : '',
+        },
       });
 
       if (!response.ok) {
@@ -89,12 +94,18 @@ const ManageTrader: React.FC = () => {
         response = await fetch(`${url}/trader/${editingTrader._id}`, {
           method: 'PUT',
           body: submitData,
+          headers: {
+            Authorization: token ? `Bearer ${token}` : '',
+          },
         });
       } else {
         // Create new trader
         response = await fetch(`${url}/trader/create`, {
           method: 'POST',
           body: submitData,
+          headers: {
+            Authorization: token ? `Bearer ${token}` : '',
+          },
         });
       }
 

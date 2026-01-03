@@ -5,7 +5,7 @@ import { ChevronDown, Wallet2Icon } from 'lucide-react';
 export default function DemoDropdown() {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
-  const { user, fetchUser } = contextData(); // fetchUser is used to refresh user data
+  const { user, fetchUser, token } = contextData(); // fetchUser is used to refresh user data
   const url = import.meta.env.VITE_REACT_APP_SERVER_URL;
 
   const handleTopUp = async () => {
@@ -13,7 +13,10 @@ export default function DemoDropdown() {
     try {
       const res = await fetch(`${url}/deposits/reset-demo-balance`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: token ? `Bearer ${token}` : '',
+        },
         body: JSON.stringify({ email: user.email }),
       });
 

@@ -17,7 +17,7 @@ type Admin = {
 };
 
 export default function SendMail() {
-  const { user: admin } = contextData() as { user: Admin };
+  const { user: admin, token } = contextData() as { user: Admin; token: string };
   const [users, setUsers] = useState<User[] | null>(null);
   const [filteredUsers, setFilteredUsers] = useState<User[] | null>(null);
   const [selectedUsers, setSelectedUsers] = useState<string[]>([]); // Using email instead of _id
@@ -28,7 +28,11 @@ export default function SendMail() {
 
   const fetchUsers = async () => {
     try {
-      const res = await fetch(`${url}/users`);
+      const res = await fetch(`${url}/users`, {
+        headers: {
+          Authorization: token ? `Bearer ${token}` : '',
+        },
+      });
       const data = await res.json();
 
       if (res.ok) {

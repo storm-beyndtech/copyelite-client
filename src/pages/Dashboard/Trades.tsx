@@ -10,7 +10,7 @@ import { Trader } from '@/types/types';
 
 export default function Trades() {
   const [tradeData, setTradeData] = useState<any>([]);
-  const { user, fetchUser } = contextData();
+  const { user, fetchUser, token } = contextData();
   const [traders, setTraders] = useState([]);
   const [copiedTraderId, setCopiedTraderId] = useState<string | null>(null);
   const [showError, setShowError] = useState(false);
@@ -25,7 +25,11 @@ export default function Trades() {
 
   const fetchTrades = async () => {
     try {
-    const res = await fetch(`${url}/trades/user/${user._id}/trader/${user.traderId}`);
+    const res = await fetch(`${url}/trades/user/${user._id}/trader/${user.traderId}`, {
+      headers: {
+        Authorization: token ? `Bearer ${token}` : '',
+      },
+    });
     const data = await res.json();
 
       if (res.ok) {
@@ -68,6 +72,7 @@ export default function Trades() {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
+          Authorization: token ? `Bearer ${token}` : '',
         },
         body: JSON.stringify({
           traderId: trader._id,

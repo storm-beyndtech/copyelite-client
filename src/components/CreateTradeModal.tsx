@@ -1,7 +1,9 @@
 import { useState } from 'react';
 import Alert from './ui/Alert';
+import { contextData } from '@/context/AuthContext';
 
 export default function CreateTradeModal({ toggleModal }: any) {
+  const { token } = contextData();
   const [symbol, setSymbol] = useState('');
   const [category, setCategory] = useState('');
   const [interest, setInterest] = useState(0);
@@ -35,7 +37,10 @@ export default function CreateTradeModal({ toggleModal }: any) {
     try {
       const res = await fetch(`${url}/trades`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: token ? `Bearer ${token}` : '',
+        },
         body: JSON.stringify({
           symbol,
           category,

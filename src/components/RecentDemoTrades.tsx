@@ -26,7 +26,7 @@ interface DemoTrade {
 
 const RecentDemoTrades = ({ changes }: any) => {
   const [trades, setTrades] = useState<DemoTrade[]>([]);
-  const { user } = contextData();
+  const { user, token } = contextData();
   const [searchQuery, setSearchQuery] = useState('');
   const [loading, setLoading] = useState(false);
   const [lastUpdated, setLastUpdated] = useState<string | null>(null);
@@ -35,7 +35,11 @@ const RecentDemoTrades = ({ changes }: any) => {
   const fetchTrades = async () => {
     setLoading(true);
     try {
-      const res = await fetch(`${url}/trades/demo-trades/${user.email}`);
+      const res = await fetch(`${url}/trades/demo-trades/${user.email}`, {
+        headers: {
+          Authorization: token ? `Bearer ${token}` : '',
+        },
+      });
       const data = await res.json();
 
       if (res.ok) {

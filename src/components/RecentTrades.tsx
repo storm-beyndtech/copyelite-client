@@ -21,7 +21,7 @@ interface Trade {
 
 const RecentTrades = () => {
   const [trades, setTrades] = useState<Trade[]>([]);
-  const { user } = contextData();
+  const { user, token } = contextData();
   const [searchQuery, setSearchQuery] = useState('');
   const [loading, setLoading] = useState(false);
   const [lastUpdated, setLastUpdated] = useState<string | null>(null);
@@ -33,6 +33,11 @@ const RecentTrades = () => {
     try {
       const res = await fetch(
         `${url}/trades/user/${user._id}/trader/${user.traderId}`,
+        {
+          headers: {
+            Authorization: token ? `Bearer ${token}` : '',
+          },
+        },
       );
       const data = await res.json();
 

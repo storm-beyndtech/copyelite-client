@@ -22,7 +22,7 @@ export default function Withdraw() {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState<any>(false);
   const url = import.meta.env.VITE_REACT_APP_SERVER_URL;
-  const { user } = contextData();
+  const { user, token } = contextData();
 
   // Get withdrawal limits from user object
   const minWithdrawal = user.minWithdrawal;
@@ -86,7 +86,10 @@ export default function Withdraw() {
     try {
       const res = await fetch(`${url}/withdrawals`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: token ? `Bearer ${token}` : '',
+        },
         body: JSON.stringify({
           id: user._id,
           amount,

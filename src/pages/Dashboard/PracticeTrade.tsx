@@ -144,7 +144,7 @@ const PracticeTrade: FC = () => {
   const [errors, setErrors] = useState<ValidationErrors>({});
   const [successMessage, setSuccessMessage] = useState<string>('');
   const [errorMessage, setErrorMessage] = useState<string>('');
-  const { user, theme } = contextData();
+  const { user, theme, token } = contextData();
   const url = import.meta.env.VITE_REACT_APP_SERVER_URL;
 
   // Stock options
@@ -266,6 +266,7 @@ const PracticeTrade: FC = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          Authorization: token ? `Bearer ${token}` : '',
         },
         body: JSON.stringify(tradeData),
       });

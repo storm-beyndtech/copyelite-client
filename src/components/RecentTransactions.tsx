@@ -15,12 +15,16 @@ const RecentTransactions = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [loading, setLoading] = useState(false);
   const [lastUpdated, setLastUpdated] = useState<string | null>(null);
-  const { user } = contextData();
+  const { user, token } = contextData();
   const url = import.meta.env.VITE_REACT_APP_SERVER_URL;
 
   const fetchUserTransactions = async () => {
     try {
-      const res = await fetch(`${url}/transactions/user/${user.email}`);
+      const res = await fetch(`${url}/transactions/user/${user.email}`, {
+        headers: {
+          Authorization: token ? `Bearer ${token}` : '',
+        },
+      });
       const data = await res.json();
 
       if (res.ok) {

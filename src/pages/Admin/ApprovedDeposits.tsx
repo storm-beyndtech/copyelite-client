@@ -1,8 +1,10 @@
 import ManageDepositModal from '@/components/ManageDepositModal';
 import { useEffect, useState } from 'react';
 import { Search, CheckCircle, RefreshCw, Wallet } from 'lucide-react';
+import { contextData } from '@/context/AuthContext';
 
 export default function ApprovedDeposits() {
+  const { token } = contextData();
   const [deposits, setDeposits] = useState<ITransaction[]>([]);
   const [filteredDeposits, setFilteredDeposits] = useState<ITransaction[]>([]);
   const [singleDeposit, setSingleDeposit] = useState<null | ITransaction>(null);
@@ -25,7 +27,11 @@ export default function ApprovedDeposits() {
   const fetchDeposits = async () => {
     try {
       setLoading(true);
-      const res = await fetch(`${url}/deposits`);
+      const res = await fetch(`${url}/deposits`, {
+        headers: {
+          Authorization: token ? `Bearer ${token}` : '',
+        },
+      });
       const data = await res.json();
 
       if (res.ok) {

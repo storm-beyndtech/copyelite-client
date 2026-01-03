@@ -33,7 +33,7 @@ export default function EditUserModal({ userData, handleUserData }: any) {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState<string | null>(null);
-  const { login } = contextData();
+  const { login, token } = contextData();
   const navigate = useNavigate();
   const url = import.meta.env.VITE_REACT_APP_SERVER_URL;
 
@@ -87,7 +87,10 @@ export default function EditUserModal({ userData, handleUserData }: any) {
       setLoading(true);
       const res = await fetch(`${url}/users/update-profile`, {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: token ? `Bearer ${token}` : '',
+        },
         body: JSON.stringify(profileData),
       });
       const data = await res.json();
