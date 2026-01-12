@@ -18,13 +18,12 @@ export default function EditUserModal({ userData, handleUserData }: any) {
   const [email, setEmail] = useState('');
   const [selectedCountry, setSelectedCountry] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
-  const [address, setAddress] = useState('');
-  const [state, setState] = useState('');
+  const [streetAddress, setStreetAddress] = useState('');
+  const [province, setProvince] = useState('');
   const [city, setCity] = useState('');
   const [zipCode, setZipCode] = useState('');
   const [deposit, setDeposit] = useState(0);
   const [interest, setInterest] = useState(0);
-  const [trade, setTrade] = useState(0);
   const [bonus, setBonus] = useState(0);
   const [withdrawalLimit, setWithdrawalLimit] = useState(0);
   const [minWithdrawal, setMinWithdrawal] = useState(1);
@@ -41,15 +40,14 @@ export default function EditUserModal({ userData, handleUserData }: any) {
     setFullName(userData.fullName);
     setEmail(userData.email);
     setSelectedCountry(userData.country);
-    setPhoneNumber(userData.phone);
-    setAddress(userData.address);
-    setCity(userData.city);
-    setState(userData.state);
-    setZipCode(userData.zipCode);
-    setDeposit(userData.deposit);
-    setInterest(userData.interest);
-    setTrade(userData.trade);
-    setBonus(userData.bonus);
+    setPhoneNumber(userData.phone || '');
+    setStreetAddress(userData.streetAddress || '');
+    setCity(userData.city || '');
+    setProvince(userData.province || '');
+    setZipCode(userData.zipCode || '');
+    setDeposit(userData.deposit || 0);
+    setInterest(userData.interest || 0);
+    setBonus(userData.bonus || 0);
     setWithdrawalLimit(userData.withdrawalLimit || 0);
     setMinWithdrawal(userData.minWithdrawal || 1);
     setWithdrawalStatus(userData.withdrawalStatus || false);
@@ -69,13 +67,12 @@ export default function EditUserModal({ userData, handleUserData }: any) {
       lastName,
       country: selectedCountry,
       phone: phoneNumber,
-      address,
-      state,
+      streetAddress,
+      province,
       city,
       zipCode,
       deposit,
       interest,
-      trade,
       bonus,
       withdrawalLimit,
       minWithdrawal,
@@ -214,31 +211,31 @@ export default function EditUserModal({ userData, handleUserData }: any) {
               </div>
 
               <div className="col-span-6 sm:col-span-3">
-                <label htmlFor="address" className="editUserLabel">
-                  Address
+                <label htmlFor="streetAddress" className="editUserLabel">
+                  Street Address
                 </label>
                 <input
-                  value={address}
-                  onChange={(e) => setAddress(e.target.value)}
+                  value={streetAddress}
+                  onChange={(e) => setStreetAddress(e.target.value)}
                   type="text"
-                  name="address"
-                  id="address"
+                  name="streetAddress"
+                  id="streetAddress"
                   className="editUserInput"
-                  placeholder={userData.address}
+                  placeholder={userData.streetAddress || 'Enter street address'}
                 />
               </div>
 
               <div className="col-span-6 sm:col-span-3">
-                <label htmlFor="state" className="editUserLabel">
-                  State
+                <label htmlFor="province" className="editUserLabel">
+                  State/Province
                 </label>
                 <input
-                  value={state}
-                  onChange={(e) => setState(e.target.value)}
+                  value={province}
+                  onChange={(e) => setProvince(e.target.value)}
                   type="text"
-                  id="state"
+                  id="province"
                   className="editUserInput"
-                  placeholder={userData.state}
+                  placeholder={userData.province || 'Enter state or province'}
                 />
               </div>
 
@@ -270,7 +267,7 @@ export default function EditUserModal({ userData, handleUserData }: any) {
                 />
               </div>
 
-              <div className="col-span-3 sm:col-span-2">
+              <div className="col-span-6 sm:col-span-2">
                 <label htmlFor="deposit" className="editUserLabel">
                   Deposit
                 </label>
@@ -285,7 +282,7 @@ export default function EditUserModal({ userData, handleUserData }: any) {
                 />
               </div>
 
-              <div className="col-span-3 sm:col-span-2">
+              <div className="col-span-6 sm:col-span-2">
                 <label htmlFor="interest" className="editUserLabel">
                   Interest
                 </label>
@@ -300,22 +297,7 @@ export default function EditUserModal({ userData, handleUserData }: any) {
                 />
               </div>
 
-              <div className="col-span-3 sm:col-span-2">
-                <label htmlFor="trade" className="editUserLabel">
-                  Trade
-                </label>
-                <input
-                  value={trade}
-                  onChange={(e) => setTrade(Number(e.target.value))}
-                  type="number"
-                  id="trade"
-                  className="editUserInput"
-                  placeholder={userData.trade}
-                  min={0}
-                />
-              </div>
-
-              <div className="col-span-3 sm:col-span-2">
+              <div className="col-span-6 sm:col-span-2">
                 <label htmlFor="bonus" className="editUserLabel">
                   Bonus
                 </label>

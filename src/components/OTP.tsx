@@ -413,9 +413,9 @@ const OTPVerification: React.FC<OTPVerificationProps> = ({
       </div>
 
       {/* Right Side - OTP Verification Form */}
-      <div className="md:col-span-3 col-span-5 p-8 space-y-6">
-        <div className="flex items-center justify-end gap-3">
-          <Link to={backLink} className="text-sm font-semibold text-brandblue">
+      <div className="md:col-span-3 col-span-5 p-4 sm:p-8 space-y-6 flex flex-col">
+        <div className="flex items-center justify-end gap-2 sm:gap-3">
+          <Link to={backLink} className="text-xs sm:text-sm font-semibold text-brandblue">
             Back to{' '}
             {pageType === 'register-verification'
               ? 'Registration'
@@ -429,17 +429,17 @@ const OTPVerification: React.FC<OTPVerificationProps> = ({
           </div>
           <DarkModeSwitcher />
         </div>
-        <div className="w-full max-w-100 mx-auto">
-          <h2 className="text-2xl font-semibold text-gray-800 dark:text-white">
+        <div className="w-full max-w-100 mx-auto flex-1 flex flex-col justify-center">
+          <h2 className="text-xl sm:text-2xl font-semibold text-gray-800 dark:text-white">
             {pageContent.title}
           </h2>
-          <p className="text-gray-500 text-sm dark:text-gray-500 mb-6">
+          <p className="text-gray-500 text-xs sm:text-sm dark:text-gray-500 mb-6">
             {pageContent.description}
           </p>
 
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* OTP Input Fields */}
-            <div className="flex justify-center gap-2 md:gap-4">
+            <div className="flex justify-center gap-3 sm:gap-4">
               {Array(otpLength)
                 .fill(0)
                 .map((_, index) => (
@@ -447,19 +447,20 @@ const OTPVerification: React.FC<OTPVerificationProps> = ({
                     key={index}
                     ref={(ref) => (inputRefs.current[index] = ref)}
                     type="text"
+                    inputMode="numeric"
                     maxLength={1}
                     value={otp[index]}
                     onChange={(e) => handleChange(e, index)}
                     onKeyDown={(e) => handleKeyDown(e, index)}
                     onPaste={index === 0 ? handlePaste : undefined}
-                    className={`w-12 h-12 md:w-14 md:h-14 border text-center text-xl rounded-md
+                    className={`w-14 h-14 sm:w-16 sm:h-16 border text-center text-xl sm:text-2xl rounded-lg
                     ${
                       index === activeInput
                         ? 'border-blue-500 ring-2 ring-blue-200'
                         : 'border-gray-300 dark:border-gray-700'
                     }
                     focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200
-                    bg-white dark:bg-transparent text-gray-900 dark:text-white`}
+                    bg-white dark:bg-transparent text-gray-900 dark:text-white transition-all`}
                   />
                 ))}
             </div>

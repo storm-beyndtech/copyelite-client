@@ -102,21 +102,27 @@ const Register: React.FC = () => {
         body: JSON.stringify(signupData),
       });
 
+      const data = await response.json();
+
       if (!response.ok) {
-        throw new Error('Registration failed');
+        setSubmitStatus('error');
+        setErrors({ email: data.message || 'Registration failed. Please try again.' });
+        return;
       }
 
       // Handle successful registration
       setSubmitStatus('success');
 
+      // Navigate immediately without unnecessary delay
       setTimeout(() => {
         navigate('/verify-otp', {
           state: { ...bodyData, pageType: 'register-verification' },
         });
-      }, 2000);
-    } catch (error) {
+      }, 500);
+    } catch (error: any) {
       // Handle registration error
       setSubmitStatus('error');
+      setErrors({ email: error.message || 'Network error. Please check your connection.' });
     } finally {
       setIsSubmitting(false);
 
@@ -195,9 +201,9 @@ const Register: React.FC = () => {
       </div>
 
       {/* Right Side - Registration Form */}
-      <div className="md:col-span-3 col-span-5 p-8 space-y-6">
-        <div className="flex items-center justify-end gap-3">
-          <Link to="/login" className="text-sm font-semibold text-brandblue">
+      <div className="md:col-span-3 col-span-5 p-4 sm:p-8 space-y-6">
+        <div className="flex items-center justify-end gap-2 sm:gap-3">
+          <Link to="/login" className="text-xs sm:text-sm font-semibold text-brandblue">
             Login
           </Link>
 
@@ -205,10 +211,10 @@ const Register: React.FC = () => {
           <DarkModeSwitcher />
         </div>
         <div className="w-full max-w-100 mx-auto">
-          <h2 className="text-2xl font-semibold text-gray-800 dark:text-white">
+          <h2 className="text-xl sm:text-2xl font-semibold text-gray-800 dark:text-white">
             Sign Up
           </h2>
-          <p className="text-gray-500 text-sm dark:text-gray-500 mb-6">
+          <p className="text-gray-500 text-xs sm:text-sm dark:text-gray-500 mb-6">
             Join the community and unleash endless possibilities
           </p>
 
