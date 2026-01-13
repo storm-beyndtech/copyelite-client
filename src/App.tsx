@@ -89,6 +89,10 @@ function App() {
     location.pathname.includes('/login') ||
     location.pathname.includes('/register') ||
     location.pathname.includes('/password-reset') ||
+    location.pathname.includes('/reset-password') ||
+    location.pathname.includes('/forgot-password') ||
+    location.pathname.includes('/verify-otp') ||
+    location.pathname.includes('/verify-2fa') ||
     location.pathname.includes('/account-setup');
   const { fetching, user, fetchUser, token } = contextData();
   const [assetsLoaded, setAssetsLoaded] = useState(false);

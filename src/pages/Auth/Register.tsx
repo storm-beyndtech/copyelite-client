@@ -51,21 +51,35 @@ const Register: React.FC = () => {
   const validateForm = (): boolean => {
     const newErrors: RegistrationErrors = {};
 
-    // Add validation logic here
+    // Username validation - matches backend schema (min 3, max 20)
     if (!formData.username.trim()) {
       newErrors.username = 'Username is required';
+    } else if (formData.username.length < 3) {
+      newErrors.username = 'Username must be at least 3 characters long';
+    } else if (formData.username.length > 20) {
+      newErrors.username = 'Username must not exceed 20 characters';
+    } else if (!/^[a-zA-Z0-9_]+$/.test(formData.username)) {
+      newErrors.username = 'Username can only contain letters, numbers, and underscores';
     }
 
+    // Email validation - matches backend schema (min 5, max 225)
     if (!formData.email.trim()) {
       newErrors.email = 'Email is required';
+    } else if (formData.email.length < 5) {
+      newErrors.email = 'Email must be at least 5 characters long';
+    } else if (formData.email.length > 225) {
+      newErrors.email = 'Email must not exceed 225 characters';
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
       newErrors.email = 'Invalid email format';
     }
 
+    // Password validation - matches backend schema (min 5, max 20)
     if (!formData.password) {
       newErrors.password = 'Password is required';
-    } else if (formData.password.length < 8) {
-      newErrors.password = 'Password must be at least 8 characters';
+    } else if (formData.password.length < 5) {
+      newErrors.password = 'Password must be at least 5 characters long';
+    } else if (formData.password.length > 20) {
+      newErrors.password = 'Password must not exceed 20 characters';
     }
 
     if (!formData.termsAccepted) {
@@ -106,7 +120,23 @@ const Register: React.FC = () => {
 
       if (!response.ok) {
         setSubmitStatus('error');
-        setErrors({ email: data.message || 'Registration failed. Please try again.' });
+
+        // Parse error message to determine which field it belongs to
+        const errorMessage = data.message || 'Registration failed. Please try again.';
+        const newErrors: RegistrationErrors = {};
+
+        if (errorMessage.toLowerCase().includes('username')) {
+          newErrors.username = errorMessage;
+        } else if (errorMessage.toLowerCase().includes('email')) {
+          newErrors.email = errorMessage;
+        } else if (errorMessage.toLowerCase().includes('password')) {
+          newErrors.password = errorMessage;
+        } else {
+          // Generic error - show on email field as fallback
+          newErrors.email = errorMessage;
+        }
+
+        setErrors(newErrors);
         return;
       }
 
@@ -120,9 +150,11 @@ const Register: React.FC = () => {
         });
       }, 500);
     } catch (error: any) {
-      // Handle registration error
+      // Handle network/unexpected errors
       setSubmitStatus('error');
-      setErrors({ email: error.message || 'Network error. Please check your connection.' });
+      setErrors({
+        email: error.message || 'Network error. Please check your connection and try again.'
+      });
     } finally {
       setIsSubmitting(false);
 
@@ -147,13 +179,42 @@ const Register: React.FC = () => {
       [name]: finalValue,
     }));
 
-    // Clear corresponding error when user starts typing/selecting
-    if (errors[name as keyof RegistrationErrors]) {
-      setErrors((prev) => ({
-        ...prev,
-        [name]: undefined,
-      }));
+    // Real-time validation for better UX
+    const newErrors: RegistrationErrors = { ...errors };
+
+    if (name === 'username' && value) {
+      if (value.length < 3) {
+        newErrors.username = 'Username must be at least 3 characters long';
+      } else if (value.length > 20) {
+        newErrors.username = 'Username must not exceed 20 characters';
+      } else if (!/^[a-zA-Z0-9_]+$/.test(value)) {
+        newErrors.username = 'Username can only contain letters, numbers, and underscores';
+      } else {
+        delete newErrors.username;
+      }
+    } else if (name === 'email' && value) {
+      if (value.length < 5) {
+        newErrors.email = 'Email must be at least 5 characters long';
+      } else if (value.length > 225) {
+        newErrors.email = 'Email must not exceed 225 characters';
+      } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+        newErrors.email = 'Invalid email format';
+      } else {
+        delete newErrors.email;
+      }
+    } else if (name === 'password' && value) {
+      if (value.length < 5) {
+        newErrors.password = 'Password must be at least 5 characters long';
+      } else if (value.length > 20) {
+        newErrors.password = 'Password must not exceed 20 characters';
+      } else {
+        delete newErrors.password;
+      }
+    } else if (name === 'termsAccepted') {
+      delete newErrors.termsAccepted;
     }
+
+    setErrors(newErrors);
   };
 
   //Google login success
@@ -353,13 +414,7 @@ const Register: React.FC = () => {
             {submitStatus === 'success' && (
               <Alert
                 type="success"
-                message="Registration Successful! Welcome to Copyelite Markets."
-              />
-            )}
-            {submitStatus === 'error' && (
-              <Alert
-                type="error"
-                message="Registration failed. Please try again."
+                message="Registration Successful! Redirecting to verification..."
               />
             )}
 

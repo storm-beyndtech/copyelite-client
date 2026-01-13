@@ -439,7 +439,7 @@ const OTPVerification: React.FC<OTPVerificationProps> = ({
 
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* OTP Input Fields */}
-            <div className="flex justify-center gap-3 sm:gap-4">
+            <div className="flex justify-center gap-2 sm:gap-3 md:gap-4">
               {Array(otpLength)
                 .fill(0)
                 .map((_, index) => (
@@ -453,7 +453,7 @@ const OTPVerification: React.FC<OTPVerificationProps> = ({
                     onChange={(e) => handleChange(e, index)}
                     onKeyDown={(e) => handleKeyDown(e, index)}
                     onPaste={index === 0 ? handlePaste : undefined}
-                    className={`w-14 h-14 sm:w-16 sm:h-16 border text-center text-xl sm:text-2xl rounded-lg
+                    className={`w-11 h-11 sm:w-14 sm:h-14 md:w-16 md:h-16 border text-center text-lg sm:text-xl md:text-2xl rounded-md sm:rounded-lg
                     ${
                       index === activeInput
                         ? 'border-blue-500 ring-2 ring-blue-200'
