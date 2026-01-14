@@ -317,6 +317,12 @@ const OTPVerification: React.FC<OTPVerificationProps> = ({
       // Handle error
       setSubmitStatus('error');
       setErrorMessage(error.message || pageContent.errorMessage);
+
+      // Reset error status after 5 seconds to allow retry
+      setTimeout(() => {
+        setSubmitStatus('idle');
+        setErrorMessage('');
+      }, 5000);
     } finally {
       setIsSubmitting(false);
     }
@@ -366,6 +372,12 @@ const OTPVerification: React.FC<OTPVerificationProps> = ({
     } catch (error) {
       setSubmitStatus('error');
       setErrorMessage('Failed to resend code. Please try again later.');
+
+      // Reset error status after 5 seconds to allow retry
+      setTimeout(() => {
+        setSubmitStatus('idle');
+        setErrorMessage('');
+      }, 5000);
     }
   };
 

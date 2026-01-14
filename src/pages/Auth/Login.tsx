@@ -107,15 +107,14 @@ const Login: React.FC = () => {
       // Handle login error
       setError(error.message);
       setSubmitStatus('error');
+
+      // Reset error state after 7 seconds to allow retry
+      setTimeout(() => {
+        setError('');
+        setSubmitStatus('idle');
+      }, 7000);
     } finally {
       setIsSubmitting(false);
-
-      // Reset error status after 5 seconds
-      if (submitStatus === 'error') {
-        setTimeout(() => {
-          setSubmitStatus('idle');
-        }, 5000);
-      }
     }
   };
 
@@ -156,7 +155,14 @@ const Login: React.FC = () => {
         navigate('/dashboard');
       }
     } else {
-      setError(data.error);
+      setError(data.error || 'Google login failed. Please try again.');
+      setSubmitStatus('error');
+
+      // Reset error state after 7 seconds to allow retry
+      setTimeout(() => {
+        setError('');
+        setSubmitStatus('idle');
+      }, 7000);
     }
   };
 

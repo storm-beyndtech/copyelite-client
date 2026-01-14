@@ -137,6 +137,13 @@ const Register: React.FC = () => {
         }
 
         setErrors(newErrors);
+
+        // Reset error state after 7 seconds to allow retry
+        setTimeout(() => {
+          setErrors({});
+          setSubmitStatus('idle');
+        }, 7000);
+
         return;
       }
 
@@ -155,13 +162,14 @@ const Register: React.FC = () => {
       setErrors({
         email: error.message || 'Network error. Please check your connection and try again.'
       });
+
+      // Reset error state after 7 seconds to allow retry
+      setTimeout(() => {
+        setErrors({});
+        setSubmitStatus('idle');
+      }, 7000);
     } finally {
       setIsSubmitting(false);
-
-      // Reset status after 5 seconds
-      setTimeout(() => {
-        setSubmitStatus('idle');
-      }, 5000);
     }
   };
 
@@ -227,10 +235,19 @@ const Register: React.FC = () => {
 
     const data = await res.json();
     if (res.ok) {
-      login(data.user);
+      login(data.user, data.token);
       navigate('/dashboard');
     } else {
       setSubmitStatus('error');
+      setErrors({
+        email: data.message || 'Google login failed. Please try again.'
+      });
+
+      // Reset error state after 7 seconds to allow retry
+      setTimeout(() => {
+        setErrors({});
+        setSubmitStatus('idle');
+      }, 7000);
     }
   };
 

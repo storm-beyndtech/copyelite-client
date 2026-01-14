@@ -35,10 +35,22 @@ export const apiFetch = async (
   }
 
   // Make the request
-  return fetch(url, {
+  const response = await fetch(url, {
     ...restOptions,
     headers: requestHeaders,
   });
+
+  // Handle 401 Unauthorized - token expired or invalid
+  if (response.status === 401 && requiresAuth) {
+    // Clear invalid token
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+
+    // Redirect to login page
+    window.location.href = '/login?session=expired';
+  }
+
+  return response;
 };
 
 /**
